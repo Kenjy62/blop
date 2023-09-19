@@ -1,17 +1,22 @@
 // Components
+import { Hashtags } from "@/app/src/features/hashtags";
 import Title from "../../Title/Title";
 
-export default function TopHashtags() {
+export default async function TopHashtags() {
+  const hashtags = await Hashtags({ next: { tags: ["tags"] } });
+
   return (
     <div className="flex flex-col gap-3">
       <Title>Top Hashtags</Title>
-      <div className="border rounded-lg p-4 flex flex-row flex-wrap gap-2">
-        <span className="cursor-pointer">#Test</span>
-        <span className="cursor-pointer">#Test</span>
-        <span className="cursor-pointer">#Test</span>
-        <span className="cursor-pointer">#Test</span>
-        <span className="cursor-pointer">#Test</span>
-        <span className="cursor-pointer">#Test</span>
+      <div className="border rounded-lg p-4 flex flex-col flex-wrap gap-2">
+        {hashtags.map((hashtag) => {
+          return (
+            <div className="flex flex-col">
+              <span className="cursor-pointer">{hashtag[0]}</span>
+              <span className="text-xs">{hashtag[1]} Utilisations</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

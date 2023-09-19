@@ -2,10 +2,13 @@
 
 import { PrismaClient } from "@prisma/client";
 
-export async function AllPost() {
+export async function GetPost(id) {
   const prisma = new PrismaClient();
 
-  const response = await prisma.blop.findMany({
+  const response = await prisma.blop.findFirst({
+    where: {
+      id: parseInt(id),
+    },
     select: {
       id: true,
       createdAt: true,
@@ -22,8 +25,21 @@ export async function AllPost() {
       likes: true,
       bookmarks: true,
       type: true,
-      reblopId: true,
-      Comment: true,
+      Hashtags: true,
+      Comment: {
+        select: {
+          id: true,
+          message: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              picture: true,
+            },
+          },
+        },
+      },
     },
   });
 
