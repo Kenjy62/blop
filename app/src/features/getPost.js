@@ -40,6 +40,33 @@ export async function GetPost(id) {
           },
         },
       },
+      UsersLikes: {
+        select: {
+          blopId: true,
+          User: {
+            select: {
+              id: true,
+              name: true,
+              picture: true,
+            },
+          },
+        },
+      },
+      reblopData: {
+        select: {
+          id: true,
+          createdAt: true,
+          content: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              picture: true,
+            },
+          },
+          Hashtags: true,
+        },
+      },
     },
   });
 

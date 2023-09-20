@@ -58,13 +58,19 @@ export default function Textarea() {
 
   // Send Post
   const sendPost = () => {
-    if (textarea.length > 0) {
+    if (textarea?.length >= 5) {
       startTransition(async () => {
-        const result = await NewPost(textarea, files.length > 0 ? true : false);
+        const result = await NewPost(
+          textarea,
+          files.length > 0 ? true : false,
+          "post"
+        );
         if (result) {
           resetForm();
         }
       });
+    } else {
+      alert("Minimum 5 characters");
     }
   };
 

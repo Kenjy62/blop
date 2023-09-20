@@ -24,6 +24,31 @@ export async function AllPost() {
       type: true,
       reblopId: true,
       Comment: true,
+      UsersLikes: {
+        select: {
+          blopId: true,
+          User: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+      reblopData: {
+        select: {
+          id: true,
+          createdAt: true,
+          content: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              picture: true,
+            },
+          },
+          Hashtags: true,
+        },
+      },
     },
   });
 

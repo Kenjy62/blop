@@ -11,7 +11,6 @@ export default function Form() {
 
   async function handleSubmit(formData) {
     const response = await Login(formData);
-    console.log(response);
     if (response !== null) {
       router.push("/Feed");
     }

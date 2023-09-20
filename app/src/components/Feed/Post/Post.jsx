@@ -1,3 +1,5 @@
+"use client";
+
 // Required
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +9,12 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-// Icons
-import { RxBookmark, RxChatBubble, RxHeart } from "react-icons/rx";
+// Components
+import Share from "./Share/Share";
+import Actions from "./Action";
+import { RxClock } from "react-icons/rx";
 
-export default function Post({ post, params, searchParams }) {
+export default function Post({ post }) {
   return (
     <div className="w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200">
       <div className="h-fit">
@@ -29,12 +33,24 @@ export default function Post({ post, params, searchParams }) {
           className="w-full flex flex-col gap-2"
         >
           <div className="flex flex-row justify-between items-center">
-            <span className="font-medium">{post.author.name}</span>
-            <span className="font-light text-xs">
-              {dayjs(post.createdAt).fromNow()}
+            <div className="flex flex-row gap-2 items-center">
+              <span className="font-medium">{post.author.name} </span>
+              <span className="text-sm">
+                {post.type === "post" ? "has posted" : "has shared"}
+              </span>
+            </div>
+            <span className="font-light text-xs flex flex-row items-center gap-1">
+              <RxClock /> {dayjs(post.createdAt).fromNow()}
             </span>
           </div>
-          <div className="font-normal">{post.content}</div>
+          {post.type === "post" ? (
+            <div className="font-normal">{post.content}</div>
+          ) : (
+            <>
+              <div className="font-normal">{post.content}</div>
+              <Share post={post.reblopData} />
+            </>
+          )}
         </Link>
         {post.picture && (
           <Image
@@ -44,19 +60,14 @@ export default function Post({ post, params, searchParams }) {
             height={500}
           />
         )}
-        <div className="flex flex-row gap-6">
-          <Link href={`/Feed/?comment=${post.id}`} scroll={false}>
-            <span className="flex flex-row gap-2 items-center cursor-pointer">
-              {post.Comment.length} <RxChatBubble />
-            </span>
-          </Link>
-          <span className="flex flex-row gap-2 items-center cursor-pointer">
-            {post.likes} <RxHeart />
-          </span>
-          <span className="flex flex-row gap-2 items-center cursor-pointer">
-            {post.bookmarks} <RxBookmark />
-          </span>
-        </div>
+        <Actions
+          postId={post.id}
+          comments={post.Comment}
+          likes={post.likes}
+          shares={post.reblops}
+          bookmarks={post.bookmarks}
+          UsersLikes={post.UsersLikes}
+        />
       </div>
     </div>
   );

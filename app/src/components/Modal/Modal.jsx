@@ -6,6 +6,7 @@ import ReactModal from "react-modal";
 
 // Components
 import Reply from "./Type/Reply";
+import Share from "./Type/Share";
 
 // Set Modal
 ReactModal.setAppElement("html");
@@ -16,7 +17,9 @@ export default function Modal() {
 
   return (
     <ReactModal
-      isOpen={searchParams.get("comment") ? true : false}
+      isOpen={
+        searchParams.get("comment") || searchParams.get("share") ? true : false
+      }
       onRequestClose={() => router.back()}
       style={{
         overlay: {
@@ -45,7 +48,12 @@ export default function Modal() {
         },
       }}
     >
-      <Reply postId={searchParams.get("comment")} />
+      {searchParams.get("comment") && (
+        <Reply postId={searchParams.get("comment")} />
+      )}
+      {searchParams.get("share") && (
+        <Share postId={searchParams.get("share")} />
+      )}
     </ReactModal>
   );
 }
