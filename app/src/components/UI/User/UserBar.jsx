@@ -11,7 +11,7 @@ export default async function UserBar() {
 
   return (
     <>
-      <Picture name={user.name} url={user.picture} />
+      <Picture name={user.name} url={user.picture} height={40} width={40} />
       <User name={user.name} />
       <Tools />
     </>

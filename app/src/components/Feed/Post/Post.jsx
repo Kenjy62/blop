@@ -18,7 +18,7 @@ export default function Post({ post }) {
   return (
     <div className="w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200">
       <div className="h-fit">
-        <Link href={`/User/${post.author.name}`}>
+        <Link href={`/Feed/User/${post.author.name}`}>
           <Image
             src={post.author.picture}
             height={40}
