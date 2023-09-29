@@ -17,6 +17,7 @@ import {
 } from "react-icons/rx";
 
 export default function Actions({
+  userId,
   postId,
   comments,
   likes,
@@ -24,24 +25,24 @@ export default function Actions({
   bookmarks,
   UsersLikes,
 }) {
-  const alreadyLike = UsersLikes.find((reaction) => reaction.User.id === 2);
+  const alreadyLike = UsersLikes.find(
+    (reaction) => reaction.User.id === parseInt(userId)
+  );
 
   return (
     <div className="flex flex-row gap-6 items-center justify-between">
       <div className="flex flex-row gap-2">
         <Link href={`?comment=${postId}`} scroll={false}>
           <span className="flex flex-row gap-2 items-center cursor-pointer">
-            {comments.length} <RxChatBubble />
+            <RxChatBubble /> {comments.length}
           </span>
         </Link>
         <Link href={`?share=${postId}`} scroll={false}>
           <span className="flex flex-row gap-2 items-center cursor-pointer">
-            {shares}
-            <RxShare1 />
+            <RxShare1 /> {shares}
           </span>
         </Link>
         <span className="flex flex-row gap-2 items-center cursor-pointer">
-          {likes}
           {alreadyLike ? (
             <RxHeartFilled
               onClick={() => toggleReaction(postId, "remove")}
@@ -50,9 +51,10 @@ export default function Actions({
           ) : (
             <RxHeart onClick={() => toggleReaction(postId, "add")} />
           )}
+          {likes}
         </span>
         <span className="flex flex-row gap-2 items-center cursor-pointer">
-          {bookmarks} <RxBookmark />
+          <RxBookmark /> {bookmarks}
         </span>
       </div>
       <div className="flex flex-row gap-2">

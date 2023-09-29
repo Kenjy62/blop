@@ -1,35 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 export default function Tabs() {
   const pathname = usePathname();
+  const { name } = useParams();
 
   const Links = [
     {
       id: 0,
       name: "Post",
-      link: "/Feed/User/Kaneki",
-      active: pathname === "/Feed/User/Kaneki" ? true : false,
+      link: `/User/${name}`,
+      active: pathname === `/User/${name}` ? true : false,
     },
     {
       id: 0,
       name: "Repost",
-      link: "/Feed/User/Kaneki/Repost",
-      active: pathname === "/Feed/User/Kaneki/Repost" ? true : false,
+      link: `/User/${name}/Repost`,
+      active: pathname === `/User/${name}/Repost` ? true : false,
     },
     {
       id: 0,
       name: "Likes",
-      link: "/Feed/User/Kaneki/Likes",
-      active: pathname === "/Feed/User/Kaneki/Likes" ? true : false,
+      link: `/User/${name}/Likes`,
+      active: pathname === `/User/${name}/Likes` ? true : false,
     },
     {
       id: 0,
       name: "Medias",
-      link: "/Feed/User/Medias",
-      active: pathname === "/Feed/User/Medias" ? true : false,
+      link: `/User/${name}/Medias`,
+      active: pathname === `/User/${name}/Medias` ? true : false,
     },
   ];
 

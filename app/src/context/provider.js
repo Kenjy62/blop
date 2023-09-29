@@ -1,7 +1,7 @@
 "use client";
 
-import { UserProvider } from "./User";
+import { UserProvider } from "./user";
 
-export default function Provider({ children }) {
-  return <UserProvider>{children}</UserProvider>;
+export default function Provider({ children, user }) {
+  return <UserProvider user={user}>{children}</UserProvider>;
 }

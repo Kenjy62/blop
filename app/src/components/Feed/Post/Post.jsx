@@ -14,11 +14,11 @@ import Share from "./Share/Share";
 import Actions from "./Action";
 import { RxClock } from "react-icons/rx";
 
-export default function Post({ post }) {
+export default function Post({ userId, post }) {
   return (
     <div className="w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200">
       <div className="h-fit">
-        <Link href={`/Feed/User/${post.author.name}`}>
+        <Link href={`/User/${post.author.name}`}>
           <Image
             src={post.author.picture}
             height={40}
@@ -28,10 +28,7 @@ export default function Post({ post }) {
         </Link>
       </div>
       <div className="flex flex-col w-full gap-6">
-        <Link
-          href={`/Feed/Post/${post.id}`}
-          className="w-full flex flex-col gap-2"
-        >
+        <Link href={`/Post/${post.id}`} className="w-full flex flex-col gap-2">
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row gap-2 items-center">
               <span className="font-medium">{post.author.name} </span>
@@ -61,6 +58,7 @@ export default function Post({ post }) {
           />
         )}
         <Actions
+          userId={userId}
           postId={post.id}
           comments={post.Comment}
           likes={post.likes}

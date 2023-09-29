@@ -13,6 +13,12 @@ export const init = async () => {
     where: {
       token: token,
     },
+    select: {
+      id: true,
+      name: true,
+      picture: true,
+      token: true,
+    },
   });
   return user;
 };
