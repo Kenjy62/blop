@@ -15,16 +15,17 @@ export default function Reply({ postId }) {
 
   // Send Post
   const Reply = (textarea, postId) => {
-    if (textarea?.length >= 5) {
-      startTransition(async () => {
-        const result = await ReplyToPost(textarea, postId);
-        if (result) {
-          resetForm();
-        }
-      });
-    } else {
-      alert("Minimum 5 characters");
-    }
+    startTransition(async () => {
+      const result = await ReplyToPost(textarea, postId);
+
+      if (result.status === 400) {
+        alert(result.message);
+      }
+
+      if (result.status === 200) {
+        resetForm();
+      }
+    });
   };
 
   return (

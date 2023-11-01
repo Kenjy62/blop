@@ -23,21 +23,21 @@ export const toggleReaction = async (postId, value) => {
   };
 
   if (value === "add") {
-    const response = await prisma.blopsLiked.create({ data });
-    const increment = await prisma.blop.update({
+    await prisma.blopsLiked.create({ data });
+    await prisma.blop.update({
       where: { id: postId },
       data: { likes: { increment: 1 } },
     });
   }
 
   if (value === "remove") {
-    const response = await prisma.blopsLiked.deleteMany({
+    await prisma.blopsLiked.deleteMany({
       where: {
         blopId: parseInt(postId),
         userId: parseInt(user.id),
       },
     });
-    const decrement = await prisma.blop.update({
+    await prisma.blop.update({
       where: { id: postId },
       data: { likes: { decrement: 1 } },
     });

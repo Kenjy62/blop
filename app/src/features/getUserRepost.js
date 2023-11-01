@@ -36,6 +36,12 @@ export async function GetUserRepost(name) {
       bookmarks: true,
       type: true,
       Hashtags: true,
+      Bookmarks: {
+        select: {
+          userId: true,
+          postId: true,
+        },
+      },
       Comment: {
         select: {
           id: true,

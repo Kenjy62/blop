@@ -3,6 +3,7 @@
 // Required
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // DayJS
 import dayjs from "dayjs";
@@ -12,9 +13,15 @@ dayjs.extend(relativeTime);
 // Components
 import Share from "./Share/Share";
 import Actions from "./Action";
+
+// Icons
 import { RxClock } from "react-icons/rx";
 
 export default function Post({ userId, post }) {
+  const now = dayjs();
+  const dateDiff = now.diff(post.createdAt, "minute");
+  const pathname = usePathname();
+
   return (
     <div className="w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200">
       <div className="h-fit">
@@ -33,7 +40,11 @@ export default function Post({ userId, post }) {
             <div className="flex flex-row gap-2 items-center">
               <span className="font-medium">{post.author.name} </span>
               <span className="text-sm">
-                {post.type === "post" ? "has posted" : "has shared"}
+                {pathname.includes("/Likes")
+                  ? "has liked"
+                  : post.type === "post"
+                  ? "has posted"
+                  : "has shared"}
               </span>
             </div>
             <span className="font-light text-xs flex flex-row items-center gap-1">
@@ -59,12 +70,16 @@ export default function Post({ userId, post }) {
         )}
         <Actions
           userId={userId}
+          postAuthorId={post.author.id}
           postId={post.id}
           comments={post.Comment}
           likes={post.likes}
           shares={post.reblops}
-          bookmarks={post.bookmarks}
+          Bookmarks={post.bookmarks}
+          UsersBookmarks={post.Bookmarks}
           UsersLikes={post.UsersLikes}
+          isDeleteable={dateDiff > 5 ? false : true}
+          createdAt={post.createdAt}
         />
       </div>
     </div>

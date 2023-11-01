@@ -14,7 +14,9 @@ export default async function Feed() {
     <>
       <div className="flex flex-col gap-4">
         {post.length > 0 &&
-          post.reverse().map((post) => <Post userId={user.id} post={post} />)}
+          post
+            .reverse()
+            .map((post) => <Post key={post.id} userId={user.id} post={post} />)}
         {post.length < 1 && (
           <div className="flex justify-center">
             <p>Aucun post pour le moment</p>

@@ -8,9 +8,11 @@ import Tabs from "@/app/src/components/User/Tabs";
 
 // Features
 import { GetUser } from "@/app/src/features/getUser";
+import { init } from "@/app/src/features/user";
 
 export default async function Default({ params }) {
   const user = await GetUser(params.name);
+  const me = await init();
 
   const repostCount = user.posts.filter((post) => post.type === "share");
   const mediasCount = user.posts.filter((post) => post.picture !== null);
@@ -18,7 +20,10 @@ export default async function Default({ params }) {
   return (
     <>
       <div className="w-full">
-        <Cover />
+        <Cover
+          cover={user.cover}
+          isMyProfil={user.id === me.id ? true : false}
+        />
         <div className="flex flex-col gap-4 items-center top-[-50px] relative">
           <div className="flex flex-row gap-8 items-end">
             <span>{user.name}</span>

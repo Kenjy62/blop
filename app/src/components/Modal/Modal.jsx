@@ -7,6 +7,7 @@ import ReactModal from "react-modal";
 // Components
 import Reply from "./Type/Reply";
 import Share from "./Type/Share";
+import Bookmark from "./Type/Bookmark";
 
 // Set Modal
 ReactModal.setAppElement("html");
@@ -18,7 +19,11 @@ export default function Modal() {
   return (
     <ReactModal
       isOpen={
-        searchParams.get("comment") || searchParams.get("share") ? true : false
+        searchParams.get("comment") ||
+        searchParams.get("share") ||
+        searchParams.get("bookmark")
+          ? true
+          : false
       }
       onRequestClose={() => router.back()}
       style={{
@@ -53,6 +58,9 @@ export default function Modal() {
       )}
       {searchParams.get("share") && (
         <Share postId={searchParams.get("share")} />
+      )}
+      {searchParams.get("bookmark") && (
+        <Bookmark postId={searchParams.get("bookmark")} />
       )}
     </ReactModal>
   );

@@ -49,6 +49,12 @@ export async function AllPost() {
           Hashtags: true,
         },
       },
+      Bookmarks: {
+        select: {
+          userId: true,
+          postId: true,
+        },
+      },
     },
   });
 

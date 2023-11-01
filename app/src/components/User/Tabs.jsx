@@ -36,9 +36,10 @@ export default function Tabs() {
 
   return (
     <div className="flex flex-row gap-4 border-t border-b">
-      {Links.map((link) => {
+      {Links.map((link, id) => {
         return (
           <Link
+            key={id}
             className={`p-4 ${
               link.active && `border-b-2 border-b-watermelon-500`
             } hover:border-b-2 hover:border-b-watermelon-500`}

@@ -14,11 +14,16 @@ export default async function Page({ params }) {
     <div className="flex flex-col gap-4">
       <Post userId={user.id} post={post} />
       {post.Comment.length > 0 && (
-        <div className="flex justify-end">Filtered by : Most récent</div>
+        <div className="flex justify-end">
+          <select>
+            <option value={"most_recent"}>Most Recent</option>
+            <option value={"most_popular"}>Most Popular</option>
+          </select>
+        </div>
       )}
       {post.Comment.length > 0 &&
         post.Comment.reverse().map((comment) => {
-          return <Comment comment={comment} />;
+          return <Comment key={comment.id} comment={comment} />;
         })}
       {post.Comment.length < 1 && (
         <div className="flex justify-center">No Comment</div>

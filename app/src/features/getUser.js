@@ -13,6 +13,7 @@ export async function GetUser(name) {
       id: true,
       name: true,
       picture: true,
+      cover: true,
       posts: {
         select: { id: true, type: true, picture: true },
       },

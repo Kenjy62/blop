@@ -12,7 +12,7 @@ export default async function TopHashtags() {
         {hashtags.length > 0 &&
           hashtags.map((hashtag) => {
             return (
-              <div className="flex flex-col">
+              <div key={hashtag} className="flex flex-col">
                 <span className="cursor-pointer">{hashtag[0]}</span>
                 <span className="text-xs">{hashtag[1]} Utilisations</span>
               </div>

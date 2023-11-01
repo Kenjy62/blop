@@ -13,7 +13,7 @@ export default async function Page({ params }) {
     <div className="flex flex-col gap-4">
       {post.length > 0 &&
         post.reverse().map((post) => {
-          return <Post userId={user.id} post={post} />;
+          return <Post key={post.id} userId={user.id} post={post} />;
         })}
       {post.length < 1 && <p>Aucuns posts like pour le moment.</p>}
     </div>

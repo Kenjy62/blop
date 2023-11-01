@@ -2,7 +2,7 @@
 import Form from "./src/components/Login/Form";
 import Title from "./src/components/UI/Title/Title";
 
-export default function Login() {
+export default function Page() {
   return (
     <>
       <div className="w-full h-screen flex flex-row">

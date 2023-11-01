@@ -10,7 +10,7 @@ export default function Layout({ children }) {
     <Provider>
       <div className="flex flex-col gap-16">
         <Header />
-        <div className="flex justify-center mb-16">
+        <div className="flex justify-center mb-16 px-2">
           <div className="flex flex-row gap-16 w-[1280px]">
             <Navbar />
             {children}

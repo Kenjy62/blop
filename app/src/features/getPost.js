@@ -52,6 +52,12 @@ export async function GetPost(id) {
           },
         },
       },
+      Bookmarks: {
+        select: {
+          userId: true,
+          postId: true,
+        },
+      },
       reblopData: {
         select: {
           id: true,
