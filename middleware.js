@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
+  console.log(`User Request : ${request.nextUrl.pathname}`);
+
   const isAlreadyLogged = request.cookies.get("token");
 
+  // If pathname is '/' (Login Page) && user is already connected, redirect to feed
   if (request.nextUrl.pathname === "/" && isAlreadyLogged) {
     return NextResponse.redirect(new URL("/Feed", request.url));
   }
 
-  if (request.nextUrl.pathname !== "/" && !isAlreadyLogged) {
-    return NextResponse.redirect(new URL("/", request.url));
+  // if pathname is not '/' (Login Page) && user is not connected, redirect to Login
+  if (
+    request.nextUrl.pathname === "/" ||
+    request.nextUrl.pathname === "/Register"
+  ) {
+    if (isAlreadyLogged) {
+      return NextResponse.redirect(new URL("/Feed", request.url));
+    } else if (!isAlreadyLogged) {
+    }
   }
 }
 

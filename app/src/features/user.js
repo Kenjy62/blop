@@ -4,9 +4,105 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { fetch } from "../config/config";
+import { writeFile } from "fs/promises";
 
 // Prisma
 import { PrismaClient } from "@prisma/client";
+
+// Register User
+export async function Register(formData) {
+  const prisma = new PrismaClient();
+
+  const ifExist = await prisma.user.findFirst({
+    where: {
+      OR: [
+        {
+          name: formData.get("name"),
+        },
+        { email: formData.get("email") },
+      ],
+    },
+  });
+
+  if (ifExist) {
+    return {
+      message: fetch.user.register.error.alreadyExist.message,
+      status: fetch.user.register.error.status,
+    };
+  }
+
+  if (!ifExist) {
+    const avatar = formData.get("avatar");
+    const cover = formData.get("cover");
+
+    if (!avatar.size === 0 || !cover.size === 0) {
+      try {
+        await prisma.user.create({
+          data: {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            password: formData.get("password"),
+            picture: "/Avatars/Default.png",
+            cover: "/Covers/Default.png",
+          },
+        });
+        return {
+          message: fetch.user.register.success.message,
+          status: fetch.user.register.success.status,
+        };
+      } catch {
+        return {
+          message: fetch.user.register.error.message,
+          status: fetch.user.register.error.status,
+        };
+      } finally {
+        prisma.$disconnect;
+      }
+    }
+
+    if (avatar.size > 0 || cover.size > 0) {
+      try {
+        const avatarBytes = await avatar.arrayBuffer();
+        const avatarBuffer = Buffer.from(avatarBytes);
+
+        const coverBytes = await cover.arrayBuffer();
+        const coverBuffer = Buffer.from(coverBytes);
+
+        await writeFile(
+          `public/Covers/${formData.get("name")}_${cover.name}`,
+          coverBuffer
+        );
+
+        await writeFile(
+          `public/Avatars/${formData.get("name")}_${avatar.name}`,
+          avatarBuffer
+        );
+
+        await prisma.user.create({
+          data: {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            password: formData.get("password"),
+            picture: `/Avatars/${formData.get("name")}_${avatar.name}`,
+            cover: `/Covers/${formData.get("name")}_${cover.name}`,
+          },
+        });
+
+        return {
+          message: fetch.user.register.success.message,
+          status: fetch.user.register.success.status,
+        };
+      } catch {
+        return {
+          message: fetch.user.register.error.message,
+          status: fetch.user.register.error.status,
+        };
+      } finally {
+        prisma.$disconnect;
+      }
+    }
+  }
+}
 
 // Login User
 export async function Login(formData) {

@@ -167,6 +167,20 @@ export const fetch = {
         },
       },
     },
+    register: {
+      success: {
+        message: "Your account has been successfully created, you can log in",
+        status: 200,
+      },
+      error: {
+        alreadyExist: {
+          message: "User with this name or email already exists",
+          status: 400,
+        },
+        message: "Your account could not be created, please try again",
+        status: 400,
+      },
+    },
   },
   sidebar: {
     tophashtags: {
