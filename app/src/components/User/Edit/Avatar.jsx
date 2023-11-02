@@ -1,7 +1,10 @@
 "use client";
 
+// Required
 import { useRef, useState } from "react";
 import Image from "next/image";
+
+// Components
 import { RxPencil1 } from "react-icons/rx";
 
 export default function Avatar({ picture }) {

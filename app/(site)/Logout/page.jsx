@@ -1,6 +1,9 @@
 "use client";
 
-import { Logout } from "@/app/src/features/logout";
+// Actions
+import { Logout } from "@/app/src/features/user";
+
+// Required
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

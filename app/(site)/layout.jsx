@@ -3,6 +3,8 @@ import Modal from "@/app/src/components/Modal/Modal";
 import Header from "@/app/src/components/UI/Structure/Header";
 import Navbar from "@/app/src/components/UI/Structure/Navbar";
 import Rightbar from "@/app/src/components/UI/Structure/Rightbar";
+
+// Context
 import Provider from "@/app/src/context/provider";
 
 export default function Layout({ children }) {

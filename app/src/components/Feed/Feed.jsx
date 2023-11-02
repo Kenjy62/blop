@@ -1,28 +1,29 @@
 // Actions
-import { useContext } from "react";
-import { AllPost } from "../../features/allpost";
+import { GetAllPost } from "../../features/post";
+import { init } from "../../features/user";
+import ComponentError from "../Error/ComponentError";
 
 // Components
 import Post from "./Post/Post";
-import { init } from "../../features/user";
 
 export default async function Feed() {
-  const post = await AllPost();
-  const user = await init();
+  const { data, message, status } = await GetAllPost();
+
+  if (status === 400) {
+    return <ComponentError message={message} />;
+  }
+
+  if (status === 200 && data.length > 0) {
+    const user = await init();
+    return data
+      .reverse()
+      .map((post) => <Post key={post.id} userId={user.data.id} post={post} />);
+  }
 
   return (
-    <>
-      <div className="flex flex-col gap-4">
-        {post.length > 0 &&
-          post
-            .reverse()
-            .map((post) => <Post key={post.id} userId={user.id} post={post} />)}
-        {post.length < 1 && (
-          <div className="flex justify-center">
-            <p>Aucun post pour le moment</p>
-          </div>
-        )}
-      </div>
-    </>
+    <p>
+      No posts at the moment, you have the honor of writing the very first with
+      the text field above
+    </p>
   );
 }

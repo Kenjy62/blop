@@ -1,33 +1,43 @@
 // Components
+import ComponentError from "@/app/src/components/Error/ComponentError";
 import Comment from "@/app/src/components/Feed/Post/Comment/Comment";
 import Post from "@/app/src/components/Feed/Post/Post";
 
 // Features
-import { GetPost } from "@/app/src/features/getPost";
+import { GetPostDetails } from "@/app/src/features/post";
 import { init } from "@/app/src/features/user";
 
 export default async function Page({ params }) {
-  const post = await GetPost(params.id);
-  const user = await init();
+  const { data, message, status } = await GetPostDetails(params.id);
 
-  return (
-    <div className="flex flex-col gap-4">
-      <Post userId={user.id} post={post} />
-      {post.Comment.length > 0 && (
-        <div className="flex justify-end">
-          <select>
-            <option value={"most_recent"}>Most Recent</option>
-            <option value={"most_popular"}>Most Popular</option>
-          </select>
-        </div>
-      )}
-      {post.Comment.length > 0 &&
-        post.Comment.reverse().map((comment) => {
-          return <Comment key={comment.id} comment={comment} />;
-        })}
-      {post.Comment.length < 1 && (
-        <div className="flex justify-center">No Comment</div>
-      )}
-    </div>
-  );
+  if (status === 400) {
+    return <ComponentError message={message} />;
+  }
+
+  if (status === 200) {
+    const user = await init();
+
+    return (
+      <div className="flex flex-col gap-4">
+        <Post userId={user.data.id} post={data} />
+        {data.Comment.length > 0 && (
+          <div className="flex justify-end">
+            <select>
+              <option value={"most_recent"}>Most Recent</option>
+              <option value={"most_popular"}>Most Popular</option>
+            </select>
+          </div>
+        )}
+        {data.Comment.length > 0 &&
+          data.Comment.reverse().map((comment) => {
+            return <Comment key={comment.id} comment={comment} />;
+          })}
+        {data.Comment.length < 1 && (
+          <div className="flex justify-center">
+            No comments yet on this post
+          </div>
+        )}
+      </div>
+    );
+  }
 }

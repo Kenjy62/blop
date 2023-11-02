@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import Button from "../../UI/Button/Button";
 
 // Features
-import { ReplyToPost } from "@/app/src/features/reply";
+import { ReplyToPost } from "@/app/src/features/post";
 
 export default function Reply({ postId }) {
   const [textarea, setTextarea] = useState();

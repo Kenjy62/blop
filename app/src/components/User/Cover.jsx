@@ -1,9 +1,12 @@
 "use client";
 
+// Required
 import Image from "next/image";
-import Button from "../UI/Button/Button";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+
+// Components
+import Button from "../UI/Button/Button";
 
 export default function Cover({ cover, isMyProfil }) {
   const { name } = useParams();

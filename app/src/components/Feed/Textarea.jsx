@@ -4,7 +4,7 @@
 import { useTransition, useRef, useState } from "react";
 
 // Actions
-import { NewPost } from "../../features/newpost";
+import { CreatePost } from "../../features/post";
 
 // Components
 import Button from "@/app/src/components/UI/Button/Button";
@@ -59,7 +59,7 @@ export default function Textarea() {
   // Send Post
   const sendPost = () => {
     startTransition(async () => {
-      const result = await NewPost(
+      const result = await CreatePost(
         textarea,
         files.length > 0 ? true : false,
         "post"

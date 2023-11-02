@@ -32,6 +32,37 @@ export const fetch = {
         status: 200,
       },
     },
+    getAll: {
+      success: {
+        message: "The list of posts to be retrieved was retrieved",
+        status: 200,
+      },
+      error: {
+        message:
+          "An error occurred while retrieving posts, please refresh the page.",
+        status: 400,
+      },
+    },
+    getUserPosts: {
+      success: {
+        message: "The list of user positions has been successfully retrieved",
+        status: 200,
+      },
+      error: {
+        message: `The user's post list could not be retrieved`,
+        status: 400,
+      },
+    },
+    getDetails: {
+      success: {
+        message: "The details of the post were retrieved",
+        status: 200,
+      },
+      error: {
+        message: "Post details could not be retrieved",
+        status: 400,
+      },
+    },
   },
   comment: {
     create: {
@@ -53,6 +84,100 @@ export const fetch = {
     error: {
       message: "An error has occurred",
       status: 400,
+    },
+  },
+  user: {
+    init: {
+      success: {
+        message: "User initialized successfully",
+        status: 200,
+      },
+      error: {
+        message: "An error occurred during user initialization",
+        status: 400,
+      },
+    },
+    get: {
+      success: {
+        message: "The user has been successfully recovered",
+        status: 200,
+      },
+      error: {
+        message: "The user could not be recovered, try to refresh page",
+        status: 400,
+      },
+    },
+    post: {
+      get: {
+        shared: {
+          success: {
+            message: "The list of posts shared by the user has been retrieved",
+            status: 200,
+          },
+          error: {
+            message:
+              "The list of posts shared by the user could not be retrieved",
+            status: 400,
+          },
+        },
+        liked: {
+          success: {
+            message: "The list of posts liked by the user has been retrieved",
+            status: 200,
+          },
+          error: {
+            message:
+              "The list of posts liked by the user could not be retrieved",
+            status: 400,
+          },
+        },
+        bookmarked: {
+          success: {
+            message:
+              "The list of posts bookmarked by the user has been retrieved",
+            status: 200,
+          },
+          error: {
+            message:
+              "The list of posts bookmarked by the user could not be retrieved",
+            status: 400,
+          },
+        },
+        media: {
+          success: {
+            message: "The list of medias by the user has been retrieved",
+            status: 200,
+          },
+          error: {
+            message: "The list of medias by the user could not be retrieved",
+            status: 400,
+          },
+        },
+      },
+    },
+    bookmark: {
+      get: {
+        success: {
+          message: "The list of bookmarks has been retrieved",
+          status: 200,
+        },
+        error: {
+          message: "The list of bookmarks could not be retrieved",
+          status: 400,
+        },
+      },
+    },
+  },
+  sidebar: {
+    tophashtags: {
+      success: {
+        message: "The lists of the top hashtags have been recovered",
+        status: 200,
+      },
+      error: {
+        message: "The lists of top hashtags could not be retrieved",
+        status: 400,
+      },
     },
   },
 };

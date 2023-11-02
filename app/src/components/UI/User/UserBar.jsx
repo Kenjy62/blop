@@ -5,15 +5,22 @@ import Tools from "./Tools";
 
 // Actions
 import { init } from "@/app/src/features/user";
+import ComponentError from "../../Error/ComponentError";
 
 export default async function UserBar() {
-  const user = await init();
+  const { data, message, status } = await init();
 
-  return (
-    <>
-      <Picture name={user.name} url={user.picture} height={40} width={40} />
-      <User name={user.name} />
-      <Tools />
-    </>
-  );
+  if (status === 400) {
+    return <ComponentError message={message} />;
+  }
+
+  if (status === 200) {
+    return (
+      <>
+        <Picture name={data.name} url={data.picture} height={40} width={40} />
+        <User name={data.name} />
+        <Tools />
+      </>
+    );
+  }
 }

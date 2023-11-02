@@ -1,5 +1,8 @@
-import Setting from "@/app/src/components/User/Setting/Setting";
+// Features
 import { getNotificationsSettings } from "@/app/src/features/user";
+
+// Components
+import Setting from "@/app/src/components/User/Setting/Setting";
 
 export default async function Page() {
   const UserSettings = await getNotificationsSettings();

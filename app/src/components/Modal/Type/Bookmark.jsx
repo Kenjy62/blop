@@ -1,20 +1,20 @@
 // Required
-import { useState, useTransition } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Components
 import Button from "../../UI/Button/Button";
 import Title from "../../UI/Title/Title";
 
 // Features
-import { AddToBookmark } from "@/app/src/features/Bookmarks";
-import { useRouter } from "next/navigation";
+import { CreateBookmark } from "@/app/src/features/bookmark";
 
 export default function Bookmark({ postId }) {
   const [tag, setTag] = useState();
   const router = useRouter();
 
   const actionAddBookmarks = async () => {
-    const response = await AddToBookmark(postId, tag);
+    const response = await CreateBookmark(postId, tag);
 
     if (response.status === 400) {
       alert(response.message);

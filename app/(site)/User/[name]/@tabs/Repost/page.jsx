@@ -1,17 +1,30 @@
 // Features
+import { GetUserPostsShared } from "@/app/src/features/user";
+
+// Components
 import Post from "@/app/src/components/Feed/Post/Post";
-import { GetUserRepost } from "@/app/src/features/getUserRepost";
+import ComponentError from "@/app/src/components/Error/ComponentError";
 
-export default async function Page({ params, searchParams }) {
-  const post = await GetUserRepost(params.name);
+export default async function Page({ params }) {
+  const { data, message, status } = await GetUserPostsShared(params.name);
 
-  return (
-    <div className="flex flex-col gap-4">
-      {post.length > 0 &&
-        post.reverse().map((post) => {
-          return <Post key={post.id} post={post} />;
-        })}
-      {post.length < 1 && <p>Aucun repost pour le moment.</p>}
-    </div>
-  );
+  console.log(data);
+
+  if (status === 400) {
+    return <ComponentError message={message} />;
+  }
+
+  if (status === 200) {
+    return (
+      <div className="flex flex-col gap-4">
+        {data.length > 0 &&
+          data.reverse().map((post) => {
+            return <Post key={post.id} post={post} />;
+          })}
+        {data.length < 1 && (
+          <p>The user has not shared any posts to their credit yet</p>
+        )}
+      </div>
+    );
+  }
 }

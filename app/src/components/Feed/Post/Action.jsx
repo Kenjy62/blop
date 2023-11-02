@@ -2,9 +2,8 @@
 import Link from "next/link";
 
 // Features
-import { toggleReaction } from "@/app/src/features/reaction";
-import { deletePost } from "@/app/src/features/deletePost";
-import { RemoveFromBookmarks } from "@/app/src/features/Bookmarks";
+import { DeletePost, ReactionPost } from "@/app/src/features/post";
+import { RemoveBookmark } from "@/app/src/features/bookmark";
 
 // DayJS
 import dayjs from "dayjs";
@@ -49,7 +48,7 @@ export default function Actions({
     const dateDiff = now.diff(createdAt, "minute");
 
     if (dateDiff < 5) {
-      const response = await deletePost(postId);
+      const response = await DeletePost(postId);
       if (response.status === 400) {
         alert(response.message);
       }
@@ -58,8 +57,8 @@ export default function Actions({
     }
   };
 
-  const RemoveBookmark = async (postId) => {
-    const response = await RemoveFromBookmarks(postId);
+  const deleteBookmark = async (postId) => {
+    const response = await RemoveBookmark(postId);
     if (response.status === 200) {
       alert("Delete");
     } else {
@@ -83,11 +82,11 @@ export default function Actions({
         <span className="flex flex-row gap-2 items-center cursor-pointer">
           {alreadyLike ? (
             <RxHeartFilled
-              onClick={() => toggleReaction(postId, "remove")}
+              onClick={() => ReactionPost(postId, "remove")}
               className="text-watermelon-500"
             />
           ) : (
-            <RxHeart onClick={() => toggleReaction(postId, "add")} />
+            <RxHeart onClick={() => ReactionPost(postId, "add")} />
           )}
           {likes}
         </span>
@@ -95,7 +94,7 @@ export default function Actions({
         {alreadyBookmarks ? (
           <span className="flex flex-row gap-2 items-center cursor-pointer">
             <RxBookmarkFilled
-              onClick={() => RemoveBookmark(postId)}
+              onClick={() => deleteBookmark(postId)}
               className="text-watermelon-500"
             />
           </span>

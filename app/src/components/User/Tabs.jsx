@@ -1,5 +1,6 @@
 "use client";
 
+// Required
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 

@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import Button from "../../UI/Button/Button";
 
 // Features
-import { SharePost } from "@/app/src/features/share";
+import { SharePost } from "@/app/src/features/post";
 
 export default function Share({ postId }) {
   const [textarea, setTextarea] = useState();

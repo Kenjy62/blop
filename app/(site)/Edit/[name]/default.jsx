@@ -1,5 +1,5 @@
+// Components
 import Nav from "@/app/src/components/User/Setting/Nav";
-import Link from "next/link";
 
 export default function Default({ params }) {
   const { name } = params;

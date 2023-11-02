@@ -2,27 +2,84 @@
 
 // Required
 import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+import { fetch } from "../config/config";
 
 // Prisma
 import { PrismaClient } from "@prisma/client";
 
-export const init = async () => {
-  const token = cookies().get("token")?.value;
+// Login User
+export async function Login(formData) {
   const prisma = new PrismaClient();
-  const user = await prisma.user.findFirst({
+
+  const response = await prisma.user.findFirst({
     where: {
-      token: token,
+      email: formData.get("email"),
+      password: formData.get("password"),
     },
     select: {
       id: true,
       name: true,
       picture: true,
-      token: true,
     },
   });
-  return user;
+
+  if (response) {
+    const token = jwt.sign({ token: response.id }, "randomKey");
+    await prisma.user.update({
+      where: {
+        id: response.id,
+      },
+      data: {
+        token: token,
+      },
+    });
+    cookies().set("token", token);
+    prisma.$disconnect;
+    return token;
+  } else {
+    return null;
+  }
+}
+
+// Logout User
+export async function Logout() {
+  cookies().delete("token");
+}
+
+// Base Initialization User
+export const init = async () => {
+  const token = cookies().get("token")?.value;
+  const prisma = new PrismaClient();
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        token: token,
+      },
+      select: {
+        id: true,
+        name: true,
+        picture: true,
+        token: true,
+      },
+    });
+    return {
+      data: user,
+      message: fetch.user.init.success.message,
+      status: fetch.user.init.success.status,
+    };
+  } catch (error) {
+    return {
+      message: fetch.user.init.error.message,
+      status: fetch.user.init.error.status,
+    };
+  } finally {
+    prisma.$disconnect;
+  }
 };
 
+// Update User Avatar
 export const UpdateAvatar = async (filename) => {
   const me = await init();
 
@@ -43,6 +100,7 @@ export const UpdateAvatar = async (filename) => {
   }
 };
 
+// Update User Cover
 export const UpdateCover = async (filename) => {
   const me = await init();
 
@@ -63,6 +121,7 @@ export const UpdateCover = async (filename) => {
   }
 };
 
+// Get User Notifications Settings
 export const getNotificationsSettings = async () => {
   const me = await init();
 
@@ -81,6 +140,7 @@ export const getNotificationsSettings = async () => {
   return response;
 };
 
+// Update User Notifications Settings
 export const updateNotificationSetting = async (type) => {
   const me = await init();
   const prisma = new PrismaClient();
@@ -129,3 +189,337 @@ export const updateNotificationSetting = async (type) => {
     });
   }
 };
+
+// Get User Posts
+export async function GetUserPosts(name) {
+  const prisma = new PrismaClient();
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const response = await prisma.blop.findMany({
+      where: {
+        authorId: parseInt(user.id),
+        type: "post",
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        content: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            picture: true,
+          },
+        },
+        picture: true,
+        reblops: true,
+        likes: true,
+        bookmarks: true,
+        type: true,
+        Hashtags: true,
+        Comment: {
+          select: {
+            id: true,
+            message: true,
+            createdAt: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+          },
+        },
+        UsersLikes: {
+          select: {
+            blopId: true,
+            User: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+          },
+        },
+        Bookmarks: {
+          select: {
+            postId: true,
+            userId: true,
+          },
+        },
+        reblopData: {
+          select: {
+            id: true,
+            createdAt: true,
+            content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+            Hashtags: true,
+          },
+        },
+      },
+    });
+
+    return {
+      data: response,
+      message: fetch.post.getUserPosts.success.message,
+      status: fetch.post.getUserPosts.success.status,
+    };
+  } catch (error) {
+    return {
+      message: fetch.post.getUserPosts.error.message,
+      status: fetch.post.getUserPosts.error.status,
+    };
+  } finally {
+    prisma.$disconnect;
+  }
+}
+
+// Get User Posts Liked
+export async function GetUserPostsLiked(name) {
+  const prisma = new PrismaClient();
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const response = await prisma.blop.findMany({
+      where: {
+        UsersLikes: {
+          some: {
+            userId: user.id,
+          },
+        },
+      },
+      include: {
+        Comment: {
+          select: {
+            id: true,
+            message: true,
+            author: {
+              select: {
+                id: true,
+                picture: true,
+                name: true,
+              },
+            },
+            createdAt: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            name: true,
+            picture: true,
+          },
+        },
+        UsersLikes: {
+          select: {
+            User: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+        Bookmarks: {
+          select: {
+            userId: true,
+            postId: true,
+          },
+        },
+        reblopData: {
+          select: {
+            id: true,
+            content: true,
+            picture: true,
+            createdAt: true,
+            author: {
+              select: {
+                id: true,
+                picture: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return {
+      data: response,
+      message: fetch.user.post.get.liked.success.message,
+      status: fetch.user.post.get.liked.success.status,
+    };
+  } catch {
+    return {
+      message: fetch.user.post.get.liked.error.message,
+      status: fetch.user.post.get.liked.error.status,
+    };
+  } finally {
+    prisma.$disconnect;
+  }
+}
+
+// Get User Posts Shared
+export async function GetUserPostsShared(name) {
+  const prisma = new PrismaClient();
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const response = await prisma.blop.findMany({
+      where: {
+        authorId: parseInt(user.id),
+        type: "share",
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        content: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            picture: true,
+          },
+        },
+        picture: true,
+        reblops: true,
+        likes: true,
+        bookmarks: true,
+        type: true,
+        Hashtags: true,
+        Bookmarks: {
+          select: {
+            userId: true,
+            postId: true,
+          },
+        },
+        Comment: {
+          select: {
+            id: true,
+            message: true,
+            createdAt: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+          },
+        },
+        UsersLikes: {
+          select: {
+            blopId: true,
+            User: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+          },
+        },
+        reblopData: {
+          select: {
+            id: true,
+            createdAt: true,
+            content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+            Hashtags: true,
+          },
+        },
+      },
+    });
+
+    return {
+      data: response,
+      message: fetch.user.post.get.shared.success.message,
+      status: fetch.user.post.get.shared.success.status,
+    };
+  } catch {
+    return {
+      message: fetch.user.post.get.shared.error.message,
+      status: fetch.user.post.get.shared.error.status,
+    };
+  } finally {
+    prisma.$disconnect;
+  }
+}
+
+// Get User Details
+export async function GetUserDetails(name) {
+  const prisma = new PrismaClient();
+
+  try {
+    const response = await prisma.user.findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        id: true,
+        name: true,
+        picture: true,
+        cover: true,
+        posts: {
+          select: { id: true, type: true, picture: true },
+        },
+        Comment: {
+          select: { id: true },
+        },
+        BlopsLiked: {
+          select: { id: true },
+        },
+      },
+    });
+    return {
+      data: response,
+      message: fetch.user.get.success.message,
+      status: fetch.user.get.success.status,
+    };
+  } catch (error) {
+    return {
+      message: fetch.user.get.error.message,
+      status: fetch.user.get.error.status,
+    };
+  } finally {
+    prisma.$disconnect;
+  }
+}

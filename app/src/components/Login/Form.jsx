@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation";
 
 // Actions
-import { Login } from "../../features/login";
+import { Login } from "../../features/user";
 
 export default function Form() {
   const router = useRouter();

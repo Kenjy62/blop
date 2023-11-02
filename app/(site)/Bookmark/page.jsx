@@ -1,32 +1,39 @@
 // Components
 import Bookmarks from "@/app/src/components/Bookmark/Bookmarks";
+import ComponentError from "@/app/src/components/Error/ComponentError";
 
 // Features
-import { GetBookmarksTags } from "@/app/src/features/getBookmarksTags";
+import { GetUserBookmarks } from "@/app/src/features/bookmark";
 
 export default async function Page() {
-  const BookmarksList = await GetBookmarksTags();
+  const { data, message, status } = await GetUserBookmarks();
 
-  const uniqueTags = ["All"];
+  if (status === 400) {
+    return <ComponentError message={message} />;
+  }
 
-  BookmarksList.response.forEach((el) => {
-    if (!uniqueTags.includes(el.tags)) {
-      uniqueTags.push(el.tags);
-    }
-  });
+  if (status === 200) {
+    const uniqueTags = ["All"];
 
-  return (
-    <>
-      {BookmarksList.response.length > 0 && (
-        <Bookmarks
-          Tags={uniqueTags}
-          BookmarksList={BookmarksList.response}
-          userId={BookmarksList.user.id}
-        />
-      )}
-      {BookmarksList.response.length < 1 && (
-        <p>Aucun bookmarks pour le moment...</p>
-      )}
-    </>
-  );
+    data.response.forEach((el) => {
+      if (!uniqueTags.includes(el.tags)) {
+        uniqueTags.push(el.tags);
+      }
+    });
+
+    return (
+      <>
+        {data.response.length > 0 && (
+          <Bookmarks
+            Tags={uniqueTags}
+            BookmarksList={data.response}
+            userId={data.user.id}
+          />
+        )}
+        {data.response.length < 1 && (
+          <p>You don't have any bookmarks at the moment</p>
+        )}
+      </>
+    );
+  }
 }
