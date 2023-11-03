@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { fetch } from "../config/config";
 import { HashtagsExtrator } from "./hashtagsExtractor";
+import { io } from "socket.io-client";
 
 // Get All Post List for Feed
 export async function GetAllPost() {
@@ -394,6 +395,11 @@ export const ReplyToPost = async (content, postId) => {
 
     await prisma.comment.create({ data });
     prisma.$disconnect;
+
+    var socket = io.connect("http://localhost:3001");
+    const socketData = { userid: user.id, blopid: postId };
+    socket.emit("newNotification", socketData);
+
     return redirect(`/Post/${postId}`);
   } else {
     return {

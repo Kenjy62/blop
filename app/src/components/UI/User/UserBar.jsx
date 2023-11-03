@@ -19,7 +19,7 @@ export default async function UserBar() {
       <>
         <Picture name={data.name} url={data.picture} height={40} width={40} />
         <User name={data.name} />
-        <Tools />
+        <Tools user={data} />
       </>
     );
   }
