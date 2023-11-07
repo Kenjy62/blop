@@ -1,21 +1,23 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import { io } from "socket.io-client";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [s, setS] = useState(null);
+  const [socket, setSocket] = useState(null);
 
-  const socketInit = (id) => {
-    var socket = io("http://localhost:3001");
+  useEffect(() => {
+    const socket = io("http://localhost:3001");
+    setSocket(socket);
+  }, []);
+
+  const socketInit = async (id) => {
     socket.emit("userInit", id);
-    setS(socket.id);
+    return true;
   };
 
-  const socketLike = () => {};
-
   return (
-    <UserContext.Provider value={{ socketInit, s }}>
+    <UserContext.Provider value={{ socketInit, socket }}>
       {children}
     </UserContext.Provider>
   );

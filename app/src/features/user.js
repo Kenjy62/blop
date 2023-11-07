@@ -158,6 +158,9 @@ export const init = async () => {
         name: true,
         picture: true,
         token: true,
+        comment_notification: true,
+        like_notification: true,
+        message_notification: true,
       },
     });
     return {
@@ -619,3 +622,42 @@ export async function GetUserDetails(name) {
     prisma.$disconnect;
   }
 }
+
+export const getNotifications = async () => {
+  const me = await init();
+
+  const prisma = new PrismaClient();
+
+  try {
+    const response = await prisma.notification.findMany({
+      where: {
+        for: parseInt(me.data.id),
+      },
+      select: {
+        id: true,
+        isRead: true,
+        type: true,
+        author: {
+          select: {
+            id: true,
+            picture: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return {
+      data: response,
+      message: "Ok",
+      status: 200,
+    };
+  } catch (error) {
+    return {
+      message: "nop",
+      status: 400,
+    };
+  } finally {
+    prisma.$disconnect;
+  }
+};

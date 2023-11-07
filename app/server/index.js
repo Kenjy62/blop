@@ -35,14 +35,53 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("newLike", (data) => {
-    console.log("User like a post");
-  });
-
-  socket.on("newNotification", (socketData) => {
+  socket.on("newCommentOnPost", async (socketData) => {
     console.log(
       `UserID : ${socketData.userid} comment PostID: ${socketData.blopid}`
     );
+
+    const prisma = new PrismaClient();
+    try {
+      const response = await prisma.blop.findFirst({
+        where: { id: parseInt(socketData.blopid) },
+        select: {
+          author: {
+            select: {
+              id: true,
+              socket: true,
+            },
+          },
+        },
+      });
+
+      await prisma.notification.create({
+        data: {
+          type: "comment",
+          from: socketData.userid,
+          for: response.author.id,
+          isRead: 0,
+        },
+      });
+
+      await prisma.user.update({
+        where: {
+          id: parseInt(response.author.id),
+        },
+        data: {
+          comment_notification: { increment: 1 },
+        },
+      });
+
+      const data = {
+        postId: socketData.blopid,
+        userId: socketData.userid,
+        type: "comment",
+      };
+
+      io.to(response.author.socket).emit("incrementCommentNotification", data);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   socket.on("disconnect", () => {

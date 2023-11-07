@@ -398,7 +398,7 @@ export const ReplyToPost = async (content, postId) => {
 
     var socket = io.connect("http://localhost:3001");
     const socketData = { userid: user.id, blopid: postId };
-    socket.emit("newNotification", socketData);
+    socket.emit("newCommentOnPost", socketData);
 
     return redirect(`/Post/${postId}`);
   } else {
