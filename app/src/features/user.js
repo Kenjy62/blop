@@ -56,7 +56,7 @@ export async function Register(formData) {
           status: fetch.user.register.error.status,
         };
       } finally {
-        prisma.$disconnect;
+        prisma.$disconnect();
       }
     }
 
@@ -98,7 +98,7 @@ export async function Register(formData) {
           status: fetch.user.register.error.status,
         };
       } finally {
-        prisma.$disconnect;
+        prisma.$disconnect();
       }
     }
   }
@@ -142,7 +142,7 @@ export async function Login(formData) {
       status: fetch.user.login.error.statut,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -183,7 +183,7 @@ export const init = async () => {
       status: fetch.user.init.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 };
 
@@ -395,7 +395,7 @@ export async function GetUserPosts(name) {
       status: fetch.post.getUserPosts.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -487,7 +487,7 @@ export async function GetUserPostsLiked(name) {
       status: fetch.user.post.get.liked.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -588,7 +588,7 @@ export async function GetUserPostsShared(name) {
       status: fetch.user.post.get.shared.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -628,7 +628,7 @@ export async function GetUserDetails(name) {
       status: fetch.user.get.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -667,6 +667,6 @@ export const getNotifications = async () => {
       status: 400,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 };

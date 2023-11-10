@@ -36,6 +36,6 @@ export async function GetTopHashtags() {
       status: fetch.sidebar.tophashtags.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }

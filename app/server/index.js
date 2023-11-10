@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
           socket: socket.id,
         },
       });
-      prisma.$disconnect;
+      prisma.$disconnect();
       console.log(`User with id : ${id} socket update in database`);
     } catch (error) {
       console.log(error);

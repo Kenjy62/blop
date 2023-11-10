@@ -6,6 +6,7 @@ import Rightbar from "@/app/src/components/UI/Structure/Rightbar";
 
 // Context
 import Provider from "@/app/src/context/provider";
+import SearchContainer from "../src/components/UI/Searchbar/SearchContainer";
 
 export default function Layout({ children }) {
   return (
@@ -20,6 +21,7 @@ export default function Layout({ children }) {
           </div>
         </div>
       </div>
+      <SearchContainer />
       <Modal />
     </Provider>
   );

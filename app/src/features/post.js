@@ -80,7 +80,7 @@ export async function GetAllPost() {
       status: fetch.post.getAll.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -144,7 +144,7 @@ export async function CreatePost(textarea, files, type, postId) {
       await prisma.post.create({ data });
 
       revalidatePath("/Feed");
-      prisma.$disconnect;
+      prisma.$disconnect();
       return {
         message: fetch.post.create.success.message,
         status: fetch.post.create.success.status,
@@ -198,7 +198,7 @@ export async function DeletePost(postId) {
       status: fetch.post.delete.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -291,7 +291,7 @@ export async function GetPostDetails(id) {
       status: fetch.post.getDetails.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -336,7 +336,7 @@ export const ReactionPost = async (postId, value) => {
   }
 
   revalidatePath("/Feed");
-  prisma.$disconnect;
+  prisma.$disconnect();
 };
 
 // Share a Post
@@ -368,7 +368,7 @@ export async function SharePost(textarea, files, type, postId) {
   await prisma.post.create({ data });
 
   revalidatePath("/Feed");
-  prisma.$disconnect;
+  prisma.$disconnect();
   return revalidatePath("/Feed");
 }
 
@@ -396,7 +396,7 @@ export const ReplyToPost = async (content, postId) => {
     };
 
     await prisma.comment.create({ data });
-    prisma.$disconnect;
+    prisma.$disconnect();
 
     var socket = io.connect("http://localhost:3001");
     const socketData = { userid: user.id, blopid: postId };

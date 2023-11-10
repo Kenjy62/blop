@@ -1,21 +1,25 @@
 "use server";
 
 import { PrismaClient } from "@prisma/client";
-import { revalidateTag } from "next/cache";
 
-export const setIsRead = async (id) => {
+export const onSearch = async (data) => {
   const prisma = new PrismaClient();
 
   try {
-    await prisma.notification.update({
+    const user = prisma.user.findMany({
       where: {
-        id: parseInt(id),
+        name: {
+          contains: data,
+        },
       },
-      data: {
-        isRead: 1,
+      select: {
+        name: true,
+        picture: true,
+        cover: true,
       },
     });
-    return revalidateTag("notifications");
+
+    return user;
   } catch (error) {
     return false;
   } finally {

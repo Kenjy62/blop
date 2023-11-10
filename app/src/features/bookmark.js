@@ -47,7 +47,7 @@ export async function CreateBookmark(postId, tag) {
       status: fetch.bookmark.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -76,7 +76,7 @@ export async function RemoveBookmark(postId) {
   } catch (error) {
     return { message: "error", status: 400 };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
 
@@ -167,6 +167,6 @@ export async function GetUserBookmarks() {
       status: fetch.user.bookmark.get.error.status,
     };
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 }
