@@ -81,10 +81,17 @@ export default function Textarea() {
     setFiles([]);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      sendPost();
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col gap-4 w-full border rounded-lg p-4">
         <textarea
+          onKeyDown={handleKeyPress}
           onChange={(e) => setTextarea(e.target.value)}
           className="w-full rounded-lg resize-none outline-none"
           placeholder="Write a new post.."

@@ -2,23 +2,27 @@
 
 // Required
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 // Actions
 import { Login } from "../../features/user";
+import { Error } from "../UI/Globals/Alert";
 
 export default function Form() {
   const router = useRouter();
+  const [error, setError] = useState(null);
 
   async function handleSubmit(formData) {
-    const response = await Login(formData);
-    if (response !== null) {
+    const { data, message, status } = await Login(formData);
+    if (status !== 400) {
       router.push("/Feed");
     }
-    if (response === null) alert("Error");
+    if (status === 400) setError(message);
   }
 
   return (
     <form className="flex flex-col gap-4 p-4 border rounded-lg">
+      {error && <Error>{error}</Error>}
       <div className="flex flex-col gap-2">
         <label htmlFor="email">Email</label>
         <input

@@ -20,7 +20,7 @@ export default async function Page({ params }) {
     return (
       <div className="flex flex-col gap-4">
         <Post userId={user.data.id} post={data} />
-        {data.Comment.length > 0 && (
+        {data.comments.length > 0 && (
           <div className="flex justify-end">
             <select>
               <option value={"most_recent"}>Most Recent</option>
@@ -28,11 +28,11 @@ export default async function Page({ params }) {
             </select>
           </div>
         )}
-        {data.Comment.length > 0 &&
-          data.Comment.reverse().map((comment) => {
+        {data.comments.length > 0 &&
+          data.comments.reverse().map((comment) => {
             return <Comment key={comment.id} comment={comment} />;
           })}
-        {data.Comment.length < 1 && (
+        {data.comments.length < 1 && (
           <div className="flex justify-center">
             No comments yet on this post
           </div>

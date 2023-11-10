@@ -13,9 +13,10 @@ export default function Share({ post }) {
         <div>
           <Image
             src={post.author.picture}
-            height={40}
-            width={40}
-            className="rounded-full"
+            height={100}
+            width={100}
+            className="rounded-full h-10 w-10"
+            alt={`${post.author.name} avatar`}
           />
         </div>
       </div>

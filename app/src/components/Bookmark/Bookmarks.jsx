@@ -18,7 +18,7 @@ export default function Bookmarks({ BookmarksList, Tags, userId }) {
   useEffect(() => {
     if (selectedTag !== "All") {
       setFilteredBookmarks(
-        BookmarksList.filter((el) => el.tags === selectedTag)
+        BookmarksList.filter((el) => el.tag === selectedTag)
       );
     } else {
       setFilteredBookmarks(BookmarksList);
@@ -29,20 +29,19 @@ export default function Bookmarks({ BookmarksList, Tags, userId }) {
     <>
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-4">
-          {Tags.map((tag) => (
-            <div onClick={() => handleClickTag(tag)}>
-              <Tag
-                key={tag}
-                state={selectedTag === tag ? "Active" : "Unactive"}
-              >
-                {tag}
-              </Tag>
-            </div>
-          ))}
+          {Tags.map((tag, id) => {
+            return (
+              <div key={id} onClick={() => handleClickTag(tag)}>
+                <Tag state={selectedTag === tag ? "Active" : "Unactive"}>
+                  {tag}
+                </Tag>
+              </div>
+            );
+          })}
         </div>
         <div className="flex flex-col gap-4">
-          {filteredBookmarks.map((el) => {
-            return <Post key={el.id} userId={userId} post={el.post} />;
+          {filteredBookmarks.map((el, id) => {
+            return <Post key={id} userId={userId} post={el.post} />;
           })}
         </div>
       </div>

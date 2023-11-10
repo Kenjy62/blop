@@ -30,6 +30,7 @@ export async function GetTopHashtags() {
       status: fetch.sidebar.tophashtags.success.status,
     };
   } catch (error) {
+    console.log(error);
     return {
       message: fetch.sidebar.tophashtags.error.message,
       status: fetch.sidebar.tophashtags.error.status,

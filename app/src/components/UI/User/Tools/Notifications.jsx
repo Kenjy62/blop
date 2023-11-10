@@ -9,9 +9,9 @@ import { RxBell } from "react-icons/rx";
 import { UserContext } from "@/app/src/context/user";
 import Comment from "../Notification/Comment";
 
-export default function Notifications({ user }) {
-  const [commentNotificationCount, setCommentNotificationCount] = useState(
-    user.comment_notification
+export default function Notifications({ user_id, data }) {
+  const [notifications, setNotifications] = useState(
+    data.filter((item) => item.isRead === 0 && item.type !== "message").length
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -20,10 +20,10 @@ export default function Notifications({ user }) {
 
   useEffect(() => {
     if (socket) {
-      socketInit(user.id);
+      socketInit(user_id);
 
       socket.on("incrementCommentNotification", (data) => {
-        setCommentNotificationCount(commentNotificationCount + 1);
+        setNotifications(notifications + 1);
       });
     }
   }, [socket]);
@@ -35,7 +35,7 @@ export default function Notifications({ user }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="absolute text-xs rounded-full h-4 w-4 text-white bg-watermelon-400 top-[-17px] right-[-8px] flex justify-center items-center">
-          {commentNotificationCount}
+          {notifications}
         </div>
         <RxBell />
       </div>

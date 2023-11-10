@@ -8,8 +8,6 @@ import ComponentError from "@/app/src/components/Error/ComponentError";
 export default async function Page({ params }) {
   const { data, message, status } = await GetUserPostsShared(params.name);
 
-  console.log(data);
-
   if (status === 400) {
     return <ComponentError message={message} />;
   }

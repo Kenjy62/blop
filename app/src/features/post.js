@@ -16,11 +16,18 @@ export async function GetAllPost() {
   const prisma = new PrismaClient();
 
   try {
-    const response = await prisma.blop.findMany({
+    const response = await prisma.post.findMany({
       select: {
         id: true,
         createdAt: true,
         content: true,
+        picture: true,
+        shares: true,
+        likes: true,
+        bookmarks: true,
+        type: true,
+        share_id: true,
+        comments: true,
         author: {
           select: {
             id: true,
@@ -28,24 +35,17 @@ export async function GetAllPost() {
             picture: true,
           },
         },
-        picture: true,
-        reblops: true,
-        likes: true,
-        bookmarks: true,
-        type: true,
-        reblopId: true,
-        Comment: true,
-        UsersLikes: {
+        userslist_likes: {
           select: {
-            blopId: true,
-            User: {
+            post_id: true,
+            user: {
               select: {
                 id: true,
               },
             },
           },
         },
-        reblopData: {
+        share_data: {
           select: {
             id: true,
             createdAt: true,
@@ -57,13 +57,13 @@ export async function GetAllPost() {
                 picture: true,
               },
             },
-            Hashtags: true,
+            hashtags: true,
           },
         },
-        Bookmarks: {
+        bookmark_data: {
           select: {
-            userId: true,
-            postId: true,
+            user_id: true,
+            post_id: true,
           },
         },
       },
@@ -74,6 +74,7 @@ export async function GetAllPost() {
       status: fetch.post.getAll.success.status,
     };
   } catch (error) {
+    console.log(error);
     return {
       message: fetch.post.getAll.error.message,
       status: fetch.post.getAll.error.status,
@@ -112,15 +113,15 @@ export async function CreatePost(textarea, files, type, postId) {
         const hashtags = await HashtagsExtrator(textarea);
         data = {
           content: textarea.toString(),
-          authorId: user.id,
+          author_id: user.id,
           createdAt: new Date(),
           likes: 0,
-          reblops: 0,
+          shares: 0,
           bookmarks: 0,
           type: "post",
           picture: files ? "https://picsum.photos/800" : null,
           updatedAt: new Date(),
-          Hashtags: {
+          hashtags: {
             create: hashtags.map((tag) => ({
               content: tag,
             })),
@@ -129,18 +130,18 @@ export async function CreatePost(textarea, files, type, postId) {
       } else {
         data = {
           content: textarea ? textarea : "",
-          authorId: user.id,
+          author_id: user.id,
           createdAt: new Date(),
           likes: 0,
-          reblops: 0,
+          share_data: 0,
           bookmarks: 0,
           type: "share",
           updatedAt: new Date(),
-          reblopId: parseInt(postId),
+          share_id: parseInt(postId),
         };
       }
 
-      await prisma.blop.create({ data });
+      await prisma.post.create({ data });
 
       revalidatePath("/Feed");
       prisma.$disconnect;
@@ -179,10 +180,10 @@ export async function DeletePost(postId) {
   }
 
   try {
-    await prisma.blop.delete({
+    await prisma.post.delete({
       where: {
         id: postId,
-        authorId: user.id,
+        author_id: user.id,
       },
     });
 
@@ -207,7 +208,7 @@ export async function GetPostDetails(id) {
   const prisma = new PrismaClient();
 
   try {
-    const response = await prisma.blop.findFirst({
+    const response = await prisma.post.findFirst({
       where: {
         id: parseInt(id),
       },
@@ -223,15 +224,15 @@ export async function GetPostDetails(id) {
           },
         },
         picture: true,
-        reblops: true,
+        shares: true,
         likes: true,
         bookmarks: true,
         type: true,
-        Hashtags: true,
-        Comment: {
+        hashtags: true,
+        comments: {
           select: {
             id: true,
-            message: true,
+            content: true,
             createdAt: true,
             author: {
               select: {
@@ -242,10 +243,10 @@ export async function GetPostDetails(id) {
             },
           },
         },
-        UsersLikes: {
+        userslist_likes: {
           select: {
-            blopId: true,
-            User: {
+            post_id: true,
+            user: {
               select: {
                 id: true,
                 name: true,
@@ -254,13 +255,13 @@ export async function GetPostDetails(id) {
             },
           },
         },
-        Bookmarks: {
+        bookmark_data: {
           select: {
-            userId: true,
-            postId: true,
+            user_id: true,
+            post_id: true,
           },
         },
-        reblopData: {
+        share_data: {
           select: {
             id: true,
             createdAt: true,
@@ -272,7 +273,7 @@ export async function GetPostDetails(id) {
                 picture: true,
               },
             },
-            Hashtags: true,
+            hashtags: true,
           },
         },
       },
@@ -283,7 +284,8 @@ export async function GetPostDetails(id) {
       message: fetch.post.getDetails.success.message,
       status: fetch.post.getDetails.success.status,
     };
-  } catch {
+  } catch (error) {
+    console.log(error);
     return {
       message: fetch.post.getDetails.error.message,
       status: fetch.post.getDetails.error.status,
@@ -308,26 +310,26 @@ export const ReactionPost = async (postId, value) => {
   });
 
   const data = {
-    blopId: postId,
-    userId: user.id,
+    post_id: postId,
+    user_id: user.id,
   };
 
   if (value === "add") {
-    await prisma.blopsLiked.create({ data });
-    await prisma.blop.update({
+    await prisma.postsLiked.create({ data });
+    await prisma.post.update({
       where: { id: postId },
       data: { likes: { increment: 1 } },
     });
   }
 
   if (value === "remove") {
-    await prisma.blopsLiked.deleteMany({
+    await prisma.postsLiked.deleteMany({
       where: {
-        blopId: parseInt(postId),
-        userId: parseInt(user.id),
+        post_id: parseInt(postId),
+        user_id: parseInt(user.id),
       },
     });
-    await prisma.blop.update({
+    await prisma.post.update({
       where: { id: postId },
       data: { likes: { decrement: 1 } },
     });
@@ -353,21 +355,21 @@ export async function SharePost(textarea, files, type, postId) {
 
   const data = {
     content: textarea ? textarea : "",
-    authorId: user.id,
+    author_id: user.id,
     createdAt: new Date(),
     likes: 0,
-    reblops: 0,
+    shares: 0,
     bookmarks: 0,
     type: "share",
     updatedAt: new Date(),
-    reblopId: parseInt(postId),
+    share_id: parseInt(postId),
   };
 
-  await prisma.blop.create({ data });
+  await prisma.post.create({ data });
 
   revalidatePath("/Feed");
   prisma.$disconnect;
-  return true;
+  return revalidatePath("/Feed");
 }
 
 // Reply To Post
@@ -387,10 +389,10 @@ export const ReplyToPost = async (content, postId) => {
     });
 
     const data = {
-      message: content,
+      content: content,
       createdAt: new Date(),
-      authorId: user.id,
-      blopId: parseInt(postId),
+      author_id: user.id,
+      post_id: parseInt(postId),
     };
 
     await prisma.comment.create({ data });

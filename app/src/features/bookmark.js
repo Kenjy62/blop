@@ -23,15 +23,15 @@ export async function CreateBookmark(postId, tag) {
   });
 
   const data = {
-    userId: parseInt(user.id),
-    postId: parseInt(postId),
-    tags: tag,
+    user_id: parseInt(user.id),
+    post_id: parseInt(postId),
+    tag: tag,
   };
 
   try {
     await prisma.bookmarks.create({ data });
 
-    await prisma.blop.update({
+    await prisma.post.update({
       where: { id: parseInt(postId) },
       data: { bookmarks: { increment: 1 } },
     });
@@ -63,11 +63,11 @@ export async function RemoveBookmark(postId) {
   try {
     await prisma.bookmarks.deleteMany({
       where: {
-        AND: [{ userId: user.id }, { postId: postId }],
+        AND: [{ user_id: user.id }, { post_id: postId }],
       },
     });
 
-    await prisma.blop.update({
+    await prisma.post.update({
       where: { id: parseInt(postId) },
       data: { bookmarks: { decrement: 1 } },
     });
@@ -97,10 +97,10 @@ export async function GetUserBookmarks() {
 
     const response = await prisma.bookmarks.findMany({
       where: {
-        userId: parseInt(user.id),
+        user_id: parseInt(user.id),
       },
       select: {
-        tags: true,
+        tag: true,
         post: {
           select: {
             id: true,
@@ -114,10 +114,10 @@ export async function GetUserBookmarks() {
                 id: true,
               },
             },
-            Comment: {
+            comments: {
               select: {
                 id: true,
-                message: true,
+                content: true,
                 author: {
                   select: {
                     id: true,
@@ -129,11 +129,11 @@ export async function GetUserBookmarks() {
               },
             },
             picture: true,
-            reblops: true,
+            shares: true,
             likes: true,
-            UsersLikes: {
+            userslist_likes: {
               select: {
-                User: {
+                user: {
                   select: {
                     id: true,
                   },
@@ -141,10 +141,10 @@ export async function GetUserBookmarks() {
               },
             },
             bookmarks: true,
-            Bookmarks: {
+            bookmark_data: {
               select: {
-                userId: true,
-                postId: true,
+                user_id: true,
+                post_id: true,
               },
             },
             type: true,
@@ -160,7 +160,8 @@ export async function GetUserBookmarks() {
       message: fetch.user.bookmark.get.success.message,
       status: fetch.user.bookmark.get.success.status,
     };
-  } catch {
+  } catch (error) {
+    console.log(error);
     return {
       message: fetch.user.bookmark.get.error.message,
       status: fetch.user.bookmark.get.error.status,

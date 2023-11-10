@@ -32,17 +32,15 @@ export default async function Default({ params }) {
               <span>{data.name}</span>
               <Picture
                 url={data.picture}
-                name={`${data.name} Cover`}
-                height={100}
-                width={100}
-                border={`border-4 border-white`}
+                name={`${data.name}`}
+                style={`w-28 h-28 rounded-full border-4 border-white object-cover`}
               />
               <span>France</span>
             </div>
             <div className="flex flex-row gap-4">
               <div className="flex flex-col">
                 <span>{data.posts.length} Posts</span>
-                <span>{data.BlopsLiked.length} Likes</span>
+                <span>{data.posts_liked.length} Likes</span>
               </div>
               <Vertical />
               <div className="flex flex-col">

@@ -108,19 +108,19 @@ export async function Register(formData) {
 export async function Login(formData) {
   const prisma = new PrismaClient();
 
-  const response = await prisma.user.findFirst({
-    where: {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    },
-    select: {
-      id: true,
-      name: true,
-      picture: true,
-    },
-  });
+  try {
+    const response = await prisma.user.findFirst({
+      where: {
+        email: formData.get("email"),
+        password: formData.get("password"),
+      },
+      select: {
+        id: true,
+        name: true,
+        picture: true,
+      },
+    });
 
-  if (response) {
     const token = jwt.sign({ token: response.id }, "randomKey");
     await prisma.user.update({
       where: {
@@ -131,10 +131,18 @@ export async function Login(formData) {
       },
     });
     cookies().set("token", token);
+    return {
+      data: token,
+      message: fetch.user.login.success.message,
+      status: fetch.user.login.success.status,
+    };
+  } catch {
+    return {
+      message: fetch.user.login.error.message,
+      status: fetch.user.login.error.statut,
+    };
+  } finally {
     prisma.$disconnect;
-    return token;
-  } else {
-    return null;
   }
 }
 
@@ -161,6 +169,7 @@ export const init = async () => {
         comment_notification: true,
         like_notification: true,
         message_notification: true,
+        notification: true,
       },
     });
     return {
@@ -180,14 +189,14 @@ export const init = async () => {
 
 // Update User Avatar
 export const UpdateAvatar = async (filename) => {
-  const me = await init();
+  const { data } = await init();
 
   const prisma = new PrismaClient();
 
   try {
     await prisma.user.update({
       where: {
-        id: parseInt(me.id),
+        id: parseInt(data.id),
       },
       data: {
         picture: filename,
@@ -201,14 +210,14 @@ export const UpdateAvatar = async (filename) => {
 
 // Update User Cover
 export const UpdateCover = async (filename) => {
-  const me = await init();
+  const { data } = await init();
 
   const prisma = new PrismaClient();
 
   try {
     await prisma.user.update({
       where: {
-        id: parseInt(me.id),
+        id: parseInt(data.id),
       },
       data: {
         cover: filename,
@@ -303,9 +312,9 @@ export async function GetUserPosts(name) {
       },
     });
 
-    const response = await prisma.blop.findMany({
+    const response = await prisma.post.findMany({
       where: {
-        authorId: parseInt(user.id),
+        author_id: parseInt(user.id),
         type: "post",
       },
       select: {
@@ -320,15 +329,15 @@ export async function GetUserPosts(name) {
           },
         },
         picture: true,
-        reblops: true,
+        shares: true,
         likes: true,
         bookmarks: true,
         type: true,
-        Hashtags: true,
-        Comment: {
+        hashtags: true,
+        comments: {
           select: {
             id: true,
-            message: true,
+            content: true,
             createdAt: true,
             author: {
               select: {
@@ -339,10 +348,10 @@ export async function GetUserPosts(name) {
             },
           },
         },
-        UsersLikes: {
+        userslist_likes: {
           select: {
-            blopId: true,
-            User: {
+            post_id: true,
+            user: {
               select: {
                 id: true,
                 name: true,
@@ -351,13 +360,13 @@ export async function GetUserPosts(name) {
             },
           },
         },
-        Bookmarks: {
+        bookmark_data: {
           select: {
-            postId: true,
-            userId: true,
+            post_id: true,
+            user_id: true,
           },
         },
-        reblopData: {
+        share_data: {
           select: {
             id: true,
             createdAt: true,
@@ -369,7 +378,7 @@ export async function GetUserPosts(name) {
                 picture: true,
               },
             },
-            Hashtags: true,
+            hashtags: true,
           },
         },
       },
@@ -404,19 +413,19 @@ export async function GetUserPostsLiked(name) {
       },
     });
 
-    const response = await prisma.blop.findMany({
+    const response = await prisma.post.findMany({
       where: {
-        UsersLikes: {
+        userslist_likes: {
           some: {
-            userId: user.id,
+            user_id: user.id,
           },
         },
       },
       include: {
-        Comment: {
+        comments: {
           select: {
             id: true,
-            message: true,
+            content: true,
             author: {
               select: {
                 id: true,
@@ -434,22 +443,22 @@ export async function GetUserPostsLiked(name) {
             picture: true,
           },
         },
-        UsersLikes: {
+        userslist_likes: {
           select: {
-            User: {
+            user: {
               select: {
                 id: true,
               },
             },
           },
         },
-        Bookmarks: {
+        bookmark_data: {
           select: {
-            userId: true,
-            postId: true,
+            user_id: true,
+            post_id: true,
           },
         },
-        reblopData: {
+        share_data: {
           select: {
             id: true,
             content: true,
@@ -496,9 +505,9 @@ export async function GetUserPostsShared(name) {
       },
     });
 
-    const response = await prisma.blop.findMany({
+    const response = await prisma.post.findMany({
       where: {
-        authorId: parseInt(user.id),
+        author_id: parseInt(user.id),
         type: "share",
       },
       select: {
@@ -513,21 +522,21 @@ export async function GetUserPostsShared(name) {
           },
         },
         picture: true,
-        reblops: true,
+        shares: true,
         likes: true,
         bookmarks: true,
         type: true,
-        Hashtags: true,
-        Bookmarks: {
+        hashtags: true,
+        bookmark_data: {
           select: {
-            userId: true,
-            postId: true,
+            user_id: true,
+            post_id: true,
           },
         },
-        Comment: {
+        comments: {
           select: {
             id: true,
-            message: true,
+            content: true,
             createdAt: true,
             author: {
               select: {
@@ -538,10 +547,10 @@ export async function GetUserPostsShared(name) {
             },
           },
         },
-        UsersLikes: {
+        userslist_likes: {
           select: {
-            blopId: true,
-            User: {
+            post_id: true,
+            user: {
               select: {
                 id: true,
                 name: true,
@@ -550,7 +559,7 @@ export async function GetUserPostsShared(name) {
             },
           },
         },
-        reblopData: {
+        share_data: {
           select: {
             id: true,
             createdAt: true,
@@ -562,7 +571,7 @@ export async function GetUserPostsShared(name) {
                 picture: true,
               },
             },
-            Hashtags: true,
+            hashtags: true,
           },
         },
       },
@@ -600,10 +609,10 @@ export async function GetUserDetails(name) {
         posts: {
           select: { id: true, type: true, picture: true },
         },
-        Comment: {
+        comments: {
           select: { id: true },
         },
-        BlopsLiked: {
+        posts_liked: {
           select: { id: true },
         },
       },

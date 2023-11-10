@@ -26,21 +26,17 @@ export default function Actions({
   userId,
   postId,
   postAuthorId,
-  comments,
-  likes,
-  shares,
   UsersLikes,
   UsersBookmarks,
   isDeleteable,
   createdAt,
-  Bookmarks,
 }) {
   const alreadyLike = UsersLikes.find(
-    (reaction) => reaction.User.id === parseInt(userId)
+    (reaction) => reaction.user.id === parseInt(userId)
   );
 
   const alreadyBookmarks = UsersBookmarks.find(
-    (user) => user.userId === userId
+    (user) => user.user_id === userId
   );
 
   const actionDelete = async () => {
@@ -67,19 +63,27 @@ export default function Actions({
   };
 
   return (
-    <div className="flex flex-row gap-6 items-center justify-between">
-      <div className="flex flex-row gap-2">
-        <Link href={`?comment=${postId}`} scroll={false}>
+    <div className="flex flex-row p-4 gap-6 items-center justify-between mt-[-35px]">
+      <div className="flex flex-row gap-4">
+        <Link
+          href={`?comment=${postId}`}
+          scroll={false}
+          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+        >
           <span className="flex flex-row gap-2 items-center cursor-pointer">
-            <RxChatBubble /> {comments.length}
+            <RxChatBubble />
           </span>
         </Link>
-        <Link href={`?share=${postId}`} scroll={false}>
+        <Link
+          href={`?share=${postId}`}
+          scroll={false}
+          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+        >
           <span className="flex flex-row gap-2 items-center cursor-pointer">
-            <RxShare1 /> {shares}
+            <RxShare1 />
           </span>
         </Link>
-        <span className="flex flex-row gap-2 items-center cursor-pointer">
+        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer">
           {alreadyLike ? (
             <RxHeartFilled
               onClick={() => ReactionPost(postId, "remove")}
@@ -88,33 +92,32 @@ export default function Actions({
           ) : (
             <RxHeart onClick={() => ReactionPost(postId, "add")} />
           )}
-          {likes}
         </span>
 
         {alreadyBookmarks ? (
-          <span className="flex flex-row gap-2 items-center cursor-pointer">
+          <span className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer">
             <RxBookmarkFilled
               onClick={() => deleteBookmark(postId)}
-              className="text-watermelon-500"
+              className="text-watermelon-500 group-hover:text-white"
             />
           </span>
         ) : (
-          <Link href={`?bookmark=${postId}`}>
-            <RxBookmark />
+          <Link
+            href={`?bookmark=${postId}`}
+            className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+          >
+            <RxBookmark className="group-hover:text-white" />
           </Link>
         )}
-        {Bookmarks}
-      </div>
-      <div className="flex flex-row gap-2">
         {isDeleteable === true && userId === postAuthorId && (
           <span
             onClick={actionDelete}
-            className="flex flex-row gap-2 items-center cursor-pointer"
+            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
           >
             <RxTrash />
           </span>
         )}
-        <span className="flex flex-row gap-2 items-center cursor-pointer">
+        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer">
           <RxExclamationTriangle />
         </span>
       </div>

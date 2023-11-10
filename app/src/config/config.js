@@ -181,6 +181,16 @@ export const fetch = {
         status: 400,
       },
     },
+    login: {
+      success: {
+        message: "Connection successful",
+        status: 200,
+      },
+      error: {
+        message: "The user does not exist",
+        statut: 400,
+      },
+    },
   },
   sidebar: {
     tophashtags: {

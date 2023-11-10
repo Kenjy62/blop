@@ -20,7 +20,7 @@ export default async function Page({ params }) {
       <div className="flex flex-col gap-4">
         {data.length > 0 &&
           data.reverse().map((post) => {
-            return <Post key={post.id} userId={user.id} post={post} />;
+            return <Post key={post.id} userId={user.data.id} post={post} />;
           })}
         {data.length < 1 && <p>The user has not liked any posts yet</p>}
       </div>

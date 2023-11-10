@@ -16,9 +16,11 @@ export async function POST(req) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    await writeFile(`public/Avatars/${me.name}_${file.name}`, buffer);
+    await writeFile(`public/Avatars/${me.data.name}_${file.name}`, buffer);
 
-    const response = await UpdateAvatar(`/Avatars/${me.name}_${file.name}`);
+    const response = await UpdateAvatar(
+      `/Avatars/${me.data.name}_${file.name}`
+    );
 
     if (response === true) {
       return NextResponse.json("success", { status: 200 });
@@ -29,9 +31,9 @@ export async function POST(req) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    await writeFile(`public/Covers/${me.name}_${file.name}`, buffer);
+    await writeFile(`public/Covers/${me.data.name}_${file.name}`, buffer);
 
-    const response = await UpdateCover(`/Covers/${me.name}_${file.name}`);
+    const response = await UpdateCover(`/Covers/${me.data.name}_${file.name}`);
 
     if (response === true) {
       return NextResponse.json("success", { status: 200 });

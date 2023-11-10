@@ -17,7 +17,7 @@ export default function Comment({ comment }) {
               src={comment.author.picture}
               height={40}
               width={40}
-              className="rounded-full"
+              className="rounded-full object-cover h-10 w-10"
             />
           </Link>
         </div>
@@ -29,7 +29,7 @@ export default function Comment({ comment }) {
                 {dayjs(comment.createdAt).fromNow()}
               </span>
             </div>
-            <div className="font-normal">{comment.message}</div>
+            <div className="font-normal">{comment.content}</div>
           </div>
         </div>
       </div>

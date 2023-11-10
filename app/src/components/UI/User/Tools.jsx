@@ -1,11 +1,16 @@
 // Components
+import { getNotifications } from "@/app/src/features/user";
 import Messages from "./Tools/Messages";
 import Notifications from "./Tools/Notifications";
 
-export default function Tools({ user }) {
+export default async function Tools({ user }) {
+  const { data, message, status } = await getNotifications(user.id, {
+    next: { tags: ["notifications"] },
+  });
+
   return (
     <div className="flex flex-row-reverse gap-4">
-      <Notifications user={user} />
+      <Notifications user_id={user.id} data={data} />
       <Messages />
     </div>
   );

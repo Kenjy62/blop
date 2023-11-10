@@ -16,8 +16,8 @@ export default async function Page() {
     const uniqueTags = ["All"];
 
     data.response.forEach((el) => {
-      if (!uniqueTags.includes(el.tags)) {
-        uniqueTags.push(el.tags);
+      if (!uniqueTags.includes(el.tag)) {
+        uniqueTags.push(el.tag);
       }
     });
 

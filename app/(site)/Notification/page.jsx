@@ -5,7 +5,9 @@ import Notifications from "@/app/src/components/Notification/Notifications";
 import { getNotifications } from "@/app/src/features/user";
 
 export default async function Page() {
-  const { data, message, status } = await getNotifications();
+  const { data, message, status } = await getNotifications({
+    next: { tags: ["notifications"] },
+  });
 
-  return <Notifications data={data} />;
+  return <Notifications data={data.reverse()} />;
 }

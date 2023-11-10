@@ -17,7 +17,11 @@ export default async function UserBar() {
   if (status === 200) {
     return (
       <>
-        <Picture name={data.name} url={data.picture} height={40} width={40} />
+        <Picture
+          name={data.name}
+          url={data.picture}
+          style={`rounded-full h-10 w-10 object-cover`}
+        />
         <User name={data.name} />
         <Tools user={data} />
       </>
