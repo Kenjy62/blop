@@ -64,7 +64,7 @@ export default function Items({ user }) {
           <Link key={id} href={el.path}>
             <div
               className={`p-2 rounded-full cursor-pointer ${
-                el.active ? "bg-watermelon-500" : null
+                el.active ? "bg-watermelon-500 dark:bg-night-200" : null
               }`}
             >
               {el.icon}

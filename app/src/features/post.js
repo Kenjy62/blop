@@ -410,3 +410,84 @@ export const ReplyToPost = async (content, postId) => {
     };
   }
 };
+
+// Get trends
+
+export const GetTrend = async (query) => {
+  const prisma = new PrismaClient();
+
+  try {
+    const response = await prisma.hashtags.findMany({
+      where: {
+        content: `#${query}`,
+      },
+      select: {
+        post: {
+          select: {
+            id: true,
+            createdAt: true,
+            content: true,
+            picture: true,
+            shares: true,
+            likes: true,
+            bookmarks: true,
+            type: true,
+            share_id: true,
+            comments: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+            userslist_likes: {
+              select: {
+                post_id: true,
+                user: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+            share_data: {
+              select: {
+                id: true,
+                createdAt: true,
+                content: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+                hashtags: true,
+              },
+            },
+            bookmark_data: {
+              select: {
+                user_id: true,
+                post_id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return {
+      data: response,
+      message: fetch.post.getTrend.success.message,
+      status: fetch.post.getTrend.success.status,
+    };
+  } catch (error) {
+    return {
+      message: fetch.post.getTrend.error.message,
+      status: fetch.post.getTrend.error.status,
+    };
+  } finally {
+    prisma.$disconnect();
+  }
+};

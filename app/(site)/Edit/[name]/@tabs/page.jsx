@@ -3,6 +3,7 @@ import ComponentError from "@/app/src/components/Error/ComponentError";
 import Button from "@/app/src/components/UI/Button/Button";
 import Avatar from "@/app/src/components/User/Edit/Avatar";
 import Cover from "@/app/src/components/User/Edit/Cover";
+import Setting from "@/app/src/components/User/Setting/Setting";
 
 // Features
 import { GetUserDetails, init } from "@/app/src/features/user";
@@ -33,6 +34,7 @@ export default async function Page({ params }) {
               <div>My Name : {data.name}</div>
               <div>My Location : France</div>
             </div>
+            <Setting name={"Dark Mode"} authorized={data.darkMode} />
             <div className="flex justify-end">
               <Button>Save</Button>
             </div>

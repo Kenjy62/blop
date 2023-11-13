@@ -36,14 +36,15 @@ export default function Tabs() {
   ];
 
   return (
-    <div className="flex flex-row gap-4 border-t border-b">
+    <div className="flex flex-row gap-4 border-t border-b dark:border-night-200">
       {Links.map((link, id) => {
         return (
           <Link
             key={id}
             className={`p-4 ${
-              link.active && `border-b-2 border-b-watermelon-500`
-            } hover:border-b-2 hover:border-b-watermelon-500`}
+              link.active &&
+              `border-b-2 border-b-watermelon-500 dark:border-b-night-200`
+            } hover:border-b-2 hover:border-b-watermelon-500 hover:dark:border-b-night-200`}
             href={link.link}
           >
             {link.name}

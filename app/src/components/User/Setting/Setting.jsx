@@ -1,28 +1,38 @@
 "use client";
 
 // Required
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 // Components
 import { Switch } from "@headlessui/react";
 import { updateNotificationSetting } from "@/app/src/features/user";
 
+// Context
+import { ThemeContext } from "@/app/src/context/theme";
+
 export default function Setting({ name, authorized }) {
   const [isAuthorized, setIsAuthorized] = useState(authorized);
+  const { toggleTheme, theme } = useContext(ThemeContext);
 
   const update = async (type) => {
     await updateNotificationSetting(type);
     setIsAuthorized(!isAuthorized);
+
+    if (type === "Dark Mode") {
+      toggleTheme();
+    }
   };
 
   return (
     <div className="flex flex-row justify-between">
-      <div>{name} Notification</div>
+      <div>
+        {name} {name !== "Dark Mode" && "Notification"}
+      </div>
       <Switch
         checked={isAuthorized}
         onChange={() => update(name)}
         className={`${
-          isAuthorized ? "bg-watermelon-400" : "bg-gray-200"
+          isAuthorized ? "bg-watermelon-400 dark:bg-night-300" : "bg-gray-200"
         } relative inline-flex h-6 w-11 items-center rounded-full`}
       >
         <span className="sr-only">Enable notifications</span>

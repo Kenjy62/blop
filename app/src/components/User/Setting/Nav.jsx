@@ -30,9 +30,19 @@ export default function Nav({ name }) {
       <Link
         key={item.name}
         href={item.path}
-        className={item.isActive ? "text-watermelon-400" : "text-black"}
+        className={
+          item.isActive
+            ? "text-watermelon-400 dark:text-white"
+            : "text-black dark:text-night-200"
+        }
       >
-        <div className={item.isActive ? "text-watermelon-400" : "text-black"}>
+        <div
+          className={
+            item.isActive
+              ? "text-watermelon-400 dark:text-night-200"
+              : "text-black dark:text-white"
+          }
+        >
           {item.name}
         </div>
       </Link>

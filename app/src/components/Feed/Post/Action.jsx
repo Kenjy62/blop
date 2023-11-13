@@ -68,7 +68,7 @@ export default function Actions({
         <Link
           href={`?comment=${postId}`}
           scroll={false}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
         >
           <span className="flex flex-row gap-2 items-center cursor-pointer">
             <RxChatBubble />
@@ -77,13 +77,13 @@ export default function Actions({
         <Link
           href={`?share=${postId}`}
           scroll={false}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
         >
           <span className="flex flex-row gap-2 items-center cursor-pointer">
             <RxShare1 />
           </span>
         </Link>
-        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer">
+        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer">
           {alreadyLike ? (
             <RxHeartFilled
               onClick={() => ReactionPost(postId, "remove")}
@@ -95,7 +95,7 @@ export default function Actions({
         </span>
 
         {alreadyBookmarks ? (
-          <span className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer">
+          <span className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer">
             <RxBookmarkFilled
               onClick={() => deleteBookmark(postId)}
               className="text-watermelon-500 group-hover:text-white"
@@ -104,7 +104,7 @@ export default function Actions({
         ) : (
           <Link
             href={`?bookmark=${postId}`}
-            className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+            className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
           >
             <RxBookmark className="group-hover:text-white" />
           </Link>
@@ -112,12 +112,12 @@ export default function Actions({
         {isDeleteable === true && userId === postAuthorId && (
           <span
             onClick={actionDelete}
-            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer"
+            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
           >
             <RxTrash />
           </span>
         )}
-        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-watermelon-400 hover:text-white cursor-pointer">
+        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer">
           <RxExclamationTriangle />
         </span>
       </div>

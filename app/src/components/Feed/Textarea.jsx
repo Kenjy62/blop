@@ -89,11 +89,11 @@ export default function Textarea() {
 
   return (
     <>
-      <div className="flex flex-col gap-4 w-full border rounded-lg p-4">
+      <div className="flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200">
         <textarea
           onKeyDown={handleKeyPress}
           onChange={(e) => setTextarea(e.target.value)}
-          className="w-full rounded-lg resize-none outline-none"
+          className="w-full rounded-lg resize-none outline-none dark:bg-night-400"
           placeholder="Write a new post.."
           value={textarea}
         />

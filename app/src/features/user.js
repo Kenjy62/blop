@@ -169,6 +169,8 @@ export const init = async () => {
         comment_notification: true,
         like_notification: true,
         message_notification: true,
+        darkMode: true,
+        // notification: true,
         notification: true,
       },
     });
@@ -178,6 +180,7 @@ export const init = async () => {
       status: fetch.user.init.success.status,
     };
   } catch (error) {
+    console.log(error);
     return {
       message: fetch.user.init.error.message,
       status: fetch.user.init.error.status,
@@ -250,18 +253,18 @@ export const getNotificationsSettings = async () => {
 
 // Update User Notifications Settings
 export const updateNotificationSetting = async (type) => {
-  const me = await init();
+  const { data } = await init();
   const prisma = new PrismaClient();
 
   if (type === "Like") {
     const defaultValue = await prisma.user.findFirst({
-      where: { id: me.id },
+      where: { id: data.id },
       select: { like_notification: true },
     });
 
     await prisma.user.update({
       where: {
-        id: me.id,
+        id: data.id,
       },
       data: {
         like_notification: defaultValue.like_notification === 0 ? 1 : 0,
@@ -269,13 +272,13 @@ export const updateNotificationSetting = async (type) => {
     });
   } else if (type === "Comment") {
     const defaultValue = await prisma.user.findFirst({
-      where: { id: me.id },
+      where: { id: data.id },
       select: { comment_notification: true },
     });
 
     await prisma.user.update({
       where: {
-        id: me.id,
+        id: data.id,
       },
       data: {
         comment_notification: defaultValue.comment_notification === 0 ? 1 : 0,
@@ -283,17 +286,27 @@ export const updateNotificationSetting = async (type) => {
     });
   } else if (type === "Message") {
     const defaultValue = await prisma.user.findFirst({
-      where: { id: me.id },
+      where: { id: data.id },
       select: { message_notification: true },
     });
 
     await prisma.user.update({
       where: {
-        id: me.id,
+        id: data.id,
       },
       data: {
         message_notification: defaultValue.message_notification === 0 ? 1 : 0,
       },
+    });
+  } else if (type == "Dark Mode") {
+    const defaultValue = await prisma.user.findFirst({
+      where: { id: data.id },
+      select: { darkMode: true },
+    });
+
+    await prisma.user.update({
+      where: { id: data.id },
+      data: { darkMode: defaultValue.darkMode === false ? true : false },
     });
   }
 };
@@ -606,6 +619,7 @@ export async function GetUserDetails(name) {
         name: true,
         picture: true,
         cover: true,
+        darkMode: true,
         posts: {
           select: { id: true, type: true, picture: true },
         },
@@ -623,6 +637,7 @@ export async function GetUserDetails(name) {
       status: fetch.user.get.success.status,
     };
   } catch (error) {
+    console.log(error);
     return {
       message: fetch.user.get.error.message,
       status: fetch.user.get.error.status,
@@ -640,7 +655,7 @@ export const getNotifications = async () => {
   try {
     const response = await prisma.notification.findMany({
       where: {
-        for: parseInt(me.data.id),
+        for_id: parseInt(me.data.id),
       },
       select: {
         id: true,

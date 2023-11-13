@@ -33,7 +33,7 @@ export default async function Default({ params }) {
               <Picture
                 url={data.picture}
                 name={`${data.name}`}
-                style={`w-28 h-28 rounded-full border-4 border-white object-cover`}
+                style={`w-28 h-28 rounded-full border-4 border-white dark:border-night-300 object-cover`}
               />
               <span>France</span>
             </div>

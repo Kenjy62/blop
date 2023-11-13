@@ -24,7 +24,7 @@ export default function Post({ userId, post }) {
 
   return (
     <div>
-      <div className="w-full p-4 pb-8 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200">
+      <div className="w-full p-4 pb-8 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200 dark:border-night-200">
         <div className="h-fit">
           <Link href={`/User/${post.author.name}`}>
             <Image

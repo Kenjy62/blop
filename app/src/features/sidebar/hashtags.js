@@ -12,7 +12,7 @@ export async function GetTopHashtags() {
     const hashtagCounts = [];
 
     response.forEach((content) => {
-      const hashtag = content.content;
+      const hashtag = content.content.toLowerCase();
       if (!hashtagCounts[hashtag]) {
         hashtagCounts[hashtag] = 1;
       } else {

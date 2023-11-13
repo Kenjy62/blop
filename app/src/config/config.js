@@ -63,6 +63,16 @@ export const fetch = {
         status: 400,
       },
     },
+    getTrend: {
+      success: {
+        message: "Ok",
+        status: 200,
+      },
+      error: {
+        message: "Nop",
+        error: 400,
+      },
+    },
   },
   comment: {
     create: {

@@ -6,7 +6,7 @@ export const onSearch = async (data) => {
   const prisma = new PrismaClient();
 
   try {
-    const user = prisma.user.findMany({
+    const user = await prisma.user.findMany({
       where: {
         name: {
           contains: data,
@@ -19,7 +19,29 @@ export const onSearch = async (data) => {
       },
     });
 
-    return user;
+    const post = await prisma.post.findMany({
+      where: {
+        content: {
+          contains: data,
+        },
+      },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        picture: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            picture: true,
+          },
+        },
+      },
+    });
+
+    return { user, post };
   } catch (error) {
     return false;
   } finally {

@@ -2,11 +2,14 @@
 
 import { UserProvider } from "./user";
 import { SearchProvider } from "./search";
+import { ThemeProvider } from "./theme";
 
-export default function Provider({ children }) {
+export default function Provider({ children, defaultTheme }) {
   return (
-    <UserProvider>
-      <SearchProvider>{children}</SearchProvider>
-    </UserProvider>
+    <ThemeProvider defaultTheme={defaultTheme}>
+      <UserProvider>
+        <SearchProvider>{children}</SearchProvider>
+      </UserProvider>
+    </ThemeProvider>
   );
 }
