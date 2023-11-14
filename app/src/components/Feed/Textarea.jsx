@@ -56,24 +56,19 @@ export default function Textarea() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Send Post
-  const sendPost = () => {
+  async function post(formData) {
     startTransition(async () => {
-      const result = await CreatePost(
-        textarea,
-        files.length > 0 ? true : false,
-        "post"
-      );
+      const { message, status } = await CreatePost(formData, "post");
 
-      if (result.status === 400) {
-        alert(result.message);
+      if (status === 400 || status === 500) {
+        alert(message);
       }
 
-      if (result.status === 200) {
+      if (status === 200) {
         resetForm();
       }
     });
-  };
+  }
 
   // Reset Form
   const resetForm = () => {
@@ -83,59 +78,63 @@ export default function Textarea() {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      sendPost();
+      post();
     }
   };
 
   return (
     <>
-      <div className="flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200">
-        <textarea
-          onKeyDown={handleKeyPress}
-          onChange={(e) => setTextarea(e.target.value)}
-          className="w-full rounded-lg resize-none outline-none dark:bg-night-400"
-          placeholder="Write a new post.."
-          value={textarea}
-        />
-        <div className="flex flex-row gap-4">
-          {files.length > 0 &&
-            files.map((file, index) => {
-              return (
-                <div key={index} className="relative">
-                  <Image
-                    src={file}
-                    height={150}
-                    width={150}
-                    className="w-[150px] h-[150px] object-cover object-center rounded-lg"
-                  />
-                  <RxCross1
-                    onClick={() => deleteImages(index)}
-                    className="absolute top-2 right-2 text-white p-1 bg-watermelon-400 rounded-full"
-                  />
-                </div>
-              );
-            })}
-        </div>
-        <div className="flex flex-row gap-4 items-center justify-between">
+      <form>
+        <div className="flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200">
+          <textarea
+            name="text"
+            onKeyDown={handleKeyPress}
+            onChange={(e) => setTextarea(e.target.value)}
+            className="w-full rounded-lg resize-none outline-none dark:bg-night-400"
+            placeholder="Write a new post.."
+            value={textarea}
+          />
           <div className="flex flex-row gap-4">
-            <RxImage onClick={userAddImages} className="cursor-pointer" />
-            <RxFace className="cursor-pointer" />
-            <RxCalendar className="cursor-pointer" />
-            <input
-              multiple
-              onChange={selectImages}
-              ref={inputFile}
-              type="file"
-              className="hidden"
-            />
+            {files.length > 0 &&
+              files.map((file, index) => {
+                return (
+                  <div key={index} className="relative">
+                    <Image
+                      src={file}
+                      height={150}
+                      width={150}
+                      className="w-[150px] h-[150px] object-cover object-center rounded-lg"
+                    />
+                    <RxCross1
+                      onClick={() => deleteImages(index)}
+                      className="absolute top-2 right-2 text-white p-1 bg-watermelon-400 rounded-full"
+                    />
+                  </div>
+                );
+              })}
           </div>
-          <div onClick={sendPost}>
-            <Button>
-              {isPending ? "Loading..." : <RxPaperPlane size={18} />}
-            </Button>
+          <div className="flex flex-row gap-4 items-center justify-between">
+            <div className="flex flex-row gap-4">
+              <RxImage onClick={userAddImages} className="cursor-pointer" />
+              <RxFace className="cursor-pointer" />
+              <RxCalendar className="cursor-pointer" />
+              <input
+                name="pictures"
+                multiple
+                onChange={selectImages}
+                ref={inputFile}
+                type="file"
+                className="hidden"
+              />
+            </div>
+            <div>
+              <button formAction={post}>
+                {isPending ? "Loading..." : <RxPaperPlane size={18} />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 }

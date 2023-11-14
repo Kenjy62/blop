@@ -9,6 +9,7 @@ import Provider from "@/app/src/context/provider";
 import SearchContainer from "../src/components/UI/Searchbar/SearchContainer";
 import Theme from "../src/components/Tricky/Theme";
 import { init } from "../src/features/user";
+import Overlay from "../src/components/Overlay/Overlay";
 
 export default async function Layout({ children }) {
   const { data, message, status } = await init();
@@ -27,6 +28,7 @@ export default async function Layout({ children }) {
           </div>
         </div>
         <SearchContainer />
+        <Overlay />
         <Modal />
       </Theme>
     </Provider>

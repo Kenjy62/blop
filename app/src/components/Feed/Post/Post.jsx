@@ -65,14 +65,22 @@ export default function Post({ userId, post }) {
               </>
             )}
           </Link>
-          {post.picture && (
-            <Image
-              className="w-full rounded-lg"
-              src={post.picture}
-              width={500}
-              height={500}
-              alt={`post picture`}
-            />
+          {post.picture.length > 0 && (
+            <div className="flex flex-row gap-2">
+              {post.picture.map((pic) => (
+                <div className="flex-1">
+                  <Link href={`?picture=${pic.url.replace("/Posts/", "")}`}>
+                    <Image
+                      className="rounded-lg w-full"
+                      src={pic.url}
+                      width={500}
+                      height={500}
+                      alt={`post picture`}
+                    />
+                  </Link>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>

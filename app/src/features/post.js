@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import { fetch } from "../config/config";
 import { HashtagsExtrator } from "./hashtagsExtractor";
 import { io } from "socket.io-client";
+import { writeFile } from "fs/promises";
 
 // Get All Post List for Feed
 export async function GetAllPost() {
@@ -85,18 +86,22 @@ export async function GetAllPost() {
 }
 
 // Create a new Post
-export async function CreatePost(textarea, files, type, postId) {
+export async function CreatePost(formData, type) {
+  // Verification lenght of post content
+  if (formData?.get("text").length < 1) {
+    return {
+      message: fetch.post.create.error.message,
+      status: fetch.post.create.error.status,
+    };
+  }
+
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  if (token) {
+  try {
     const user = await prisma.user.findFirst({
-      where: {
-        token: token.value,
-      },
-      select: {
-        id: true,
-      },
+      where: { token: token.value },
+      select: { id: true },
     });
 
     if (!user) {
@@ -106,55 +111,89 @@ export async function CreatePost(textarea, files, type, postId) {
       };
     }
 
-    var data = null;
+    if (type === "post") {
+      // Hashtags Extractor
+      const hashtags = await HashtagsExtrator(formData.get("text"));
 
-    if (textarea.length > 5) {
-      if (type === "post") {
-        const hashtags = await HashtagsExtrator(textarea);
-        data = {
-          content: textarea.toString(),
-          author_id: user.id,
-          createdAt: new Date(),
-          likes: 0,
-          shares: 0,
-          bookmarks: 0,
-          type: "post",
-          picture: files ? "https://picsum.photos/800" : null,
-          updatedAt: new Date(),
-          hashtags: {
-            create: hashtags.map((tag) => ({
-              content: tag,
-            })),
-          },
-        };
-      } else {
-        data = {
-          content: textarea ? textarea : "",
-          author_id: user.id,
-          createdAt: new Date(),
-          likes: 0,
-          share_data: 0,
-          bookmarks: 0,
-          type: "share",
-          updatedAt: new Date(),
-          share_id: parseInt(postId),
-        };
+      // Prepare data for create post
+      const data = {
+        content: formData?.get("text").toString(),
+        author_id: user.id,
+        createdAt: new Date(),
+        likes: 0,
+        shares: 0,
+        bookmarks: 0,
+        type: "post",
+        updatedAt: new Date(),
+        hashtags: {
+          create: hashtags.map((tag) => ({
+            content: tag,
+          })),
+        },
+      };
+
+      // Create a post
+      const response = await prisma.post.create({ data });
+
+      // Upload File
+      for (const entry of formData.entries()) {
+        const [name, value] = entry;
+
+        if (name === "pictures" && value.size > 0) {
+          const pictureBytes = await value.arrayBuffer();
+          const pictureBuffer = Buffer.from(pictureBytes);
+
+          await writeFile(
+            `public/Posts/${value.size}_${value.name}`,
+            pictureBuffer
+          );
+
+          // Write into Database
+          await prisma.postPicture.create({
+            data: {
+              post_id: response.id,
+              url: `/Posts/${value.size}_${value.name}`,
+            },
+          });
+        }
       }
 
-      await prisma.post.create({ data });
-
       revalidatePath("/Feed");
-      prisma.$disconnect();
       return {
         message: fetch.post.create.success.message,
         status: fetch.post.create.success.status,
       };
     } else {
+      // If is a share
+
+      // Prepare data
+      const data = {
+        content: textarea ? textarea : "",
+        author_id: user.id,
+        createdAt: new Date(),
+        likes: 0,
+        share_data: 0,
+        bookmarks: 0,
+        type: "share",
+        updatedAt: new Date(),
+        share_id: parseInt(postId),
+      };
+
+      await prisma.post.create({ data });
+
+      revalidatePath("/Feed");
       return {
-        message: fetch.post.create.error.message,
-        status: fetch.post.create.error.status,
+        message: fetch.post.create.success.message,
+        status: fetch.post.create.success.status,
       };
     }
+  } catch (error) {
+    return {
+      message: "Internal Server Error, try again",
+      status: 500,
+    };
+  } finally {
+    prisma.$disconnect();
   }
 }
 
@@ -290,6 +329,30 @@ export async function GetPostDetails(id) {
       message: fetch.post.getDetails.error.message,
       status: fetch.post.getDetails.error.status,
     };
+  } finally {
+    prisma.$disconnect();
+  }
+}
+
+export async function GetImage(image_id) {
+  const prisma = new PrismaClient();
+  try {
+    const response = await prisma.postPicture.findFirst({
+      where: {
+        id: parseInt(image_id),
+      },
+      select: {
+        url: true,
+      },
+    });
+
+    return {
+      data: response,
+      message: "ok",
+      status: 200,
+    };
+  } catch (error) {
+    console.log(error);
   } finally {
     prisma.$disconnect();
   }
