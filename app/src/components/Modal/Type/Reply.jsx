@@ -7,7 +7,7 @@ import Button from "../../UI/Button/Button";
 // Features
 import { ReplyToPost } from "@/app/src/features/post";
 
-export default function Reply({ postId }) {
+export default function Reply({ defaultTheme, postId }) {
   const [textarea, setTextarea] = useState();
 
   // Transition with SA
@@ -32,7 +32,7 @@ export default function Reply({ postId }) {
     <>
       <textarea
         onChange={(e) => setTextarea(e.target.value)}
-        className="w-full resize-none outline-none"
+        className={`dark:bg-night-300 w-full resize-none outline-none`}
         type="text"
         placeholder="Write your response here.."
       />

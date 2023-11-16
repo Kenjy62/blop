@@ -36,13 +36,13 @@ export default function Tabs({ data }) {
   }, [isActive, data]);
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-row h-fit gap-2">
         {Tabs.map((tab, id) => {
           return (
             <div key={id} onClick={() => setIsActive(tab)}>
               <Tag key={id} state={isActive === tab ? "Active" : "Unactive"}>
-                {tab} ({unreadCounts[tab] || 0})
+                {tab} {unreadCounts[tab] !== 0 && `(${unreadCounts[tab]})`}
               </Tag>
             </div>
           );

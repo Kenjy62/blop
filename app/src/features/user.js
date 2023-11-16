@@ -92,7 +92,8 @@ export async function Register(formData) {
           message: fetch.user.register.success.message,
           status: fetch.user.register.success.status,
         };
-      } catch {
+      } catch (error) {
+        console.log(error);
         return {
           message: fetch.user.register.error.message,
           status: fetch.user.register.error.status,
@@ -681,6 +682,106 @@ export const getNotifications = async () => {
       message: "nop",
       status: 400,
     };
+  } finally {
+    prisma.$disconnect();
+  }
+};
+
+export const getConversations = async (searchParams) => {
+  console.log(searchParams);
+
+  const prisma = new PrismaClient();
+  const { data, message, status } = await init();
+
+  if (status === 200) {
+    try {
+      const response = await prisma.conversation.findMany({
+        where: {
+          OR: [{ participant1Id: data.id }, { participant2Id: data.id }],
+        },
+        select: {
+          id: true,
+          participant1: {
+            select: {
+              name: true,
+              picture: true,
+            },
+          },
+          participant1Id: true,
+          participant2: {
+            select: {
+              name: true,
+              picture: true,
+            },
+          },
+          participant2Id: true,
+        },
+      });
+
+      if (searchParams?.query?.length > 0) {
+        let filteredConversation = response.filter(
+          (conversation) =>
+            conversation.participant1.name
+              .toLowerCase()
+              .includes(searchParams.query.toLowerCase()) ||
+            conversation.participant2.name
+              .toLowerCase()
+              .includes(searchParams.query.toLowerCase())
+        );
+
+        return { data: filteredConversation, message: "ok", status: 200 };
+      }
+
+      return { data: response, message: "ok", status: 200 };
+    } catch (error) {
+      console.log(error);
+    } finally {
+      prisma.$disconnect;
+    }
+  }
+};
+
+export const getMessages = async (id) => {
+  const prisma = new PrismaClient();
+
+  try {
+    const response = await prisma.message.findMany({
+      where: {
+        conversationId: parseInt(id),
+      },
+      select: {
+        content: true,
+        createdAt: true,
+        sender: {
+          select: {
+            name: true,
+            picture: true,
+          },
+        },
+        senderId: true,
+        isRead: true,
+        conversation: {
+          select: {
+            participant1: {
+              select: {
+                name: true,
+                picture: true,
+              },
+            },
+            participant2: {
+              select: {
+                name: true,
+                picture: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return { data: response, message: "ok", status: 200 };
+  } catch (error) {
+    console.log(error);
   } finally {
     prisma.$disconnect();
   }

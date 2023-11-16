@@ -1,4 +1,4 @@
-import Post from "../../Feed/Post/Post";
+import Post from "./Structure/Post";
 import User from "./Structure/User";
 
 export default function Result({ user, post }) {
@@ -9,11 +9,9 @@ export default function Result({ user, post }) {
           ? user.map((user) => <User user={user} />)
           : "Aucun résultat dans les utilisateurs"}
       </div>
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col gap-2">
         {post?.length > 0
-          ? post.map((post) => {
-              return post.content;
-            })
+          ? post.map((post) => <Post post={post} />)
           : "Aucun post contenant ce mot"}
       </div>
     </div>

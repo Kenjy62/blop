@@ -12,7 +12,7 @@ import Bookmark from "./Type/Bookmark";
 // Set Modal
 ReactModal.setAppElement("html");
 
-export default function Modal() {
+export default function Modal({ defaultTheme }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -26,6 +26,8 @@ export default function Modal() {
           : false
       }
       onRequestClose={() => router.back()}
+      overlayClassName={!defaultTheme ? "" : "dark"}
+      className={"dark:bg-night-300"}
       style={{
         overlay: {
           position: "fixed",

@@ -9,7 +9,6 @@ export default function Searchbar() {
   return (
     <input
       onChange={(e) => startSearch(e.currentTarget.value)}
-      onFocus={() => toggle()}
       className="border px-2 py-1 rounded-lg w-[50%] outline-none focus:border focus:border-watermelon-200 dark:bg-night-300 dark:border-night-200"
       type="text"
       placeholder="Search everythings.."

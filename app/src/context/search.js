@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 export const SearchContext = createContext();
 
@@ -13,11 +13,21 @@ export const SearchProvider = ({ children }) => {
   };
 
   const startSearch = (data) => {
-    setQuery(data);
+    if (data.length > 0) {
+      if (!state) {
+        setState(!state);
+      }
+
+      setQuery(data);
+    } else if (data.length < 1 && state) {
+      setState(!state);
+    }
   };
 
   return (
-    <SearchContext.Provider value={{ state, toggle, query, startSearch }}>
+    <SearchContext.Provider
+      value={{ state, toggle, query, startSearch, setQuery }}
+    >
       {children}
     </SearchContext.Provider>
   );

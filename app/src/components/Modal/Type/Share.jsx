@@ -24,7 +24,7 @@ export default function Share({ postId }) {
     <>
       <textarea
         onChange={(e) => setTextarea(e.target.value)}
-        className="w-full resize-none outline-none"
+        className="w-full resize-none outline-none dark:bg-night-300"
         type="text"
         placeholder="U can't add message or just share a post..."
       />

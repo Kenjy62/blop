@@ -1,8 +1,25 @@
+"use client";
+
+// Required
+import { useContext } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+// Context
+import { SearchContext } from "@/app/src/context/search";
+
 export default function User({ user }) {
+  const { toggle } = useContext(SearchContext);
+  const router = useRouter();
+
   return (
-    <div className="w-48 h-44 bg-watermelon-400 rounded-lg">
+    <div
+      className="w-48 h-44 bg-watermelon-400 dark:bg-night-400 rounded-lg cursor-pointer"
+      onClick={() => {
+        toggle();
+        router.push(`/User/${user.name}`);
+      }}
+    >
       <div>
         <Image
           src={user.cover}
@@ -18,9 +35,10 @@ export default function User({ user }) {
           height={64}
           width={64}
           alt={`${user.name} avatar`}
-          className="rounded-full"
+          className="rounded-full border-4 dark:border-night-400"
         />
       </div>
+      <div className="flex justify-center">{user.name}</div>
     </div>
   );
 }

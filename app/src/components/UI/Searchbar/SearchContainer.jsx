@@ -25,9 +25,9 @@ export default function SearchContainer() {
     }
   }, [query]);
 
-  if (state)
+  if (state) {
     return (
-      <div className=" absolute top-[74px] h-[calc(100vh-74px)] w-full bg-white p-4">
+      <div className=" absolute top-[74px] h-[calc(100vh-74px)] w-full bg-white p-4 dark:bg-night-300 dark:text-white">
         {userList?.length > 0 || post?.length > 0 ? (
           <Result user={userList} post={post} />
         ) : (
@@ -35,6 +35,7 @@ export default function SearchContainer() {
         )}
       </div>
     );
+  }
 
   return null;
 }

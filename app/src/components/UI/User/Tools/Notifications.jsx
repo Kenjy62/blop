@@ -34,9 +34,11 @@ export default function Notifications({ user_id, data }) {
         className="relative cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="absolute text-xs rounded-full h-4 w-4 text-white bg-watermelon-400 top-[-17px] right-[-8px] flex justify-center items-center">
-          {notifications}
-        </div>
+        {notifications !== 0 && (
+          <div className="absolute text-xs rounded-full h-4 w-4 text-white bg-watermelon-400 top-[-17px] right-[-8px] flex justify-center items-center">
+            {notifications}
+          </div>
+        )}
         <RxBell />
       </div>
       {isOpen && <Comment />}

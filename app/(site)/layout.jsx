@@ -29,7 +29,7 @@ export default async function Layout({ children }) {
         </div>
         <SearchContainer />
         <Overlay />
-        <Modal />
+        <Modal defaultTheme={data.darkMode} />
       </Theme>
     </Provider>
   );

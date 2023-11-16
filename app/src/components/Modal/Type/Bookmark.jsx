@@ -26,7 +26,7 @@ export default function Bookmark({ postId }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full dark:text-white">
       <Title>Add To Bookmark</Title>
       <div className="flex flex-col w-full gap-2">
         <div className="flex flex-row gap-4">
