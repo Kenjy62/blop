@@ -8,11 +8,12 @@ import ReactModal from "react-modal";
 import Reply from "./Type/Reply";
 import Share from "./Type/Share";
 import Bookmark from "./Type/Bookmark";
+import CreateConversation from "./Type/CreateConversation";
 
 // Set Modal
 ReactModal.setAppElement("html");
 
-export default function Modal({ defaultTheme }) {
+export default function Modal({ defaultTheme, userFollowed }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 

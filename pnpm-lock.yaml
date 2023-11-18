@@ -62,9 +62,18 @@ dependencies:
   react-modal:
     specifier: ^3.16.1
     version: 3.16.1(react-dom@18.2.0)(react@18.2.0)
+  react-nice-scroll:
+    specifier: ^1.0.0
+    version: 1.0.0(react@18.2.0)
   react-redux:
     specifier: ^8.1.2
     version: 8.1.2(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1)
+  react-scrollbar-custom:
+    specifier: ^1.2.0
+    version: 1.2.0(react-dom@18.2.0)(react@18.2.0)
+  react-scrollbars-custom:
+    specifier: ^4.1.1
+    version: 4.1.1(react-dom@18.2.0)(react@18.2.0)
   redux-persist:
     specifier: ^6.0.0
     version: 6.0.0(react@18.2.0)(redux@4.2.1)
@@ -788,6 +797,15 @@ packages:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
     dev: false
 
+  /clsx@1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
+
+  /cnbuilder@3.1.0:
+    resolution: {integrity: sha512-9sxWwwprkPNTVQnx92WYPEWCmyZRqbf9VWUYABU4rl0mLL17VAV2MvvOApkMA6bQVXRLJ8jN//8Yp6drElpLWA==}
+    dev: false
+
   /color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
     engines: {node: '>=7.0.0'}
@@ -810,6 +828,11 @@ packages:
   /cookie@0.4.2:
     resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /core-js@3.33.2:
+    resolution: {integrity: sha512-XeBzWI6QL3nJQiHmdzbAOiMYqjrb7hwU7A39Qhvd/POSa/t9E1AeZyEZx3fNvp/vtM8zXwhoL0FsiS0hD0pruQ==}
+    requiresBuild: true
     dev: false
 
   /cors@2.8.5:
@@ -1361,6 +1384,10 @@ packages:
     engines: {node: '>=4.0'}
     dev: false
 
+  /estree-walker@0.6.1:
+    resolution: {integrity: sha512-SqmZANLWS0mnatqbSfRP5g8OXZC12Fgg1IwNtLsyHDzJizORW4khDfjPqJZsemPWBB2uqykUah5YpQ6epsqC/w==}
+    dev: false
+
   /esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
@@ -1591,6 +1618,10 @@ packages:
 
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+    dev: false
+
+  /gsap@3.12.2:
+    resolution: {integrity: sha512-EkYnpG8qHgYBFAwsgsGEqvT1WUidX0tt/ijepx7z8EUJHElykg91RvW1XbkT59T0gZzzszOpjQv7SE41XuIXyQ==}
     dev: false
 
   /has-bigints@1.0.2:
@@ -2310,6 +2341,10 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /performance-now@2.1.0:
+    resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
+    dev: false
+
   /picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: false
@@ -2442,6 +2477,12 @@ packages:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: false
 
+  /raf@3.4.1:
+    resolution: {integrity: sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==}
+    dependencies:
+      performance-now: 2.1.0
+    dev: false
+
   /react-dom@18.2.0(react@18.2.0):
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
@@ -2450,6 +2491,26 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-draggable@4.4.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-LtY5Xw1zTPqHkVmtM3X8MUOxNDOUhv/khTgBgrUvwaS064bwVvxT+q5El0uUFNx5IEPKXuRejr7UqLwBIg5pdw==}
+    peerDependencies:
+      react: '>= 16.3.0'
+      react-dom: '>= 16.3.0'
+    dependencies:
+      clsx: 1.2.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-hooks-global-state@1.0.2(react@18.2.0):
+    resolution: {integrity: sha512-UcWz+VjcUUCQ7bXGmOhanGII3j22zyPSjwJnQWeycxFYj/etBxIbz9xziEm4sv5+OqGuS7bzvpx24XkCxgJ7Bg==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-icons@4.11.0(react@18.2.0):
@@ -2487,6 +2548,19 @@ packages:
       warning: 4.0.3
     dev: false
 
+  /react-nice-scroll@1.0.0(react@18.2.0):
+    resolution: {integrity: sha512-TXRNUiHqBGBoXB8BDZvYXpQViv0ruW+OWYVJSxqJvEX1FEijr6EGMsU40xiT0FyCZ09az2fNgHVTJpUM+qdP+g==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      gsap: 3.12.2
+      react: 18.2.0
+      react-hooks-global-state: 1.0.2(react@18.2.0)
+      rollup-plugin-scss: 3.0.0
+      smooth-scrollbar: 8.8.4
+    dev: false
+
   /react-redux@8.1.2(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1):
     resolution: {integrity: sha512-xJKYI189VwfsFc4CJvHqHlDrzyFTY/3vZACbE+rr/zQ34Xx1wQfB4OTOSeOSNrF6BDVe8OOdxIrAnMGXA3ggfw==}
     peerDependencies:
@@ -2517,6 +2591,32 @@ packages:
       react-is: 18.2.0
       redux: 4.2.1
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /react-scrollbar-custom@1.2.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-+WAAOSzR4FVuAZ7hglv718gpMkyihOGyNIvkCoq7MdAZwLDbMOzyWyarYWbjk4sLy5T5Kf7ruwn+kep/UFZu5Q==}
+    deprecated: 'WARNING: This module has been renamed to react-scrollbars-custom. Please install it instead. See https://github.com/xobotyi/react-scrollbars-custom for mode info.'
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0
+      react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      prop-types: 15.8.1
+      raf: 3.4.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-scrollbars-custom@4.1.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-FOI1EMrdN5qziwvFAuH4saOo0+ggxeTuKLPpy6nezNdLUnDW1vCHGq0VSSfTSRstDgfXgwff5TMP9NeJ8NiFOQ==}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
+      cnbuilder: 3.1.0
+      react: 18.2.0
+      react-draggable: 4.4.6(react-dom@18.2.0)(react@18.2.0)
+      zoom-level: 2.5.0
+    transitivePeerDependencies:
+      - react-dom
     dev: false
 
   /react@18.2.0:
@@ -2633,6 +2733,18 @@ packages:
       glob: 7.2.3
     dev: false
 
+  /rollup-plugin-scss@3.0.0:
+    resolution: {integrity: sha512-UldNaNHEon2a5IusHvj/Nnwc7q13YDvbFxz5pfNbHBNStxGoUNyM+0XwAA/UafJ1u8XRPGdBMrhWFthrrGZdWQ==}
+    dependencies:
+      rollup-pluginutils: 2.8.2
+    dev: false
+
+  /rollup-pluginutils@2.8.2:
+    resolution: {integrity: sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==}
+    dependencies:
+      estree-walker: 0.6.1
+    dev: false
+
   /run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
@@ -2718,6 +2830,13 @@ packages:
   /slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
+    dev: false
+
+  /smooth-scrollbar@8.8.4:
+    resolution: {integrity: sha512-Wn2Q/iE+PE1ef4EfhFMhgaIMfSrjJl2LalRu0hBWSrw5nZKGsUIjWFWHnLB/Lpx7N+a1pJH6+wkQzBr+5nWPUg==}
+    dependencies:
+      core-js: 3.33.2
+      tslib: 1.14.1
     dev: false
 
   /socket.io-adapter@2.5.2(bufferutil@4.0.8)(utf-8-validate@6.0.3):
@@ -2973,6 +3092,10 @@ packages:
       strip-bom: 3.0.0
     dev: false
 
+  /tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: false
+
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: false
@@ -3218,4 +3341,8 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zoom-level@2.5.0:
+    resolution: {integrity: sha512-7UlRWU4Q3uCMCeDVMOm7eBrIu145OqsIJ3p6zq58l8UsSYwKWxc6zEapC5YA9tIeh0oheb4cT9Kk2Wq353loFg==}
     dev: false

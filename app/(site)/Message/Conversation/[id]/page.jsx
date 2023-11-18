@@ -1,9 +1,8 @@
 // Components
-import Receiver from "@/app/src/components/Message/Receiver";
-import Sender from "@/app/src/components/Message/Sender";
-import Button from "@/app/src/components/UI/Button/Button";
-import Title from "@/app/src/components/UI/Title/Title";
-import Picture from "@/app/src/components/UI/User/Picture";
+import ChatArea from "@/app/src/components/Message/Chat/ChatArea";
+import ChatContainer from "@/app/src/components/Message/Chat/ChatContainer";
+import ChatList from "@/app/src/components/Message/Chat/ChatList";
+import ChatTop from "@/app/src/components/Message/Chat/ChatTop";
 
 // Features
 import { getMessages, init } from "@/app/src/features/user";
@@ -24,31 +23,10 @@ export default async function Page({ params }) {
   };
 
   return (
-    <div className="w-full flex flex-col">
-      <div className="rounded-t-lg dark:bg-night-300 p-4 flex flex-row gap-4 items-center">
-        <Picture
-          url={sender.picture}
-          style={"h-14 w-14 rounded-full object-cover"}
-        />
-        <Title>{sender.name}</Title>
-      </div>
-      <div className="dark:bg-night-200 p-4 flex-1 overflow-y-scroll flex flex-col gap-2">
-        {data.map((item) =>
-          item.senderId === user.data.id ? (
-            <Receiver data={item} />
-          ) : (
-            <Sender data={item} />
-          )
-        )}
-      </div>
-      <div className="dark:bg-night-300 p-4 flex flex-row gap-4 justify-between">
-        <input
-          type="text"
-          placeholder="Write your message here.."
-          className="dark:bg-night-200 rounded-lg p-2 flex-1"
-        />
-        <Button>Send</Button>
-      </div>
-    </div>
+    <ChatContainer>
+      <ChatTop picture={sender.picture} name={sender.name} />
+      <ChatList data={data} userId={user.data.id} />
+      <ChatArea conversationId={params.id} userId={user.data.id} />
+    </ChatContainer>
   );
 }

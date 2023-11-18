@@ -1,21 +1,23 @@
 "use client";
-
-// Required
-import { useRouter, useSearchParams } from "next/navigation";
 import ReactModal from "react-modal";
-import ImageLoader from "./Type/Image";
+import CreateConversation from "../Modal/Type/CreateConversation";
+import { usePathname, useRouter } from "next/navigation";
 
-// Set Modal
-ReactModal.setAppElement("html");
-
-export default function Overlay() {
-  const searchParams = useSearchParams();
+export default function Modal({ userFollowed }) {
   const router = useRouter();
+
+  const pathname = usePathname();
+  console.log(pathname);
+
+  // Set Modal
+  ReactModal.setAppElement("html");
 
   return (
     <ReactModal
-      isOpen={searchParams.get("picture") ? true : false}
-      onRequestClose={() => router.back()}
+      isOpen={pathname.includes("/Message/Create") ? true : false}
+      onRequestClose={() => router.push("/Message")}
+      overlayClassName={""}
+      className={"dark:bg-night-300"}
       style={{
         overlay: {
           position: "fixed",
@@ -30,14 +32,12 @@ export default function Overlay() {
           alignItems: "center",
           inset: 0,
           overflow: "hidden",
-          zIndex: 99,
         },
         content: {
           position: "relative",
-          minWidth: "95%",
-          height: "95%",
+          minWidth: 500,
+          height: "auto",
           padding: 16,
-          zIndex: 99,
           borderRadius: 12,
           margin: 0,
           overflow: "hidden",
@@ -45,7 +45,7 @@ export default function Overlay() {
         },
       }}
     >
-      <ImageLoader url={searchParams.get("picture")} />
+      <CreateConversation userFollowed={userFollowed} />
     </ReactModal>
   );
 }

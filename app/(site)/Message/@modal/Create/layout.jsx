@@ -1,6 +1,6 @@
 export default function Layout({ children, modal }) {
   return (
-    <div className="w-full">
+    <div>
       {children}
       {modal}
     </div>

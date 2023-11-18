@@ -214,4 +214,26 @@ export const fetch = {
       },
     },
   },
+  follow: {
+    create: {
+      success: {
+        message: "You are now following this user",
+        status: 200,
+      },
+      error: {
+        message: "An error has occurred, try again!",
+        status: 400,
+      },
+    },
+    delete: {
+      success: {
+        message: "You no longer follow this user",
+        status: 400,
+      },
+      error: {
+        message: "An error has occured, try again!",
+        status: 400,
+      },
+    },
+  },
 };

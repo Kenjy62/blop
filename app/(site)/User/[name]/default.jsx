@@ -17,7 +17,9 @@ export default async function Default({ params }) {
 
   if (status === 200) {
     const me = await init();
-
+    const alreadyFollow = data.userFollowed.filter(
+      (user) => user.user1_id === me.data.id && user.user2_id === data.id
+    );
     const repostCount = data.posts.filter((post) => post.type === "share");
     const mediasCount = data.posts.filter((post) => post.picture !== null);
     return (
@@ -26,6 +28,7 @@ export default async function Default({ params }) {
           <Cover
             cover={data.cover}
             isMyProfil={data.id === me.data.id ? true : false}
+            isFollowed={alreadyFollow}
           />
           <div className="flex flex-col gap-4 items-center top-[-50px] relative">
             <div className="flex flex-row gap-8 items-end">

@@ -2,6 +2,7 @@ import Conversation from "@/app/src/components/Message/Conversation";
 import SearchBar from "@/app/src/components/Message/Searchbar";
 import Button from "@/app/src/components/UI/Button/Button";
 import { getConversations } from "@/app/src/features/user";
+import Link from "next/link";
 
 export default async function Page({ searchParams }) {
   const { data, message, status } = await getConversations(searchParams);
@@ -11,7 +12,9 @@ export default async function Page({ searchParams }) {
       <div className="w-full flex flex-col gap-4">
         <div className="flex flex-row justify-between gap-4">
           <SearchBar />
-          <Button>Create Conversation</Button>
+          <Link href="/Message/Create">
+            <Button>Create Conversation</Button>
+          </Link>
         </div>
         {data.map((item) => (
           <Conversation conversation={item} />

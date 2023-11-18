@@ -67,8 +67,8 @@ export default function Post({ userId, post }) {
           </Link>
           {post.picture.length > 0 && (
             <div className="flex flex-row gap-2">
-              {post.picture.map((pic) => (
-                <div className="flex-1">
+              {post.picture.map((pic, id) => (
+                <div className="flex-1" key={id}>
                   <Link href={`?picture=${pic.url.replace("/Posts/", "")}`}>
                     <Image
                       className="rounded-lg w-full"

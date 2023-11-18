@@ -630,8 +630,15 @@ export async function GetUserDetails(name) {
         posts_liked: {
           select: { id: true },
         },
+        userFollowed: {
+          select: {
+            user1_id: true,
+            user2_id: true,
+          },
+        },
       },
     });
+
     return {
       data: response,
       message: fetch.user.get.success.message,
@@ -688,8 +695,6 @@ export const getNotifications = async () => {
 };
 
 export const getConversations = async (searchParams) => {
-  console.log(searchParams);
-
   const prisma = new PrismaClient();
   const { data, message, status } = await init();
 
@@ -780,6 +785,121 @@ export const getMessages = async (id) => {
     });
 
     return { data: response, message: "ok", status: 200 };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    prisma.$disconnect();
+  }
+};
+
+export const followUser = async (name) => {
+  const prisma = new PrismaClient();
+
+  try {
+    const { data, message, status } = await init();
+
+    if (status === 200) {
+      try {
+        const user = await prisma.user.findFirst({
+          where: { name: name },
+          select: { id: true },
+        });
+
+        await prisma.follow.create({
+          data: {
+            user1_id: data.id,
+            user2_id: user.id,
+          },
+        });
+
+        return {
+          message: fetch.follow.create.success.message,
+          status: fetch.follow.create.success.status,
+        };
+      } catch (error) {
+        console.log(error);
+        return {
+          message: fetch.follow.create.error.message,
+          status: fetch.follow.create.error.status,
+        };
+      } finally {
+        prisma.$disconnect();
+      }
+    } else if (status === 400) {
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      message: fetch.user.init.error.message,
+      status: fetch.user.init.error.status,
+    };
+  } finally {
+    prisma.$disconnect();
+  }
+};
+
+export const unfollowUser = async (name) => {
+  const prisma = new PrismaClient();
+
+  const { data, message, status } = await init();
+
+  if (status === 200) {
+    try {
+      const user = await prisma.user.findFirst({
+        where: { name: name },
+        select: { id: true },
+      });
+
+      await prisma.follow.deleteMany({
+        where: { user1_id: data.id, user2_id: user.id },
+      });
+
+      return true;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      prisma.$disconnect();
+    }
+  } else if (status === 400) {
+    return false;
+  }
+};
+
+export const getFollower = async () => {
+  const prisma = new PrismaClient();
+
+  try {
+    const { data, message, status } = await init();
+
+    if (status === 200) {
+      try {
+        const response = await prisma.follow.findMany({
+          where: {
+            user1_id: data.id,
+          },
+          select: {
+            user2: {
+              select: {
+                name: true,
+                picture: true,
+                id: true,
+              },
+            },
+          },
+        });
+
+        return { data: response, message: "ok", status: 200 };
+      } catch (error) {
+        console.log(error);
+        return { message: "nop", status: 400 };
+      } finally {
+        prisma.$disconnect();
+      }
+    }
   } catch (error) {
     console.log(error);
   } finally {
