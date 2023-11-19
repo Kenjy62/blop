@@ -1,3 +1,4 @@
+// Components
 import Post from "./Structure/Post";
 import User from "./Structure/User";
 

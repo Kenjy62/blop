@@ -1,23 +1,24 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request) {
-  console.log(`User Request : ${request.nextUrl.pathname}`);
-
   const isAlreadyLogged = request.cookies.get("token");
+  const url = request.nextUrl.pathname;
+  console.log(`User request: ${url}`);
 
-  // If pathname is '/' (Login Page) && user is already connected, redirect to feed
-  if (request.nextUrl.pathname === "/" && isAlreadyLogged) {
-    return NextResponse.redirect(new URL("/Feed", request.url));
-  }
-
-  // if pathname is not '/' (Login Page) && user is not connected, redirect to Login
-  if (
-    request.nextUrl.pathname === "/" ||
-    request.nextUrl.pathname === "/Register"
+  if (!isAlreadyLogged && url !== "/" && url !== "/Register") {
+    console.log("not logged and not on login or register");
+    // Vérifiez si la variable next est définie
+    if (typeof NextRequest === "function") {
+      return NextResponse.redirect(new URL("/", request.url));
+    } else {
+      console.log("serer action error");
+    }
+  } else if (
+    (isAlreadyLogged && url === "/") ||
+    (isAlreadyLogged && url === "/Register")
   ) {
-    if (isAlreadyLogged) {
+    if (typeof NextRequest === "function") {
       return NextResponse.redirect(new URL("/Feed", request.url));
-    } else if (!isAlreadyLogged) {
     }
   }
 }

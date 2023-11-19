@@ -8,6 +8,8 @@ import { useState, useTransition } from "react";
 
 // Components
 import Button from "../UI/Button/Button";
+
+// Features
 import { followUser, unfollowUser } from "../../features/user";
 
 export default function Cover({ cover, isMyProfil, isFollowed }) {

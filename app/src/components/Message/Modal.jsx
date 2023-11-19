@@ -1,13 +1,16 @@
 "use client";
+
+// Components
 import ReactModal from "react-modal";
 import CreateConversation from "../Modal/Type/CreateConversation";
+
+// Required
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Modal({ userFollowed }) {
   const router = useRouter();
 
   const pathname = usePathname();
-  console.log(pathname);
 
   // Set Modal
   ReactModal.setAppElement("html");

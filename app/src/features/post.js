@@ -6,11 +6,12 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { fetch } from "../config/config";
 import { HashtagsExtrator } from "./hashtagsExtractor";
 import { io } from "socket.io-client";
 import { writeFile } from "fs/promises";
+import { getFollower } from "./user";
 
 // Get All Post List for Feed
 export async function GetAllPost() {
@@ -79,6 +80,94 @@ export async function GetAllPost() {
     return {
       message: fetch.post.getAll.error.message,
       status: fetch.post.getAll.error.status,
+    };
+  } finally {
+    prisma.$disconnect();
+  }
+}
+
+// Get Followed Post List for Feed
+
+export async function GetFollowedPost() {
+  const { data, message, status } = await getFollower();
+
+  const followedList = [];
+
+  data.forEach((user) => {
+    followedList.push(user.user2.id);
+  });
+
+  const prisma = new PrismaClient();
+
+  try {
+    const response = await prisma.post.findMany({
+      where: {
+        author_id: {
+          in: followedList,
+        },
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        content: true,
+        picture: true,
+        shares: true,
+        likes: true,
+        bookmarks: true,
+        type: true,
+        share_id: true,
+        comments: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            picture: true,
+          },
+        },
+        userslist_likes: {
+          select: {
+            post_id: true,
+            user: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+        share_data: {
+          select: {
+            id: true,
+            createdAt: true,
+            content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
+            hashtags: true,
+          },
+        },
+        bookmark_data: {
+          select: {
+            user_id: true,
+            post_id: true,
+          },
+        },
+      },
+    });
+
+    return {
+      data: response,
+      message: "ok",
+      status: 200,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "nop",
+      status: 400,
     };
   } finally {
     prisma.$disconnect();

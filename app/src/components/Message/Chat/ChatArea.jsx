@@ -1,10 +1,10 @@
 "use client";
 
+// Features
 import { send } from "@/app/src/features/chat";
 
+// Required
 import { useState } from "react";
-
-// ... (imports)
 
 export default function ChatArea({ conversationId, userId }) {
   const [textarea, setTextarea] = useState(""); // Initialiser avec une chaîne vide

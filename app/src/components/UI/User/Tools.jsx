@@ -1,7 +1,9 @@
 // Components
-import { getNotifications } from "@/app/src/features/user";
 import Messages from "./Tools/Messages";
 import Notifications from "./Tools/Notifications";
+
+// Features
+import { getNotifications } from "@/app/src/features/user";
 
 export default async function Tools({ user }) {
   const { data, message, status } = await getNotifications(user.id, {

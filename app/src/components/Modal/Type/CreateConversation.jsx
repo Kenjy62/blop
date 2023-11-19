@@ -1,8 +1,13 @@
-import { useRouter, useSearchParams } from "next/navigation";
+// Required
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+// Features
+import { newConversation } from "@/app/src/features/chat";
+
+// Components
 import Title from "../../UI/Title/Title";
 import Picture from "../../UI/User/Picture";
-import { useEffect, useState } from "react";
-import { newConversation } from "@/app/src/features/chat";
 
 export default function CreateConversation({ userFollowed }) {
   const router = useRouter();
@@ -23,12 +28,7 @@ export default function CreateConversation({ userFollowed }) {
   }, [query]);
 
   async function createConversation(id) {
-    console.log(id);
-
     const { data, message, status } = await newConversation(id);
-
-    console.log(data, message, status);
-
     router.push(`/Message/Conversation/${data.id}`);
   }
 

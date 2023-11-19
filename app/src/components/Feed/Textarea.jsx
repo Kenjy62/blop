@@ -3,11 +3,8 @@
 // Required
 import { useTransition, useRef, useState } from "react";
 
-// Actions
+// Features
 import { CreatePost } from "../../features/post";
-
-// Components
-import Button from "@/app/src/components/UI/Button/Button";
 
 // Icons
 import {
@@ -56,6 +53,7 @@ export default function Textarea() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Post Function
   async function post(formData) {
     startTransition(async () => {
       const { message, status } = await CreatePost(formData, "post");
@@ -76,6 +74,7 @@ export default function Textarea() {
     setFiles([]);
   };
 
+  // Liste if key enter is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       post();

@@ -49,6 +49,8 @@ export const newConversation = async (id) => {
   try {
     const { data, message, status } = await init();
 
+    console.log(data, message, status);
+
     const response = await prisma.conversation.findFirst({
       where: {
         OR: [

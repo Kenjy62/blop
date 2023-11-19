@@ -33,6 +33,18 @@ export default function Tabs() {
       link: `/User/${name}/Medias`,
       active: pathname === `/User/${name}/Medias` ? true : false,
     },
+    {
+      id: 0,
+      name: "Follows",
+      link: `/User/${name}/Follows`,
+      active: pathname === `/User/${name}/Follows` ? true : false,
+    },
+    {
+      id: 0,
+      name: "Followers",
+      link: `/User/${name}/Followers`,
+      active: pathname === `/User/${name}/Followers` ? true : false,
+    },
   ];
 
   return (

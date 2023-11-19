@@ -54,11 +54,9 @@ export default function Actions({
   };
 
   const deleteBookmark = async (postId) => {
-    const response = await RemoveBookmark(postId);
-    if (response.status === 200) {
-      alert("Delete");
-    } else {
-      alert("error");
+    const { message, status } = await RemoveBookmark(postId);
+    if (status === 400) {
+      alert(message);
     }
   };
 

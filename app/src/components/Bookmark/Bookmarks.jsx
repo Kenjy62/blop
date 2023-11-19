@@ -8,6 +8,7 @@ import Post from "../Feed/Post/Post";
 import Tag from "../UI/Tag/Tag";
 
 export default function Bookmarks({ BookmarksList, Tags, userId }) {
+  // States
   const [selectedTag, setSelectedTag] = useState("All");
   const [filteredBookmarks, setFilteredBookmarks] = useState(BookmarksList);
 

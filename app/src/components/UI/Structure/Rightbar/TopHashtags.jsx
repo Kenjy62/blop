@@ -1,7 +1,11 @@
 // Components
-import { GetTopHashtags } from "@/app/src/features/sidebar/hashtags";
 import Title from "../../Title/Title";
 import ComponentError from "../../../Error/ComponentError";
+
+// Features
+import { GetTopHashtags } from "@/app/src/features/sidebar/hashtags";
+
+// Required
 import Link from "next/link";
 
 export default async function TopHashtags() {

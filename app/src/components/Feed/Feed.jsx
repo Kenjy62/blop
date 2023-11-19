@@ -1,29 +1,29 @@
-// Actions
-import { GetAllPost } from "../../features/post";
-import { init } from "../../features/user";
-import ComponentError from "../Error/ComponentError";
-
 // Components
 import Post from "./Post/Post";
+import Order from "./Order";
 
-export default async function Feed() {
-  const { data, message, status } = await GetAllPost();
-
-  if (status === 400) {
-    return <ComponentError message={message} />;
-  }
-
-  if (status === 200 && data.length > 0) {
-    const user = await init();
-    return data
-      .reverse()
-      .map((post) => <Post key={post.id} userId={user.data.id} post={post} />);
-  }
-
+export default function Feed({ post, user, order }) {
   return (
-    <p>
-      No posts at the moment, you have the honor of writing the very first with
-      the text field above
-    </p>
+    <div className="flex flex-col gap-4">
+      <Order selected={order} />
+      <div>
+        {order === "Followed" &&
+          post.map((post) => (
+            <Post key={post.id} userId={user.data.id} post={post} />
+          ))}
+        {order === "All" &&
+          post
+            .reverse()
+            .map((post) => (
+              <Post key={post.id} userId={user.data.id} post={post} />
+            ))}
+        {!order &&
+          post
+            .reverse()
+            .map((post) => (
+              <Post key={post.id} userId={user.data.id} post={post} />
+            ))}
+      </div>
+    </div>
   );
 }

@@ -13,6 +13,7 @@ dayjs.extend(relativeTime);
 // Components
 import Share from "./Share/Share";
 import Actions from "./Action";
+import Picture from "../../UI/User/Picture";
 
 // Icons
 import { RxClock } from "react-icons/rx";
@@ -26,15 +27,12 @@ export default function Post({ userId, post }) {
     <div>
       <div className="w-full p-4 pb-8 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200 dark:border-night-200">
         <div className="h-fit">
-          <Link href={`/User/${post.author.name}`}>
-            <Image
-              src={post.author.picture}
-              height={100}
-              width={100}
-              className="rounded-full h-10 w-10 object-cover"
-              alt={`${post.author.name} avatar`}
-            />
-          </Link>
+          <Picture
+            name={post.author.name}
+            url={post.author.picture}
+            link={true}
+            style="rounded-full h-14 w-14 object-cover"
+          />
         </div>
         <div className="flex flex-col w-full gap-6">
           <Link

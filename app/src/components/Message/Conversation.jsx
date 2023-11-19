@@ -1,7 +1,11 @@
 // Components
-import Link from "next/link";
-import { init } from "../../features/user";
 import Picture from "../UI/User/Picture";
+
+// Features
+import { init } from "../../features/user";
+
+// Required
+import Link from "next/link";
 
 export default async function Conversation({ conversation }) {
   const { data, message, status } = await init();

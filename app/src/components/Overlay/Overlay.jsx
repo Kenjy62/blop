@@ -2,6 +2,8 @@
 
 // Required
 import { useRouter, useSearchParams } from "next/navigation";
+
+// Components
 import ReactModal from "react-modal";
 import ImageLoader from "./Type/Image";
 

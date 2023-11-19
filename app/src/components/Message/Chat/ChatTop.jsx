@@ -1,3 +1,4 @@
+// Components
 import Picture from "../../UI/User/Picture";
 import Title from "../../UI/Title/Title";
 
@@ -8,6 +9,7 @@ export default function ChatTop({ picture, name }) {
         name={name}
         url={picture}
         style={"h-14 w-14 rounded-full object-cover"}
+        link={true}
       />
       <Title>{name}</Title>
     </div>

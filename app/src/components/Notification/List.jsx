@@ -1,11 +1,16 @@
 // Required
 import Image from "next/image";
+
+// Components
 import Tag from "../UI/Tag/Tag";
+import Picture from "../UI/User/Picture";
+
+// Features
 import { setIsRead } from "../../features/notification";
 
 export default function List({ list }) {
   const onHover = async (id) => {
-    const update = await setIsRead(id);
+    await setIsRead(id);
   };
 
   return (
@@ -18,12 +23,11 @@ export default function List({ list }) {
               key={item.id}
               className="flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200"
             >
-              <Image
-                className="rounded-full h-10 w-10"
-                src={item.author.picture}
-                height={64}
-                width={64}
-                alt={`${item.author.name} avatar`}
+              <Picture
+                url={item.author.picture}
+                name={item.author.name}
+                link={true}
+                style="rounded-full h-10 w-10 cursor-pointer object-cover"
               />
               <span className="w-fit">
                 {item.author.name} has {item.type} your post : date

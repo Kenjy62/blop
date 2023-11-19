@@ -1,5 +1,6 @@
 "use client";
 
+// required
 import { useRouter } from "next/navigation";
 
 export default function SearchBar() {

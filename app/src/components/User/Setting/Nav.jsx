@@ -23,6 +23,11 @@ export default function Nav({ name }) {
       path: `/Edit/${name}/Security`,
       isActive: pathname === `/Edit/${name}/Security` ? true : false,
     },
+    {
+      name: "Confidentiality",
+      path: `/Edit/${name}/Confidentiality`,
+      isActive: pathname === `/Edit/${name}/Confidentiality` ? true : false,
+    },
   ];
 
   return nav.map((item) => {

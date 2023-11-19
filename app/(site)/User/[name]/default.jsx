@@ -7,6 +7,7 @@ import Tabs from "@/app/src/components/User/Tabs";
 
 // Features
 import { init, GetUserDetails } from "@/app/src/features/user";
+import Link from "next/link";
 
 export default async function Default({ params }) {
   const { data, message, status } = await GetUserDetails(params.name);
@@ -20,6 +21,8 @@ export default async function Default({ params }) {
     const alreadyFollow = data.userFollowed.filter(
       (user) => user.user1_id === me.data.id && user.user2_id === data.id
     );
+    const followsCount = data.userFollower.length;
+    const followersCount = data.userFollowed.length;
     const repostCount = data.posts.filter((post) => post.type === "share");
     const mediasCount = data.posts.filter((post) => post.picture !== null);
     return (
@@ -49,6 +52,11 @@ export default async function Default({ params }) {
               <div className="flex flex-col">
                 <span>{repostCount.length} Reposts</span>
                 <span>{mediasCount?.length} Medias</span>
+              </div>
+              <Vertical />
+              <div className="flex flex-col">
+                <span>{followsCount} Follows</span>
+                <span>{followersCount} Followers</span>
               </div>
             </div>
           </div>

@@ -1,9 +1,15 @@
 "use client";
 
+// Required
 import { useContext, useEffect, useState } from "react";
+
+// Context
 import { SearchContext } from "@/app/src/context/search";
+
+// Features
 import { onSearch } from "@/app/src/features/searchbar";
-import User from "./Structure/User";
+
+// Components
 import Result from "./Result";
 
 export default function SearchContainer() {

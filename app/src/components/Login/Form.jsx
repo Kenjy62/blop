@@ -4,8 +4,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// Actions
+// Features
 import { Login } from "../../features/user";
+
+// Components
 import { Error } from "../UI/Globals/Alert";
 
 export default function Form() {

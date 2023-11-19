@@ -1,8 +1,11 @@
 "use client";
 
+// Required
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import Image from "next/image";
+
+// Context
 import { SearchContext } from "@/app/src/context/search";
 
 export default function Post({ post }) {

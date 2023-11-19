@@ -1,4 +1,4 @@
-// Required
+// Features
 import { init } from "@/app/src/features/user";
 
 // Icons
