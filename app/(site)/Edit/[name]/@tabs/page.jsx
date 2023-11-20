@@ -34,7 +34,11 @@ export default async function Page({ params }) {
               <div>My Name : {data.name}</div>
               <div>My Location : France</div>
             </div>
-            <Setting name={"Dark Mode"} authorized={data.darkMode} />
+            <Setting
+              display={"Dark Mode"}
+              name={"Dark Mode"}
+              authorized={data.darkMode}
+            />
             <div className="flex justify-end">
               <Button>Save</Button>
             </div>

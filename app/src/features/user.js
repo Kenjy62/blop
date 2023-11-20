@@ -179,11 +179,9 @@ export const init = async () => {
         name: true,
         picture: true,
         token: true,
-        comment_notification: true,
-        like_notification: true,
-        message_notification: true,
         darkMode: true,
-        // notification: true,
+        display_follow: true,
+        display_follower: true,
         notification: true,
       },
     });
@@ -264,6 +262,40 @@ export const getNotificationsSettings = async () => {
   return response;
 };
 
+// Get User Notifications Settings
+export const getConfidentialitySettings = async () => {
+  const me = await init();
+
+  const prisma = new PrismaClient();
+  const response = await prisma.user.findFirst({
+    where: {
+      id: me.id,
+    },
+    select: {
+      display_follow: true,
+      display_follower: true,
+    },
+  });
+
+  return response;
+};
+
+export const getUserConfidentialitySettings = async (name) => {
+  const prisma = new PrismaClient();
+
+  const response = await prisma.user.findFirst({
+    where: {
+      name: name,
+    },
+    select: {
+      display_follow: true,
+      display_follower: true,
+    },
+  });
+
+  return response;
+};
+
 // Update User Notifications Settings
 export const updateNotificationSetting = async (type) => {
   const { data } = await init();
@@ -311,7 +343,7 @@ export const updateNotificationSetting = async (type) => {
         message_notification: defaultValue.message_notification === 0 ? 1 : 0,
       },
     });
-  } else if (type == "Dark Mode") {
+  } else if (type === "Dark Mode") {
     const defaultValue = await prisma.user.findFirst({
       where: { id: data.id },
       select: { darkMode: true },
@@ -320,6 +352,34 @@ export const updateNotificationSetting = async (type) => {
     await prisma.user.update({
       where: { id: data.id },
       data: { darkMode: defaultValue.darkMode === false ? true : false },
+    });
+  } else if (type === "Display Follows") {
+    const defaultValue = await prisma.user.findFirst({
+      where: {
+        id: data.id,
+      },
+      select: {
+        display_follow: true,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: data.id },
+      data: { display_follow: defaultValue.display_follow === 1 ? 0 : 1 },
+    });
+  } else if (type === "Display Followers") {
+    const defaultValue = await prisma.user.findFirst({
+      where: {
+        id: data.id,
+      },
+      select: {
+        display_follower: true,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: data.id },
+      data: { display_follower: defaultValue.display_follower === 1 ? 0 : 1 },
     });
   }
 };

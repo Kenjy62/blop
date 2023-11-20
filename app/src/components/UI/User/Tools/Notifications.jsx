@@ -2,6 +2,7 @@
 
 // Required
 import { useContext, useEffect, useState } from "react";
+
 // Icons
 import { RxBell } from "react-icons/rx";
 
@@ -22,7 +23,7 @@ export default function Notifications({ user_id, data }) {
     if (socket) {
       socketInit(user_id);
 
-      socket.on("incrementCommentNotification", (data) => {
+      socket.on("new_notification", () => {
         setNotifications(notifications + 1);
       });
     }

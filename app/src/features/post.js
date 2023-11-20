@@ -472,6 +472,10 @@ export const ReactionPost = async (postId, value) => {
       where: { id: postId },
       data: { likes: { increment: 1 } },
     });
+
+    const socket = io.connect("http://localhost:3001");
+    const socketData = { userid: user.id, post_id: postId };
+    socket.emit("post_like", socketData);
   }
 
   if (value === "remove") {
@@ -519,6 +523,10 @@ export async function SharePost(textarea, files, type, postId) {
 
   await prisma.post.create({ data });
 
+  const socket = io.connect("http://localhost:3001");
+  const socketData = { userid: user.id, post_id: postId };
+  socket.emit("post_share", socketData);
+
   revalidatePath("/Feed");
   prisma.$disconnect();
   return revalidatePath("/Feed");
@@ -550,9 +558,9 @@ export const ReplyToPost = async (content, postId) => {
     await prisma.comment.create({ data });
     prisma.$disconnect();
 
-    var socket = io.connect("http://localhost:3001");
-    const socketData = { userid: user.id, blopid: postId };
-    socket.emit("newCommentOnPost", socketData);
+    const socket = io.connect("http://localhost:3001");
+    const socketData = { userid: user.id, post_id: postId };
+    socket.emit("post_comment", socketData);
 
     return redirect(`/Post/${postId}`);
   } else {

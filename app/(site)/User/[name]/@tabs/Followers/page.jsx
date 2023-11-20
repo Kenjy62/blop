@@ -1,5 +1,9 @@
 // Features
-import { getSpecifiqueUserFollowers, init } from "@/app/src/features/user";
+import {
+  getSpecifiqueUserFollowers,
+  getUserConfidentialitySettings,
+  init,
+} from "@/app/src/features/user";
 
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
@@ -9,6 +13,12 @@ export default async function Page({ params }) {
   const { data, message, status } = await getSpecifiqueUserFollowers(
     params.name
   );
+
+  const userAuthorization = await getUserConfidentialitySettings(params.name);
+
+  if (userAuthorization.display_follower === 0) {
+    return <p>This user doesn't allow to display followers</p>;
+  }
 
   if (status === 200 && data.length > 0) {
     return (

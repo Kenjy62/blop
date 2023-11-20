@@ -1,21 +1,35 @@
+// Components
 import Setting from "@/app/src/components/User/Setting/Setting";
 
-export default function Page() {
+// Features
+import { getConfidentialitySettings } from "@/app/src/features/user";
+
+export default async function Page() {
+  const UserSettings = await getConfidentialitySettings();
+
   const settings = [
     {
+      display: "Display Follows for other",
       name: "Display Follows",
-      authorized: false,
+      authorized: UserSettings.display_follow === 1 ? true : false,
     },
     {
+      display: "Display Followers for other",
       name: "Display Followers",
-      authorized: false,
+      authorized: UserSettings.display_follower === 1 ? true : false,
     },
   ];
 
   return (
     <div className="flex flex-col w-full p-4 gap-4">
       {settings.map((setting) => {
-        return <Setting name={setting.name} authorized={setting.authorized} />;
+        return (
+          <Setting
+            display={setting.display}
+            name={setting.name}
+            authorized={setting.authorized}
+          />
+        );
       })}
     </div>
   );

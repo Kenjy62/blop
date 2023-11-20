@@ -6,12 +6,9 @@ export function middleware(request) {
   console.log(`User request: ${url}`);
 
   if (!isAlreadyLogged && url !== "/" && url !== "/Register") {
-    console.log("not logged and not on login or register");
     // Vérifiez si la variable next est définie
     if (typeof NextRequest === "function") {
       return NextResponse.redirect(new URL("/", request.url));
-    } else {
-      console.log("serer action error");
     }
   } else if (
     (isAlreadyLogged && url === "/") ||

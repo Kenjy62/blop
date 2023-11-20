@@ -35,15 +35,16 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("newCommentOnPost", async (socketData) => {
+  socket.on("post_comment", async (socketData) => {
     console.log(
-      `UserID : ${socketData.userid} comment PostID: ${socketData.blopid}`
+      `UserID : ${socketData.userid} comment PostID: ${socketData.post_id}`
     );
 
     const prisma = new PrismaClient();
     try {
-      const response = await prisma.blop.findFirst({
-        where: { id: parseInt(socketData.blopid) },
+      // Find Post
+      const response = await prisma.post.findFirst({
+        where: { id: parseInt(socketData.post_id) },
         select: {
           author: {
             select: {
@@ -54,21 +55,13 @@ io.on("connection", (socket) => {
         },
       });
 
+      // Create notification
       await prisma.notification.create({
         data: {
           type: "comment",
           from: socketData.userid,
-          for: response.author.id,
+          for_id: response.author.id,
           isRead: 0,
-        },
-      });
-
-      await prisma.user.update({
-        where: {
-          id: parseInt(response.author.id),
-        },
-        data: {
-          comment_notification: { increment: 1 },
         },
       });
 
@@ -78,7 +71,94 @@ io.on("connection", (socket) => {
         type: "comment",
       };
 
-      io.to(response.author.socket).emit("incrementCommentNotification", data);
+      // Send io to user
+      io.to(response.author.socket).emit("new_notification", data);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  socket.on("post_share", async (socketData) => {
+    console.log(
+      `UserID : ${socketData.userid} share PostID: ${socketData.post_id}`
+    );
+
+    const prisma = new PrismaClient();
+    try {
+      // Find Post
+      const response = await prisma.post.findFirst({
+        where: { id: parseInt(socketData.post_id) },
+        select: {
+          author: {
+            select: {
+              id: true,
+              socket: true,
+            },
+          },
+        },
+      });
+
+      // Create notification
+      await prisma.notification.create({
+        data: {
+          type: "share",
+          from: socketData.userid,
+          for_id: response.author.id,
+          isRead: 0,
+        },
+      });
+
+      const data = {
+        postId: socketData.blopid,
+        userId: socketData.userid,
+        type: "comment",
+      };
+
+      // Send io to user
+      io.to(response.author.socket).emit("new_notification", data);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  socket.on("post_like", async (socketData) => {
+    console.log(
+      `UserID : ${socketData.userid} like PostID: ${socketData.post_id}`
+    );
+
+    const prisma = new PrismaClient();
+    try {
+      // Find Post
+      const response = await prisma.post.findFirst({
+        where: { id: parseInt(socketData.post_id) },
+        select: {
+          author: {
+            select: {
+              id: true,
+              socket: true,
+            },
+          },
+        },
+      });
+
+      // Create notification
+      await prisma.notification.create({
+        data: {
+          type: "like",
+          from: socketData.userid,
+          for_id: response.author.id,
+          isRead: 0,
+        },
+      });
+
+      const data = {
+        postId: socketData.blopid,
+        userId: socketData.userid,
+        type: "comment",
+      };
+
+      // Send io to user
+      io.to(response.author.socket).emit("new_notification", data);
     } catch (error) {
       console.log(error);
     }

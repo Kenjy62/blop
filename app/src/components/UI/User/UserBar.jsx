@@ -21,6 +21,7 @@ export default async function UserBar() {
           name={data.name}
           url={data.picture}
           style={`rounded-full h-10 w-10 object-cover`}
+          link={true}
         />
         <User name={data.name} />
         <Tools user={data} />

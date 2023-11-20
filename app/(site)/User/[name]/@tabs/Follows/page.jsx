@@ -1,5 +1,9 @@
 // Features
-import { getSpecifiqueUserFollows, init } from "@/app/src/features/user";
+import {
+  getSpecifiqueUserFollows,
+  getUserConfidentialitySettings,
+  init,
+} from "@/app/src/features/user";
 
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
@@ -7,7 +11,12 @@ import FollowCard from "@/app/src/components/UI/Cards/FollowCard";
 
 export default async function Page({ params }) {
   const { data, message, status } = await getSpecifiqueUserFollows(params.name);
+  const userAuthorization = await getUserConfidentialitySettings(params.name);
   const me = await init();
+
+  if (userAuthorization.display_follow === 0) {
+    return <p>This user doesn't allow to display follows</p>;
+  }
 
   if (status === 200 && data.length > 0) {
     return (

@@ -10,7 +10,7 @@ import { updateNotificationSetting } from "@/app/src/features/user";
 // Context
 import { ThemeContext } from "@/app/src/context/theme";
 
-export default function Setting({ name, authorized }) {
+export default function Setting({ display, name, authorized }) {
   const [isAuthorized, setIsAuthorized] = useState(authorized);
   const { toggleTheme, theme } = useContext(ThemeContext);
 
@@ -25,9 +25,7 @@ export default function Setting({ name, authorized }) {
 
   return (
     <div className="flex flex-row justify-between">
-      <div>
-        {name} {name !== "Dark Mode" && "Notification"}
-      </div>
+      <div>{display}</div>
       <Switch
         checked={isAuthorized}
         onChange={() => update(name)}
