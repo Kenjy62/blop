@@ -1,6 +1,7 @@
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
 import Feed from "@/app/src/components/Feed/Feed";
+import LoadMore from "@/app/src/components/Feed/Loadmore";
 import Order from "@/app/src/components/Feed/Order";
 import Textarea from "@/app/src/components/Feed/Textarea";
 
@@ -10,7 +11,7 @@ import { init } from "@/app/src/features/user";
 
 export default async function Page({ searchParams }) {
   if (!searchParams.order || searchParams.order === "All") {
-    const { data, message, status } = await GetAllPost();
+    const { data, message, status } = await GetAllPost(0, 5);
 
     if (status === 400) {
       return <ComponentError message={message} />;
@@ -37,7 +38,7 @@ export default async function Page({ searchParams }) {
   }
 
   if (searchParams.order === "Followed") {
-    const { data, message, status } = await GetFollowedPost();
+    const { data, message, status } = await GetFollowedPost(0, 5);
 
     if (status === 400) {
       return <ComponentError message={message} />;

@@ -14,8 +14,31 @@ import {
   RxBookmark,
 } from "react-icons/rx";
 
-export default function Items({ user }) {
+export default function Items({ user, colorScheme }) {
   const pathname = usePathname();
+
+  var color;
+  var active;
+
+  if (colorScheme === "Watermelon") {
+    color = `p-2 rounded-full cursor-pointer hover:bg-watermelon-300`;
+    active = `bg-watermelon-300 dark:bg-watermelon-300`;
+  } else if (colorScheme === "harlequin") {
+    color = `p-2 rounded-full cursor-pointer hover:bg-harlequin-300`;
+    active = `bg-harlequin-300 dark:bg-harlequin-300`;
+  } else if (colorScheme === "royal-blue") {
+    color = `p-2 rounded-full cursor-pointer hover:bg-royal-blue-300`;
+    active = `bg-royal-blue-300 dark:bg-royal-blue-300`;
+  } else if (colorScheme === "fire-bush") {
+    color = `p-2 rounded-full cursor-pointer hover:bg-fire-bush-300`;
+    active = `bg-fire-bush-300 dark:bg-fire-bush-300`;
+  } else if (colorScheme === "cinnabar") {
+    color = `p-2 rounded-full cursor-pointer hover:bg-cinnabar-300`;
+    active = `bg-cinnabar-300 dark:bg-cinnabar-300`;
+  } else if (colorScheme === "purple-heart") {
+    color = `p-2 rounded-full cursor-pointer hover:bg-purple-heart-300`;
+    active = `bg-purple-heart-300 dark:bg-purple-heart-300`;
+  }
 
   const menuLinks = [
     {
@@ -62,13 +85,7 @@ export default function Items({ user }) {
       {menuLinks.map((el, id) => {
         return (
           <Link key={id} href={el.path}>
-            <div
-              className={`p-2 rounded-full cursor-pointer ${
-                el.active ? "bg-watermelon-500 dark:bg-night-200" : null
-              }`}
-            >
-              {el.icon}
-            </div>
+            <div className={`${color} ${el.active && active}`}>{el.icon}</div>
           </Link>
         );
       })}

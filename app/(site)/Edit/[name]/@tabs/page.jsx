@@ -1,6 +1,6 @@
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
-import Button from "@/app/src/components/UI/Button/Button";
+import ColorSelector from "@/app/src/components/User/ColorSelector/ColorSelector";
 import Avatar from "@/app/src/components/User/Edit/Avatar";
 import Cover from "@/app/src/components/User/Edit/Cover";
 import Setting from "@/app/src/components/User/Setting/Setting";
@@ -34,14 +34,12 @@ export default async function Page({ params }) {
               <div>My Name : {data.name}</div>
               <div>My Location : France</div>
             </div>
+            <ColorSelector />
             <Setting
               display={"Dark Mode"}
               name={"Dark Mode"}
               authorized={data.darkMode}
             />
-            <div className="flex justify-end">
-              <Button>Save</Button>
-            </div>
           </div>
         </div>
       );

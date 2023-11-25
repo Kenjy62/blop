@@ -7,6 +7,29 @@ import Link from "next/link";
 export default async function Page({ searchParams }) {
   const { data, message, status } = await getConversations(searchParams);
 
+  const sortedConversations = data.sort((a, b) => {
+    if (
+      a.messages &&
+      a.messages.length > 0 &&
+      b.messages &&
+      b.messages.length > 0
+    ) {
+      const lastMessageA = a.messages[0].createdAt;
+      const lastMessageB = b.messages[0].createdAt;
+
+      return new Date(lastMessageB) - new Date(lastMessageA);
+    }
+
+    // Si l'une des conversations n'a pas de messages, elle sera placée à la fin.
+    if (a.messages && a.messages.length > 0) {
+      return -1;
+    } else if (b.messages && b.messages.length > 0) {
+      return 1;
+    }
+
+    return 0; // Les deux conversations n'ont pas de messages, l'ordre initial est conservé.
+  });
+
   if (status === 200 && data.length > 0) {
     return (
       <div className="w-full flex flex-col gap-4">
@@ -16,9 +39,23 @@ export default async function Page({ searchParams }) {
             <Button>Create Conversation</Button>
           </Link>
         </div>
-        {data.map((item) => (
+        {sortedConversations.map((item) => (
           <Conversation conversation={item} />
         ))}
+      </div>
+    );
+  }
+
+  if (status === 200 && data.length < 1 && searchParams?.query) {
+    return (
+      <div className="w-full flex flex-col gap-4">
+        <div className="flex flex-row justify-between gap-4">
+          <SearchBar />
+          <Link href="/Message/Create">
+            <Button>Create Conversation</Button>
+          </Link>
+        </div>
+        <div>Unknow result with : {searchParams.query}</div>
       </div>
     );
   }
@@ -28,9 +65,11 @@ export default async function Page({ searchParams }) {
       <div className="w-full flex flex-col gap-4">
         <div className="flex flex-row justify-between gap-4">
           <SearchBar />
-          <Button>Create Conversation</Button>
+          <Link href="/Message/Create">
+            <Button>Create Conversation</Button>
+          </Link>
         </div>
-        <div>Unknow result with : {searchParams.query}</div>
+        <div>No Conversations for this moment</div>
       </div>
     );
   }

@@ -13,7 +13,7 @@ export default async function Tools({ user }) {
   return (
     <div className="flex flex-row-reverse gap-4">
       <Notifications user_id={user.id} data={data} />
-      <Messages />
+      <Messages user_id={user.id} data={data} />
     </div>
   );
 }

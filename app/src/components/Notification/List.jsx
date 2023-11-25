@@ -1,5 +1,5 @@
 // Required
-import Image from "next/image";
+import Link from "next/link";
 
 // Components
 import Tag from "../UI/Tag/Tag";
@@ -7,7 +7,6 @@ import Picture from "../UI/User/Picture";
 
 // Features
 import { setIsRead } from "../../features/notification";
-import Link from "next/link";
 
 export default function List({ list }) {
   const onHover = async (id) => {
@@ -17,9 +16,10 @@ export default function List({ list }) {
   return (
     <div className="flex flex-col gap-4">
       {list.length > 0 &&
-        list.map((item) => {
+        list.map((item, id) => {
+          console.log(item);
           return (
-            <Link href="#">
+            <Link key={id} href="#">
               <div
                 onMouseEnter={() => item.isRead === 0 && onHover(item.id)}
                 key={item.id}
@@ -28,7 +28,7 @@ export default function List({ list }) {
                 <Picture
                   url={item.author.picture}
                   name={item.author.name}
-                  link={true}
+                  link={false}
                   style="rounded-full h-10 w-10 cursor-pointer object-cover"
                 />
                 <span className="w-fit">

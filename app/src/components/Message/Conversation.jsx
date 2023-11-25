@@ -6,6 +6,7 @@ import { init } from "../../features/user";
 
 // Required
 import Link from "next/link";
+import Date from "./Date";
 
 export default async function Conversation({ conversation }) {
   const { data, message, status } = await init();
@@ -37,9 +38,9 @@ export default async function Conversation({ conversation }) {
                   ? conversation.participant1.name
                   : conversation.participant2.name}
               </span>
-              <span>message</span>
+              <span>{conversation.messages[0].content}</span>
             </div>
-            <div>Date</div>
+            <Date date={conversation.messages[0].createdAt} />
           </div>
         </Link>
       </div>

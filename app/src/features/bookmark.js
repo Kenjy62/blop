@@ -5,7 +5,7 @@
 // Required
 import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
-import { fetch } from "../config/config";
+import { fetch } from "../config/text";
 import { revalidatePath } from "next/cache";
 
 // Add Post to Bookmark
@@ -36,7 +36,6 @@ export async function CreateBookmark(postId, tag) {
       data: { bookmarks: { increment: 1 } },
     });
 
-    revalidatePath("/Feed");
     return {
       message: fetch.bookmark.success.message,
       status: fetch.bookmark.success.status,

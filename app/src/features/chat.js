@@ -3,6 +3,7 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { init } from "./user";
+import { io } from "socket.io-client";
 
 export const send = async (formData, conversation_id, sender_id) => {
   const prisma = new PrismaClient();
@@ -20,6 +21,13 @@ export const send = async (formData, conversation_id, sender_id) => {
           isRead: false,
         },
       });
+
+      const socket = io.connect("http://localhost:3001");
+      const socketData = {
+        from_id: sender_id,
+        conversation_id: conversation_id,
+      };
+      socket.emit("chat_new", socketData);
 
       revalidatePath(`/Message/Conversation/${conversation_id}`);
       return {
@@ -48,8 +56,6 @@ export const newConversation = async (id) => {
 
   try {
     const { data, message, status } = await init();
-
-    console.log(data, message, status);
 
     const response = await prisma.conversation.findFirst({
       where: {

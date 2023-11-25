@@ -6,6 +6,9 @@ import { send } from "@/app/src/features/chat";
 // Required
 import { useState } from "react";
 
+// Hooks
+import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+
 export default function ChatArea({ conversationId, userId }) {
   const [textarea, setTextarea] = useState(""); // Initialiser avec une chaîne vide
 
@@ -21,6 +24,24 @@ export default function ChatArea({ conversationId, userId }) {
     }
   }
 
+  const colorScheme = CheckColorScheme();
+
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `py-1 px-3 h-fit bg-watermelon-400 dark:bg-watermelon-400 text-white rounded-lg w-fit cursor-pointer`;
+  } else if (colorScheme === "harlequin") {
+    color = `py-1 px-3 h-fit bg-harlequin-400 dark:bg-harlequin-400 text-white rounded-lg w-fit cursor-pointer`;
+  } else if (colorScheme === "royal-blue") {
+    color = `py-1 px-3 h-fit bg-royal-blue-400 dark:bg-royal-blue-400 text-white rounded-lg w-fit cursor-pointer`;
+  } else if (colorScheme === "fire-bush") {
+    color = `py-1 px-3 h-fit bg-fire-bush-400 dark:bg-fire-bush-400 text-white rounded-lg w-fit cursor-pointer`;
+  } else if (colorScheme === "cinnabar") {
+    color = `py-1 px-3 h-fit bg-cinnabar-400 dark:bg-cinnabar-400 text-white rounded-lg w-fit cursor-pointer`;
+  } else if (colorScheme === "purple-heart") {
+    color = `py-1 px-3 h-fit bg-purple-heart-400 dark:bg-purpl-heart-400 text-white rounded-lg w-fit cursor-pointer`;
+  }
+
   return (
     <div className="items-center dark:bg-night-300 p-4 flex flex-row gap-4 justify-between">
       <form className="flex flex-row gap-4 w-full items-center">
@@ -32,11 +53,7 @@ export default function ChatArea({ conversationId, userId }) {
           placeholder="Write your message here.."
           className="dark:bg-night-200 rounded-lg p-2 w-full flex-1"
         />
-        <button
-          formAction={sendChat}
-          type="submit"
-          className="py-1 px-3 h-fit bg-watermelon-400 dark:bg-night-200 text-white rounded-lg w-fit hover:bg-watermelon-500 cursor-pointer"
-        >
+        <button formAction={sendChat} type="submit" className={color}>
           Send
         </button>
       </form>

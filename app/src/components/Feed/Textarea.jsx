@@ -6,6 +6,9 @@ import { useTransition, useRef, useState } from "react";
 // Features
 import { CreatePost } from "../../features/post";
 
+// Hooks
+import { CheckColorScheme } from "../../hooks/colorScheme";
+
 // Icons
 import {
   RxImage,
@@ -15,11 +18,31 @@ import {
   RxCross1,
 } from "react-icons/rx";
 import Image from "next/image";
+import Button from "../UI/Button/Button";
 
 export default function Textarea() {
+  const colorScheme = CheckColorScheme();
+
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `absolute top-2 right-2 text-white p-1 bg-watermelon-400 rounded-full cursor-pointer`;
+  } else if (colorScheme === "royal-blue") {
+    color = `absolute top-2 right-2 text-white p-1 bg-royal-blue-400 rounded-full cursor-pointer`;
+  } else if (colorScheme === "cinnabar") {
+    color = `absolute top-2 right-2 text-white p-1 bg-cinnabar-400 rounded-full cursor-pointer`;
+  } else if (colorScheme === "purple-heart") {
+    color = `absolute top-2 right-2 text-white p-1 bg-purple-heart-400 rounded-full cursor-pointer`;
+  } else if (colorScheme === "fire-bush") {
+    color = `absolute top-2 right-2 text-white p-1 bg-fire-bush-400 rounded-full cursor-pointer`;
+  } else if (colorScheme === "harlequin") {
+    color = `absolute top-2 right-2 text-white p-1 bg-harlequin-400 rounded-full cursor-pointer`;
+  }
+
   // States
   const [files, setFiles] = useState([]);
   const [textarea, setTextarea] = useState();
+  const [error, setError] = useState();
 
   // Transition with SA
   let [isPending, startTransition] = useTransition();
@@ -59,7 +82,8 @@ export default function Textarea() {
       const { message, status } = await CreatePost(formData, "post");
 
       if (status === 400 || status === 500) {
-        alert(message);
+        setError(message);
+        return;
       }
 
       if (status === 200) {
@@ -83,6 +107,9 @@ export default function Textarea() {
 
   return (
     <>
+      {error && (
+        <div className="flex justify-center text-watermelon-500">{error}</div>
+      )}
       <form>
         <div className="flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200">
           <textarea
@@ -103,10 +130,11 @@ export default function Textarea() {
                       height={150}
                       width={150}
                       className="w-[150px] h-[150px] object-cover object-center rounded-lg"
+                      alt="Post Image"
                     />
                     <RxCross1
                       onClick={() => deleteImages(index)}
-                      className="absolute top-2 right-2 text-white p-1 bg-watermelon-400 rounded-full"
+                      className={color}
                     />
                   </div>
                 );
@@ -128,7 +156,9 @@ export default function Textarea() {
             </div>
             <div>
               <button formAction={post}>
-                {isPending ? "Loading..." : <RxPaperPlane size={18} />}
+                <Button>
+                  {isPending ? "Loading..." : <RxPaperPlane size={18} />}
+                </Button>
               </button>
             </div>
           </div>

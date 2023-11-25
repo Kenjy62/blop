@@ -10,6 +10,9 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
+// Hooks
+import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+
 // Icons
 import {
   RxBookmark,
@@ -60,32 +63,49 @@ export default function Actions({
     }
   };
 
+  const colorScheme = CheckColorScheme();
+
+  var color;
+  var hover;
+
+  if (colorScheme === "Watermelon") {
+    color = `text-watermelon-400 group-hover:text-white`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-watermelon-400 hover:text-white cursor-pointer`;
+  } else if (colorScheme === "royal-blue") {
+    color = `text-royal-blue-400 group-hover:text-white`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-royal-blue-400 hover:text-white cursor-pointer`;
+  } else if (colorScheme === "harlequin") {
+    color = `text-harlequin-400 group-hover:text-white`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-harlequin-400 hover:text-white cursor-pointer`;
+  } else if (colorScheme === "fire-bush") {
+    color = `text-fire-bush-400 group-hover:text-white`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-fire-bush-400 hover:text-white cursor-pointer`;
+  } else if (colorScheme === "cinnabar") {
+    color = `text-cinnabar-400 group-hover:text-white`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-cinnabar-400 hover:text-white cursor-pointer`;
+  } else if (colorScheme === "purple-heart") {
+    color = `text-purple-heart-400 group-hover:text-white`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-purple-heart-400 hover:text-white cursor-pointer`;
+  }
+
   return (
     <div className="flex flex-row p-4 gap-6 items-center justify-between mt-[-35px]">
       <div className="flex flex-row gap-4">
-        <Link
-          href={`?comment=${postId}`}
-          scroll={false}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
-        >
+        <Link href={`?comment=${postId}`} scroll={false} className={hover}>
           <span className="flex flex-row gap-2 items-center cursor-pointer">
             <RxChatBubble />
           </span>
         </Link>
-        <Link
-          href={`?share=${postId}`}
-          scroll={false}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
-        >
+        <Link href={`?share=${postId}`} scroll={false} className={hover}>
           <span className="flex flex-row gap-2 items-center cursor-pointer">
             <RxShare1 />
           </span>
         </Link>
-        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer">
+        <span className={hover}>
           {alreadyLike ? (
             <RxHeartFilled
               onClick={() => ReactionPost(postId, "remove")}
-              className="text-watermelon-500"
+              className={color}
             />
           ) : (
             <RxHeart onClick={() => ReactionPost(postId, "add")} />
@@ -93,29 +113,26 @@ export default function Actions({
         </span>
 
         {alreadyBookmarks ? (
-          <span className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer">
+          <span className={hover}>
             <RxBookmarkFilled
               onClick={() => deleteBookmark(postId)}
-              className="text-watermelon-500 group-hover:text-white"
+              className={color}
             />
           </span>
         ) : (
           <Link
             href={`?bookmark=${postId}`}
-            className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
+            className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-watermelon-400 hover:text-white cursor-pointer"
           >
             <RxBookmark className="group-hover:text-white" />
           </Link>
         )}
         {isDeleteable === true && userId === postAuthorId && (
-          <span
-            onClick={actionDelete}
-            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer"
-          >
+          <span onClick={actionDelete} className={hover}>
             <RxTrash />
           </span>
         )}
-        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 hover:text-white cursor-pointer">
+        <span className={hover}>
           <RxExclamationTriangle />
         </span>
       </div>

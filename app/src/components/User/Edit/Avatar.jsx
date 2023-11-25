@@ -1,8 +1,11 @@
 "use client";
 
 // Required
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import Image from "next/image";
+
+// Context
+import { ThemeContext } from "@/app/src/context/theme";
 
 // Components
 import { RxPencil1 } from "react-icons/rx";
@@ -10,6 +13,24 @@ import { RxPencil1 } from "react-icons/rx";
 export default function Avatar({ picture }) {
   const AvatarFile = useRef();
   const [file, setFile] = useState();
+
+  const { colorScheme } = useContext(ThemeContext);
+
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `text-white text-2xl p-1 bg-watermelon-400 rounded-full`;
+  } else if (colorScheme === "royal-blue") {
+    color = `text-white text-2xl p-1 bg-royal-blue-400 rounded-full`;
+  } else if (colorScheme === "harlequin") {
+    color = `text-white text-2xl p-1 bg-harlequin-400 rounded-full`;
+  } else if (colorScheme === "fire-bush") {
+    color = `text-white text-2xl p-1 bg-fire-bush-400 rounded-full`;
+  } else if (colorScheme === "cinnabar") {
+    color = `text-white text-2xl p-1 bg-cinnabar-400 rounded-full`;
+  } else if (colorScheme === "purple-heart") {
+    color = `text-white text-2xl p-1 bg-purple-heart-400 rounded-full`;
+  }
 
   // Open the input files
   const Edit = () => {
@@ -47,16 +68,14 @@ export default function Avatar({ picture }) {
   return (
     <div className="relative">
       <Image
+        alt={"User Avatar"}
         src={file?.length > 0 ? file : picture}
         height={200}
         width={200}
         className="rounded-lg h-[200px] object-cover relative"
       />
       <div className="absolute h-full w-full top-0 left-0 flex justify-center items-center">
-        <RxPencil1
-          onClick={() => Edit()}
-          className="text-white text-2xl p-1 bg-watermelon-400 rounded-full"
-        />
+        <RxPencil1 onClick={() => Edit()} className={color} />
       </div>
       <input
         onChange={(e) => Update(e)}

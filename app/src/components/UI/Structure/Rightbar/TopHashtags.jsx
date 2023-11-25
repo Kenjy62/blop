@@ -36,7 +36,7 @@ export default async function TopHashtags() {
                 </div>
               );
             })}
-          {data.length < 1 && <p>Aucun tophashtag pour le moment</p>}
+          {data.length < 1 && <p>No hashtags for this moment</p>}
         </div>
       </div>
     );

@@ -11,6 +11,7 @@ export default function Order({ selected }) {
   return (
     <div className="flex justify-end dark:text-black">
       <select
+        className="dark:bg-night-300 text-white rounded-lg p-2"
         value={!selected ? "All" : selected}
         id="feedOrder"
         onChange={(e) => router.push(`?order=${e.currentTarget.value}`)}

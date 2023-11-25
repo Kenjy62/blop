@@ -8,7 +8,7 @@ import Tag from "../UI/Tag/Tag";
 import List from "./List";
 
 export default function Tabs({ data }) {
-  const Tabs = ["All", "Comment", "Like", "Share", "Message"];
+  const Tabs = ["All", "Comment", "Like", "Share", "Chat"];
   const [notifications, setNotifications] = useState(data);
   const [isActive, setIsActive] = useState("All");
   const [unreadCounts, setUnreadCounts] = useState({});

@@ -3,10 +3,36 @@
 // Required
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { CheckColorScheme } from "../../hooks/colorScheme";
 
 export default function Tabs() {
   const pathname = usePathname();
   const { name } = useParams();
+
+  const colorScheme = CheckColorScheme();
+
+  var activeColor;
+  var unactiveColor;
+
+  if (colorScheme === "Watermelon") {
+    activeColor = `border-b-2 border-b-watermelon-400 dark:border-b-watermeon-400  p-4`;
+    unactiveColor = `hover:border-b-2 hover:border-b-watermelon-400 p-4`;
+  } else if (colorScheme === "harlequin") {
+    activeColor = `border-b-2 border-b-harlequin-400 dark:border-b-watermeon-400  p-4`;
+    unactiveColor = `hover:border-b-2 hover:border-b-harlequin-400 p-4`;
+  } else if (colorScheme === "royal-blue") {
+    activeColor = `border-b-2 border-b-royal-blue-400 dark:border-b-watermeon-400 p-4`;
+    unactiveColor = `hover:border-b-2 hover:border-b-royal-blue-400 p-4`;
+  } else if (colorScheme === "fire-bush") {
+    activeColor = `border-b-2 border-b-fire-bush-400 dark:border-b-watermeon-400 p-4`;
+    unactiveColor = `hover:border-b-2 hover:border-b-fire-bush-400 p-4`;
+  } else if (colorScheme === "cinnabar") {
+    activeColor = `border-b-2 border-b-cinnabar-400 dark:border-b-watermeon-400 p-4`;
+    unactiveColor = `hover:border-b-2 hover:border-b-cinnabar-400 p-4`;
+  } else if (colorScheme === "purple-heart") {
+    activeColor = `border-b-2 border-b-purple-heart-400 dark:border-b-watermeon-400 p-4`;
+    unactiveColor = `hover:border-b-2 hover:border-b-purple-heart-400 p-4`;
+  }
 
   const Links = [
     {
@@ -53,10 +79,7 @@ export default function Tabs() {
         return (
           <Link
             key={id}
-            className={`p-4 ${
-              link.active &&
-              `border-b-2 border-b-watermelon-500 dark:border-b-night-200`
-            } hover:border-b-2 hover:border-b-watermelon-500 hover:dark:border-b-night-200`}
+            className={`${link.active && activeColor} ${unactiveColor}`}
             href={link.link}
           >
             {link.name}

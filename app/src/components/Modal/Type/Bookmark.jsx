@@ -26,21 +26,21 @@ export default function Bookmark({ postId }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full dark:text-white">
+    <div className="flex flex-col gap-4 w-full bg-white p-4 rounded-lg dark:text-white">
       <Title>Add To Bookmark</Title>
-      <div className="flex flex-col w-full gap-2">
-        <div className="flex flex-row gap-4">
+      <div className="flex flex-col w-full gap-4">
+        <div className="flex flex-row gap-4 items-center">
           <label>Tag :</label>
           <input
             onChange={(e) => setTag(e.target.value)}
-            className="w-fit"
+            className="w-fit dark:bg-night-400 py-1 px-2 rounded-lg"
             type="text"
             placeholder="example: 'Dev'"
           />
         </div>
         <div className="flex justify-center">
           <div onClick={actionAddBookmarks}>
-            <Button>Save</Button>
+            <Button>Create a bookmark</Button>
           </div>
         </div>
       </div>

@@ -1,7 +1,11 @@
 "use server";
 
+// Required
 import { PrismaClient } from "@prisma/client";
-import { fetch } from "../../config/config";
+
+// Config
+import { fetch } from "../../config/text";
+import { config } from "../../config/config";
 
 export async function GetTopHashtags() {
   const prisma = new PrismaClient();
@@ -22,7 +26,7 @@ export async function GetTopHashtags() {
 
     const sortedHashtags = Object.entries(hashtagCounts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
+      .slice(0, config.hashtags.limit);
 
     return {
       data: sortedHashtags,

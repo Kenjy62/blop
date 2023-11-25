@@ -164,6 +164,68 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("chat_new", async (socketData) => {
+    console.log(
+      `UserID: ${socketData.from_id} send chat to conversationID: ${socketData.conversation_id}`
+    );
+
+    const prisma = new PrismaClient();
+
+    const conversation = await prisma.conversation.findFirst({
+      where: {
+        AND: [
+          { id: parseInt(socketData.conversation_id) },
+          {
+            OR: [
+              { participant1Id: parseInt(socketData.from_id) },
+              { participant2Id: parseInt(socketData.from_id) },
+            ],
+          },
+        ],
+      },
+    });
+
+    if (conversation.participant1Id !== socketData.from_id) {
+      const user = await prisma.user.findFirst({
+        where: { id: parseInt(conversation.participant1Id) },
+        select: { socket: true },
+      });
+
+      // Create notification
+      await prisma.notification.create({
+        data: {
+          type: "chat",
+          from: parseInt(socketData.from_id),
+          for_id: parseInt(conversation.participant1Id),
+          conversation_id: parseInt(socketData.conversation_id),
+          isRead: 0,
+        },
+      });
+
+      io.to(user.socket).emit("new_message");
+      io.to(user.socket).emit("new_notification_message");
+    } else {
+      const user = await prisma.user.findFirst({
+        where: { id: parseInt(conversation.participant2Id) },
+        select: { socket: true },
+      });
+
+      // Create notification
+      await prisma.notification.create({
+        data: {
+          type: "chat",
+          from: parseInt(socketData.from_id),
+          for_id: parseInt(conversation.participant2Id),
+          conversation_id: parseInt(socketData.conversation_id),
+          isRead: 0,
+        },
+      });
+
+      io.to(user.socket).emit("new_message");
+      io.to(user.socket).emit("new_notification_message");
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
   });

@@ -7,14 +7,14 @@ import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect, useParams } from "next/navigation";
-import { fetch } from "../config/config";
+import { fetch } from "../config/text";
 import { HashtagsExtrator } from "./hashtagsExtractor";
 import { io } from "socket.io-client";
 import { writeFile } from "fs/promises";
 import { getFollower } from "./user";
 
 // Get All Post List for Feed
-export async function GetAllPost() {
+export async function GetAllPost(skip, limit) {
   const prisma = new PrismaClient();
 
   try {
@@ -69,6 +69,11 @@ export async function GetAllPost() {
           },
         },
       },
+      orderBy: {
+        id: "desc",
+      },
+      skip: skip,
+      take: limit,
     });
     return {
       data: response,
@@ -88,7 +93,7 @@ export async function GetAllPost() {
 
 // Get Followed Post List for Feed
 
-export async function GetFollowedPost() {
+export async function GetFollowedPost(skip, limit) {
   const { data, message, status } = await getFollower();
 
   const followedList = [];
@@ -156,6 +161,11 @@ export async function GetFollowedPost() {
           },
         },
       },
+      orderBy: {
+        id: "desc",
+      },
+      skip: skip,
+      take: limit,
     });
 
     return {
@@ -534,40 +544,63 @@ export async function SharePost(textarea, files, type, postId) {
 
 // Reply To Post
 export const ReplyToPost = async (content, postId) => {
-  const prisma = new PrismaClient();
+  if (content?.length > 5) {
+    const prisma = new PrismaClient();
 
-  if (content.length > 5) {
     const token = cookies().get("token");
 
-    const user = await prisma.user.findFirst({
-      where: {
-        token: token.value,
-      },
-      select: {
-        id: true,
-      },
-    });
+    return prisma.user
+      .findFirst({
+        where: {
+          token: token.value,
+        },
+        select: {
+          id: true,
+        },
+      })
+      .then(async (user) => {
+        if (user) {
+          const data = {
+            content: content,
+            createdAt: new Date(),
+            author_id: user.id,
+            post_id: parseInt(postId),
+          };
 
-    const data = {
-      content: content,
-      createdAt: new Date(),
-      author_id: user.id,
-      post_id: parseInt(postId),
-    };
-
-    await prisma.comment.create({ data });
-    prisma.$disconnect();
-
-    const socket = io.connect("http://localhost:3001");
-    const socketData = { userid: user.id, post_id: postId };
-    socket.emit("post_comment", socketData);
-
-    return redirect(`/Post/${postId}`);
+          return prisma.comment
+            .create({ data })
+            .then(() => {
+              const socket = io.connect("http://localhost:3001");
+              const socketData = { userid: user.id, post_id: postId };
+              socket.emit("post_comment", socketData);
+            })
+            .then(() => {
+              prisma.$disconnect();
+              return {
+                message: fetch.comment.create.success.message,
+                status: fetch.comment.create.success.status,
+              };
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return {
+          message: fetch.user.get.error.message,
+          status: fetch.user.get.error.status,
+        };
+      })
+      .finally(() => {
+        prisma.$disconnect();
+      });
   } else {
-    return {
+    return Promise.resolve({
       message: fetch.comment.create.error.message,
       status: fetch.comment.create.error.status,
-    };
+    });
   }
 };
 

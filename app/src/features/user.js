@@ -3,7 +3,7 @@
 // Required
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import { fetch } from "../config/config";
+import { fetch } from "../config/text";
 import { writeFile } from "fs/promises";
 
 // Prisma
@@ -183,6 +183,7 @@ export const init = async () => {
         display_follow: true,
         display_follower: true,
         notification: true,
+        colorScheme: true,
       },
     });
     return {
@@ -297,7 +298,7 @@ export const getUserConfidentialitySettings = async (name) => {
 };
 
 // Update User Notifications Settings
-export const updateNotificationSetting = async (type) => {
+export const updateNotificationSetting = async (type, color) => {
   const { data } = await init();
   const prisma = new PrismaClient();
 
@@ -380,6 +381,15 @@ export const updateNotificationSetting = async (type) => {
     await prisma.user.update({
       where: { id: data.id },
       data: { display_follower: defaultValue.display_follower === 1 ? 0 : 1 },
+    });
+  } else if (type === "ColorScheme") {
+    await prisma.user.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        colorScheme: color,
+      },
     });
   }
 };
@@ -754,6 +764,16 @@ export const getNotifications = async () => {
             name: true,
           },
         },
+        Conversation: {
+          select: {
+            id: true,
+          },
+        },
+        Post: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
@@ -798,6 +818,10 @@ export const getConversations = async (searchParams) => {
             },
           },
           participant2Id: true,
+          messages: {
+            take: 1,
+            orderBy: { createdAt: "desc" },
+          },
         },
       });
 
