@@ -4,11 +4,15 @@
 import { useRef, useState, useContext } from "react";
 import Image from "next/image";
 
+// Toast
+import toast from "react-hot-toast";
+
 // Context
 import { ThemeContext } from "@/app/src/context/theme";
 
 // Components
 import { RxPencil1 } from "react-icons/rx";
+import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
 
 export default function Cover({ picture }) {
   const CoverFile = useRef();
@@ -55,9 +59,15 @@ export default function Cover({ picture }) {
         body: data,
       }).then((response) => {
         if (response.status === 200) {
-          alert("update");
+          toast(<ToastSuccess message={"Cover Update Successfully!"} />, {
+            position: "bottom-left",
+            style: { background: "transparent" },
+          });
         } else {
-          alert("error");
+          toast(<ToastError message={"An error occurred, try again"} />, {
+            position: "bottom-left",
+            style: { background: "transparent" },
+          });
         }
       });
     } else {

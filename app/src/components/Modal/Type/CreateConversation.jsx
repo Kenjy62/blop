@@ -34,7 +34,7 @@ export default function CreateConversation({ userFollowed }) {
 
   if (followed) {
     return (
-      <div className="dark w-full p-4 rounded-lg bg-night-400 flex flex-col gap-4">
+      <div className="w-full p-4 rounded-lg bg-white dark:bg-night-400 flex flex-col gap-4">
         <Title>Create Conversation</Title>
         <input
           onChange={(e) => {
@@ -62,8 +62,10 @@ export default function CreateConversation({ userFollowed }) {
                 <span>{user.user2.name}</span>
               </div>
             ))
+          ) : followed.length < 1 && query?.length > 0 ? (
+            <p>No result for : {query}</p>
           ) : (
-            <div className="dark:text-white">Unknow result for : {query}</div>
+            <p>You are not following any users, please follow a user first.</p>
           )}
         </div>
       </div>

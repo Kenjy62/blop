@@ -16,7 +16,7 @@ export default async function UserBar() {
 
   if (status === 200) {
     return (
-      <>
+      <div className="flex flex-row-reverse gap-4 items-center">
         <Picture
           name={data.name}
           url={data.picture}
@@ -25,7 +25,7 @@ export default async function UserBar() {
         />
         <User name={data.name} />
         <Tools user={data} />
-      </>
+      </div>
     );
   }
 }

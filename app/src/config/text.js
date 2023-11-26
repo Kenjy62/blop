@@ -73,6 +73,16 @@ export const fetch = {
         error: 400,
       },
     },
+    share: {
+      success: {
+        message: "The post was successfully shared.",
+        status: 200,
+      },
+      error: {
+        message: "An error has occurred, try again",
+        status: 400,
+      },
+    },
   },
   comment: {
     create: {
@@ -81,7 +91,7 @@ export const fetch = {
         status: 200,
       },
       error: {
-        message: "Your post must contain at least 5 characters.",
+        message: "Your comment must contain at least 5 characters.",
         status: 400,
       },
     },
@@ -94,6 +104,16 @@ export const fetch = {
     error: {
       message: "An error has occurred",
       status: 400,
+    },
+    remove: {
+      success: {
+        message: "Post remove to your bookmarks.",
+        status: 200,
+      },
+      error: {
+        message: "An error occurred, try again!",
+        status: 400,
+      },
     },
   },
   user: {

@@ -1,6 +1,7 @@
 // Components
 import Searchbar from "../Searchbar/Searchbar";
 import UserBar from "../User/UserBar";
+import Logo from "./Header/Logo";
 
 export default function Header({ colorScheme }) {
   var color;
@@ -22,11 +23,9 @@ export default function Header({ colorScheme }) {
   return (
     <header className={color}>
       <div className="w-[1280px] justify-between flex flex-row gap-4 items-center">
-        <div>Blop</div>
+        <Logo />
         <Searchbar />
-        <div className="flex flex-row-reverse gap-4 items-center">
-          <UserBar />
-        </div>
+        <UserBar />
       </div>
     </header>
   );

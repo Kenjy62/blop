@@ -7,6 +7,10 @@ import SearchContainer from "../src/components/UI/Searchbar/SearchContainer";
 import Theme from "../src/components/Tricky/Theme";
 import Overlay from "../src/components/Overlay/Overlay";
 
+// Toast
+
+import { Toaster } from "react-hot-toast";
+
 // Context
 import Provider from "@/app/src/context/provider";
 
@@ -22,6 +26,7 @@ export default async function Layout({ children }) {
       defaultColor={data?.colorScheme ? data.colorScheme : "Watermelon"}
     >
       <Theme>
+        <Toaster />
         <div className="flex flex-col gap-16 dark:bg-night-400 dark:text-white">
           <Header
             colorScheme={data?.colorScheme ? data.colorScheme : "Watermelon"}

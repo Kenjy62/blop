@@ -23,9 +23,9 @@ export async function POST(req) {
     );
 
     if (response === true) {
-      return NextResponse.json("success", { status: 200 });
+      return NextResponse.json("Avatar update successfully!", { status: 200 });
     } else {
-      return NextResponse.json("error", { status: 500 });
+      return NextResponse.json("An error occurred, try again", { status: 500 });
     }
   } else if (type === "cover") {
     const bytes = await file.arrayBuffer();
@@ -36,9 +36,9 @@ export async function POST(req) {
     const response = await UpdateCover(`/Covers/${me.data.name}_${file.name}`);
 
     if (response === true) {
-      return NextResponse.json("success", { status: 200 });
+      return NextResponse.json("Cover update successfully", { status: 200 });
     } else {
-      return NextResponse.json("error", { status: 500 });
+      return NextResponse.json("An error occurred, try again", { status: 500 });
     }
   }
 }

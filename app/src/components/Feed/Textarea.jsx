@@ -20,6 +20,10 @@ import {
 import Image from "next/image";
 import Button from "../UI/Button/Button";
 
+// Toast
+import toast from "react-hot-toast";
+import { ToastError } from "../UI/Toast/Toasts";
+
 export default function Textarea() {
   const colorScheme = CheckColorScheme();
 
@@ -42,7 +46,6 @@ export default function Textarea() {
   // States
   const [files, setFiles] = useState([]);
   const [textarea, setTextarea] = useState();
-  const [error, setError] = useState();
 
   // Transition with SA
   let [isPending, startTransition] = useTransition();
@@ -82,7 +85,10 @@ export default function Textarea() {
       const { message, status } = await CreatePost(formData, "post");
 
       if (status === 400 || status === 500) {
-        setError(message);
+        toast(<ToastError message={message} />, {
+          position: "bottom-left",
+          style: { background: "transparent" },
+        });
         return;
       }
 
@@ -107,9 +113,6 @@ export default function Textarea() {
 
   return (
     <>
-      {error && (
-        <div className="flex justify-center text-watermelon-500">{error}</div>
-      )}
       <form>
         <div className="flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200">
           <textarea

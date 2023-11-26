@@ -8,10 +8,30 @@ import { UserContext } from "@/app/src/context/user";
 import { useRouter } from "next/navigation";
 
 // Components
-import Receiver from "../Receiver";
-import Sender from "../Sender";
+import Receiver from "../Other/Receiver";
+import Sender from "../Other/Sender";
+
+// Hooks
+import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 
 export default function ChatList({ data, userId }) {
+  const colorScheme = CheckColorScheme();
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `dark:bg-night-200 border border-watermelon-400 flex-1 flex flex-col`;
+  } else if (colorScheme === "cinnabar") {
+    color = `dark:bg-night-200 flex-1 flex flex-col border border-cinnabar-300`;
+  } else if (colorScheme === "harlequin") {
+    color = `dark:bg-night-200 flex-1 flex flex-col border border-harlequin-300`;
+  } else if (colorScheme === "purple-heart") {
+    color = `dark:bg-night-200 flex-1 flex flex-col border border-purple-heart-300`;
+  } else if (colorScheme === "fire-bush") {
+    color = `dark:bg-night-200 flex-1 flex flex-col border border-fire-bush-300`;
+  } else if (colorScheme === "royal-blue") {
+    color = `dark:bg-night-200 flex-1 flex flex-col border border-royal-blue-300`;
+  }
+
   const { socket } = useContext(UserContext);
 
   const router = useRouter();
@@ -34,7 +54,7 @@ export default function ChatList({ data, userId }) {
   }, [socket]);
 
   return (
-    <div className={`dark:bg-night-200 flex-1 flex flex-col`}>
+    <div className={color}>
       <div
         className="overflow-y-scroll h-[calc(100vh-361px)] flex flex-col gap-4"
         ref={scrollableDivRef}

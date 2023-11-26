@@ -69,7 +69,9 @@ export default async function Page({ searchParams }) {
             <Button>Create Conversation</Button>
           </Link>
         </div>
-        <div>No Conversations for this moment</div>
+        <div className="flex justify-center">
+          No Conversations for this moment
+        </div>
       </div>
     );
   }

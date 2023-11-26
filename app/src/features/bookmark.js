@@ -5,8 +5,10 @@
 // Required
 import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
-import { fetch } from "../config/text";
 import { revalidatePath } from "next/cache";
+
+// Config
+import { fetch } from "../config/text";
 
 // Add Post to Bookmark
 export async function CreateBookmark(postId, tag) {
@@ -35,7 +37,7 @@ export async function CreateBookmark(postId, tag) {
       where: { id: parseInt(postId) },
       data: { bookmarks: { increment: 1 } },
     });
-
+    revalidatePath("/Feed");
     return {
       message: fetch.bookmark.success.message,
       status: fetch.bookmark.success.status,
@@ -71,9 +73,15 @@ export async function RemoveBookmark(postId) {
       data: { bookmarks: { decrement: 1 } },
     });
     revalidatePath("/Feed");
-    return { message: "Ok", status: 200 };
+    return {
+      message: fetch.bookmark.remove.success.message,
+      status: fetch.bookmark.remove.success.status,
+    };
   } catch (error) {
-    return { message: "error", status: 400 };
+    return {
+      message: fetch.bookmark.remove.error.message,
+      status: fetch.bookmark.remove.error.status,
+    };
   } finally {
     prisma.$disconnect();
   }

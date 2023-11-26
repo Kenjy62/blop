@@ -4,7 +4,7 @@
 import Link from "next/link";
 
 // Components
-import Picture from "../User/Picture";
+import Picture from "../../User/Picture";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";

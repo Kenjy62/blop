@@ -1,5 +1,6 @@
 // Required
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 // Components
 import Button from "../../UI/Button/Button";
@@ -8,8 +9,14 @@ import Button from "../../UI/Button/Button";
 import { SharePost } from "@/app/src/features/post";
 import Title from "../../UI/Title/Title";
 
+// Toast
+import toast from "react-hot-toast";
+import { ToastSuccess } from "../../UI/Toast/Toasts";
+
 export default function Share({ postId }) {
   const [textarea, setTextarea] = useState();
+
+  const router = useRouter();
 
   // Transition with SA
   let [isPending, startTransition] = useTransition();
@@ -17,12 +24,19 @@ export default function Share({ postId }) {
   // Share Post
   const Sharing = (textarea, postId, type) => {
     startTransition(async () => {
-      SharePost(textarea, null, type, postId);
+      const { message, status } = await SharePost(textarea, null, type, postId);
+      if (status === 200) {
+        router.back();
+        toast(<ToastSuccess message={message} />, {
+          position: "bottom-left",
+          style: { background: "transparent" },
+        });
+      }
     });
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-white rounded-lg p-4">
+    <div className="flex flex-col gap-4 bg-white dark:bg-night-300 rounded-lg p-4">
       <Title>Share a post</Title>
       <textarea
         onChange={(e) => setTextarea(e.target.value)}

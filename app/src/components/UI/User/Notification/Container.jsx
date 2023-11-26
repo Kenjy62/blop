@@ -1,29 +1,33 @@
-import Link from "next/link";
-import Picture from "../Picture";
+// Components
+import Item from "./Item";
 
-export default function Container({ data, type }) {
+export default function Container({ colorScheme, data, type }) {
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `w-48 h-52 dark:bg-night-300 bg-white border border-watermelon-300 dark:border-watermelon-300 rounded-tr-none rounded-lg overflow-y-scroll py-2`;
+  } else if (colorScheme === "harlequin") {
+    color = `w-48 h-52 dark:bg-night-300 bg-white border border-harlequin-300 dark:border-harlequin-300 rounded-tr-none rounded-lg overflow-y-scroll py-2`;
+  } else if (colorScheme === "royal-blue") {
+    color = `w-48 h-52 dark:bg-night-300 bg-white border border-royal-blue-300 dark:border-royal-blue-300 rounded-tr-none rounded-lg overflow-y-scroll py-2`;
+  } else if (colorScheme === "fire-bush") {
+    color = `w-48 h-52 dark:bg-night-300 bg-white border border-fire-bush-300 dark:border-fire-bush-300 rounded-tr-none rounded-lg overflow-y-scroll py-2`;
+  } else if (colorScheme === "cinnabar") {
+    color = `w-48 h-52 dark:bg-night-300 bg-white border border-cinnabar-300 dark:border-cinnabar-300 rounded-tr-none rounded-lg overflow-y-scroll py-2`;
+  } else if (colorScheme === "purple-heart") {
+    color = `w-48 h-52 dark:bg-night-300 bg-white border border-purple-heart-300 dark:border-purple-heart-300 rounded-tr-none rounded-lg overflow-y-scroll py-2`;
+  }
+
   if (type === "Chat") {
     const filteredData = data.filter(
       (item) => item.type === "chat" && item.isRead === 0
     );
 
-    console.log(filteredData);
-
     if (filteredData.length > 0) {
       return (
-        <div className="w-48 h-52 dark:bg-night-300 rounded-tr-none rounded-lg overflow-y-scroll py-2">
+        <div className={color}>
           {filteredData.map((item, id) => (
-            <Link
-              key={id}
-              href={`/Message/Conversation/${item.Conversation.id}`}
-              className="flex flex-row w-full p-2 gap-2 items-center dark:hover:bg-night-200"
-            >
-              <Picture
-                url={item.author.picture}
-                style="h-8 w-8 rounded-full object-cover"
-              />
-              <div className="text-xs">{item.author.name} send a message</div>
-            </Link>
+            <Item key={id} item={item} />
           ))}
         </div>
       );
@@ -31,8 +35,8 @@ export default function Container({ data, type }) {
 
     if (filteredData.length < 1) {
       return (
-        <div className="dark:bg-night-300 rounded-tr-none rounded-lg overflow-y-scroll py-2">
-          No chat notification for this moment
+        <div className={`${color} h-fit w-fit`}>
+          <span className="p-2"> No chat notification for this moment</span>
         </div>
       );
     }
@@ -43,20 +47,9 @@ export default function Container({ data, type }) {
 
     if (filteredData.length > 0) {
       return (
-        <div className="w-48 h-52 dark:bg-night-300 rounded-tr-none rounded-lg overflow-y-scroll py-2">
+        <div className={color}>
           {filteredData.map((item) => (
-            <Link
-              href={`/Post/${item.Post.id}`}
-              className="flex flex-row w-full p-2 gap-2 items-center dark:hover:bg-night-200"
-            >
-              <Picture
-                url={item.author.picture}
-                style="h-8 w-8 rounded-full object-cover"
-              />
-              <div className="text-xs">
-                {item.author.name} has {item.type} you'r post
-              </div>
-            </Link>
+            <Item item={item} />
           ))}
         </div>
       );
@@ -64,7 +57,7 @@ export default function Container({ data, type }) {
 
     if (filteredData.length < 1) {
       return (
-        <div className="dark:bg-night-300 rounded-tr-none rounded-lg overflow-y-scroll py-2">
+        <div className={`${color} w-fit h-fit`}>
           <span className="p-2">No notification for this moment</span>
         </div>
       );

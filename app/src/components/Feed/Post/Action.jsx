@@ -13,6 +13,9 @@ dayjs.extend(relativeTime);
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 
+// Toast
+import toast from "react-hot-toast";
+
 // Icons
 import {
   RxBookmark,
@@ -24,6 +27,7 @@ import {
   RxShare1,
   RxTrash,
 } from "react-icons/rx";
+import { ToastSuccess } from "../../UI/Toast/Toasts";
 
 export default function Actions({
   userId,
@@ -49,17 +53,33 @@ export default function Actions({
     if (dateDiff < 5) {
       const response = await DeletePost(postId);
       if (response.status === 400) {
-        alert(response.message);
+        toast(<ToastError message={response.message} />, {
+          position: "bottom-left",
+          style: { background: "transparent" },
+        });
       }
     } else {
-      alert("Post is too old for delete!");
+      toast(<ToastError message={"Post is too old for delete!"} />, {
+        position: "bottom-left",
+        style: { background: "transparent" },
+      });
     }
   };
 
   const deleteBookmark = async (postId) => {
     const { message, status } = await RemoveBookmark(postId);
     if (status === 400) {
-      alert(message);
+      toast(<ToastError message={message} />, {
+        position: "bottom-left",
+        style: { background: "transparent" },
+      });
+    }
+
+    if (status === 200) {
+      toast(<ToastSuccess message={message} />, {
+        position: "bottom-left",
+        style: { background: "transparent" },
+      });
     }
   };
 
@@ -70,22 +90,22 @@ export default function Actions({
 
   if (colorScheme === "Watermelon") {
     color = `text-watermelon-400 group-hover:text-white`;
-    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-watermelon-400 hover:text-white cursor-pointer`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-watermelon-400 dark:hover:bg-watermelon-400 hover:text-white cursor-pointer`;
   } else if (colorScheme === "royal-blue") {
     color = `text-royal-blue-400 group-hover:text-white`;
-    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-royal-blue-400 hover:text-white cursor-pointer`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-royal-blue-400 dark:hover:bg-royal-blue-400 hover:text-white cursor-pointer`;
   } else if (colorScheme === "harlequin") {
     color = `text-harlequin-400 group-hover:text-white`;
-    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-harlequin-400 hover:text-white cursor-pointer`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-harlequin-400 dark:hover:bg-harlequin-400 hover:text-white cursor-pointer`;
   } else if (colorScheme === "fire-bush") {
     color = `text-fire-bush-400 group-hover:text-white`;
-    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-fire-bush-400 hover:text-white cursor-pointer`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-fire-bush-400 dark:hover:bg-fire-bush-400 hover:text-white cursor-pointer`;
   } else if (colorScheme === "cinnabar") {
     color = `text-cinnabar-400 group-hover:text-white`;
-    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-cinnabar-400 hover:text-white cursor-pointer`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-cinnabar-400 dark:hover:bg-cinnabar-400 hover:text-white cursor-pointer`;
   } else if (colorScheme === "purple-heart") {
     color = `text-purple-heart-400 group-hover:text-white`;
-    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-purple-heart-400 hover:text-white cursor-pointer`;
+    hover = `group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 hover:bg-purple-heart-400 dark:hover:bg-purple-heart-400 hover:text-white cursor-pointer`;
   }
 
   return (
@@ -120,11 +140,8 @@ export default function Actions({
             />
           </span>
         ) : (
-          <Link
-            href={`?bookmark=${postId}`}
-            className="group w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center dark:bg-night-200 dark:hover:bg-watermelon-400 hover:text-white cursor-pointer"
-          >
-            <RxBookmark className="group-hover:text-white" />
+          <Link href={`?bookmark=${postId}`} className={hover}>
+            <RxBookmark />
           </Link>
         )}
         {isDeleteable === true && userId === postAuthorId && (

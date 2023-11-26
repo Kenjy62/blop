@@ -15,10 +15,11 @@ import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 // Components
 import { TriangleTop } from "../../../Tricky/Triangle";
 import Container from "../Notification/Container";
+import Indicator from "../Notification/Indicator";
 
 export default function Notifications({ user_id, data }) {
   const [notifications, setNotifications] = useState(
-    data.filter((item) => item.isRead === 0 && item.type !== "chat").length
+    data.filter((item) => item.isRead === 0 && item.type !== "chat")
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -58,8 +59,8 @@ export default function Notifications({ user_id, data }) {
     if (socket) {
       socketInit(user_id);
 
-      socket.on("new_notification", () => {
-        setNotifications(notifications + 1);
+      socket.on("new_notification", (data) => {
+        setNotifications((prev) => [data, ...prev]);
       });
     }
   }, [socket]);
@@ -75,15 +76,19 @@ export default function Notifications({ user_id, data }) {
   return (
     <>
       <div className="relative cursor-pointer" onClick={handleClick}>
-        {notifications !== 0 && <div className={color}>{notifications}</div>}
+        {notifications.length !== 0 && (
+          <Indicator style={color} notifications={notifications} />
+        )}
         <RxBell />
       </div>
       {isOpen && (
         <div ref={divRef} className="top-[55px] absolute flex flex-col">
-          <div className="flex justify-end">
-            <TriangleTop />
-          </div>
-          <Container data={data} type="Notification" />
+          <TriangleTop />
+          <Container
+            colorScheme={colorScheme}
+            data={notifications}
+            type="Notification"
+          />
         </div>
       )}
     </>

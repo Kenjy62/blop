@@ -31,7 +31,9 @@ export default async function Page() {
           />
         )}
         {data.response.length < 1 && (
-          <p>You don't have any bookmarks at the moment</p>
+          <div className="flex justify-center">
+            You don't have any bookmarks at the moment
+          </div>
         )}
       </>
     );

@@ -3,15 +3,18 @@ import { useState, useTransition } from "react";
 
 // Components
 import Button from "../../UI/Button/Button";
+import Title from "../../UI/Title/Title";
+import { ToastError } from "../../UI/Toast/Toasts";
 
 // Features
 import { ReplyToPost } from "@/app/src/features/post";
 import { useRouter } from "next/navigation";
-import Title from "../../UI/Title/Title";
+
+// Toast
+import toast from "react-hot-toast";
 
 export default function Reply({ defaultTheme, postId }) {
   const [textarea, setTextarea] = useState();
-  const [errorMsg, setErrorMsg] = useState();
   const router = useRouter();
 
   // Transition with SA
@@ -23,7 +26,10 @@ export default function Reply({ defaultTheme, postId }) {
       const { message, status } = await ReplyToPost(textarea, postId);
 
       if (status === 400) {
-        setErrorMsg(message);
+        toast(<ToastError message={message} />, {
+          position: "bottom-left",
+          style: { background: "transparent" },
+        });
       }
 
       if (status === 200) {
@@ -33,12 +39,7 @@ export default function Reply({ defaultTheme, postId }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-white p-4 rounded-lg">
-      {errorMsg && (
-        <div className="flex justify-center text-watermelon-500">
-          {errorMsg}
-        </div>
-      )}
+    <div className="flex flex-col gap-4 bg-white dark:bg-night-300 p-4 rounded-lg">
       <Title>Reply to post</Title>
       <textarea
         onChange={(e) => setTextarea(e.target.value)}

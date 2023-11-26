@@ -537,9 +537,11 @@ export async function SharePost(textarea, files, type, postId) {
   const socketData = { userid: user.id, post_id: postId };
   socket.emit("post_share", socketData);
 
-  revalidatePath("/Feed");
   prisma.$disconnect();
-  return revalidatePath("/Feed");
+  return {
+    message: fetch.post.share.success.message,
+    status: fetch.post.share.success.status,
+  };
 }
 
 // Reply To Post

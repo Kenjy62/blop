@@ -9,6 +9,10 @@ import { ThemeContext } from "@/app/src/context/theme";
 
 // Components
 import { RxPencil1 } from "react-icons/rx";
+import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
+
+// Toast
+import toast from "react-hot-toast";
 
 export default function Avatar({ picture }) {
   const AvatarFile = useRef();
@@ -55,9 +59,15 @@ export default function Avatar({ picture }) {
         body: data,
       }).then((response) => {
         if (response.status === 200) {
-          alert("update");
+          toast(<ToastSuccess message={"Avatar Update Successfully!"} />, {
+            position: "bottom-left",
+            style: { background: "transparent" },
+          });
         } else {
-          alert("error");
+          toast(<ToastError message={"An error occurred, try again"} />, {
+            position: "bottom-left",
+            style: { background: "transparent" },
+          });
         }
       });
     } else {

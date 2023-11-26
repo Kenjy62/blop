@@ -1,7 +1,7 @@
 // Components
 import Title from "../../Title/Title";
 import ComponentError from "../../../Error/ComponentError";
-import UserCard from "../../Cards/UserCard";
+import UserCard from "../../Cards/User/UserCard";
 
 // Features
 import { GetLastUsers } from "@/app/src/features/sidebar/lastusers";

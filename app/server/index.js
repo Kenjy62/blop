@@ -56,23 +56,46 @@ io.on("connection", (socket) => {
       });
 
       // Create notification
-      await prisma.notification.create({
+      const notif = await prisma.notification.create({
         data: {
           type: "comment",
           from: socketData.userid,
           for_id: response.author.id,
           isRead: 0,
+          post_id: parseInt(socketData.post_id),
         },
       });
 
-      const data = {
-        postId: socketData.blopid,
-        userId: socketData.userid,
-        type: "comment",
-      };
+      const thisNotif = await prisma.notification.findFirst({
+        where: {
+          id: parseInt(notif.id),
+        },
+        select: {
+          id: true,
+          isRead: true,
+          type: true,
+          author: {
+            select: {
+              id: true,
+              picture: true,
+              name: true,
+            },
+          },
+          Conversation: {
+            select: {
+              id: true,
+            },
+          },
+          Post: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
 
       // Send io to user
-      io.to(response.author.socket).emit("new_notification", data);
+      io.to(response.author.socket).emit("new_notification", thisNotif);
     } catch (error) {
       console.log(error);
     }
@@ -99,23 +122,46 @@ io.on("connection", (socket) => {
       });
 
       // Create notification
-      await prisma.notification.create({
+      const notif = await prisma.notification.create({
         data: {
           type: "share",
           from: socketData.userid,
           for_id: response.author.id,
           isRead: 0,
+          post_id: parseInt(socketData.post_id),
         },
       });
 
-      const data = {
-        postId: socketData.blopid,
-        userId: socketData.userid,
-        type: "comment",
-      };
+      const thisNotif = await prisma.notification.findFirst({
+        where: {
+          id: parseInt(notif.id),
+        },
+        select: {
+          id: true,
+          isRead: true,
+          type: true,
+          author: {
+            select: {
+              id: true,
+              picture: true,
+              name: true,
+            },
+          },
+          Conversation: {
+            select: {
+              id: true,
+            },
+          },
+          Post: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
 
       // Send io to user
-      io.to(response.author.socket).emit("new_notification", data);
+      io.to(response.author.socket).emit("new_notification", thisNotif);
     } catch (error) {
       console.log(error);
     }
@@ -142,23 +188,46 @@ io.on("connection", (socket) => {
       });
 
       // Create notification
-      await prisma.notification.create({
+      const notif = await prisma.notification.create({
         data: {
           type: "like",
           from: socketData.userid,
           for_id: response.author.id,
           isRead: 0,
+          post_id: parseInt(socketData.post_id),
         },
       });
 
-      const data = {
-        postId: socketData.blopid,
-        userId: socketData.userid,
-        type: "comment",
-      };
+      const thisNotif = await prisma.notification.findFirst({
+        where: {
+          id: parseInt(notif.id),
+        },
+        select: {
+          id: true,
+          isRead: true,
+          type: true,
+          author: {
+            select: {
+              id: true,
+              picture: true,
+              name: true,
+            },
+          },
+          Conversation: {
+            select: {
+              id: true,
+            },
+          },
+          Post: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
 
       // Send io to user
-      io.to(response.author.socket).emit("new_notification", data);
+      io.to(response.author.socket).emit("new_notification", thisNotif);
     } catch (error) {
       console.log(error);
     }
@@ -211,7 +280,7 @@ io.on("connection", (socket) => {
       });
 
       // Create notification
-      await prisma.notification.create({
+      const notif = await prisma.notification.create({
         data: {
           type: "chat",
           from: parseInt(socketData.from_id),
@@ -222,7 +291,7 @@ io.on("connection", (socket) => {
       });
 
       io.to(user.socket).emit("new_message");
-      io.to(user.socket).emit("new_notification_message");
+      io.to(user.socket).emit("new_notification_message", notif);
     }
   });
 

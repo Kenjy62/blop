@@ -6,7 +6,8 @@ import { init } from "../../features/user";
 
 // Required
 import Link from "next/link";
-import Date from "./Date";
+import Date from "./Other/Date";
+import Item from "./Conversation/Item";
 
 export default async function Conversation({ conversation }) {
   const { data, message, status } = await init();
@@ -27,22 +28,7 @@ export default async function Conversation({ conversation }) {
           }
           style={"h-14 w-14 rounded-full object-cover"}
         />
-        <Link
-          className="w-full"
-          href={`Message/Conversation/${conversation.id}`}
-        >
-          <div className="flex flex-row justify-between w-full">
-            <div className="flex flex-col gap-2">
-              <span>
-                {conversation.participant1.name !== data.name
-                  ? conversation.participant1.name
-                  : conversation.participant2.name}
-              </span>
-              <span>{conversation.messages[0].content}</span>
-            </div>
-            <Date date={conversation.messages[0].createdAt} />
-          </div>
-        </Link>
+        <Item conversation={conversation} data={data} />
       </div>
     </div>
   );
