@@ -1,11 +1,20 @@
-import Conversation from "@/app/src/components/Message/Conversation";
+// Components
+import ComponentError from "@/app/src/components/Error/ComponentError";
+import Item from "@/app/src/components/Message/Conversation/Item";
 import SearchBar from "@/app/src/components/Message/Searchbar";
 import Button from "@/app/src/components/UI/Button/Button";
+
+// Features
 import { getConversations } from "@/app/src/features/user";
+import { init } from "@/app/src/features/user";
+
+// Required
 import Link from "next/link";
 
 export default async function Page({ searchParams }) {
   const { data, message, status } = await getConversations(searchParams);
+
+  const user = await init();
 
   const sortedConversations = data.sort((a, b) => {
     if (
@@ -40,7 +49,7 @@ export default async function Page({ searchParams }) {
           </Link>
         </div>
         {sortedConversations.map((item) => (
-          <Conversation conversation={item} />
+          <Item conversation={item} data={user.data} />
         ))}
       </div>
     );
@@ -77,6 +86,6 @@ export default async function Page({ searchParams }) {
   }
 
   if (status === 400) {
-    return <p>error</p>;
+    return <ComponentError message={message} />;
   }
 }

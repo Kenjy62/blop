@@ -28,7 +28,11 @@ export default function Reply({ defaultTheme, postId }) {
       if (status === 400) {
         toast(<ToastError message={message} />, {
           position: "bottom-left",
-          style: { background: "transparent" },
+          style: {
+            background: "transparent",
+            boxShadow: "none",
+            border: "none",
+          },
         });
       }
 

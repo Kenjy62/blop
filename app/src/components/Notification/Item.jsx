@@ -8,6 +8,8 @@ import Tag from "../UI/Tag/Tag";
 // Features
 import { setIsRead } from "../../features/notification";
 
+// Hooks
+
 export default function Item({ item }) {
   const onHover = async (id) => {
     await setIsRead(id);

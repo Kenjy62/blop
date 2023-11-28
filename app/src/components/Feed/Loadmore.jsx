@@ -52,7 +52,6 @@ export default function LoadMore({ user, order }) {
   async function load() {
     setTimeout(async () => {
       if (!order || order === "All") {
-        console.log("ALL LOAD");
         const { data, message, status } = await GetAllPost(skip, limit);
         if (data.length < 5) {
           setNoPost(true);
@@ -62,7 +61,6 @@ export default function LoadMore({ user, order }) {
           setPost(data);
         }
       } else if (order === "Followed") {
-        console.log("FOLLOWED LOAD");
         const { data, message, status } = await GetFollowedPost(skip, limit);
         if (data.length === 0) {
           setNoPost(true);

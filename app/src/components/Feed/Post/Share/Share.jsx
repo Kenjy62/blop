@@ -10,9 +10,30 @@ dayjs.extend(relativeTime);
 // Icons
 import { RxClock } from "react-icons/rx";
 
+// Hooks
+import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+
 export default function Share({ post }) {
+  const colorScheme = CheckColorScheme();
+
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-watermelon-400 dark:border-night-300 dark:hover:border-watermelon-400`;
+  } else if (colorScheme === "royal-blue") {
+    color = `w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-royal-blue-400 dark:border-night-300 dark:hover:border-royal-blue-400`;
+  } else if (colorScheme === "purple-heart") {
+    color = `w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-purple-heart-400 dark:border-night-300 dark:hover:border-purple-heart-400`;
+  } else if (colorScheme === "harlequin") {
+    color = `w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-harlequin-400 dark:border-night-300 dark:hover:border-harlequin-400`;
+  } else if (colorScheme === "cinnabar") {
+    color = `w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-cinnabar-400 dark:border-night-300 dark:hover:border-cinnabar-400`;
+  } else if (colorScheme === "fire-bush") {
+    color = `w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-fire-bush-400 dark:border-night-300 dark:hover:border-fire-bush-400`;
+  }
+
   return (
-    <div className="w-full p-4 border rounded-lg flex flex-row gap-4 hover:border-watermelon-200 dark:border-night-200">
+    <div className={color}>
       <div className="h-fit">
         <div>
           <Picture

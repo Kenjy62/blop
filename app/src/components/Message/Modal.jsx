@@ -20,7 +20,7 @@ export default function Modal({ userFollowed }) {
       isOpen={pathname.includes("/Message/Create") ? true : false}
       onRequestClose={() => router.push("/Message")}
       overlayClassName={""}
-      className={"dark dark:bg-night-300"}
+      className={"bg-transparent"}
       style={{
         overlay: {
           position: "fixed",

@@ -10,6 +10,9 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
+// Components
+import { ToastSuccess } from "../../UI/Toast/Toasts";
+
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 
@@ -27,7 +30,6 @@ import {
   RxShare1,
   RxTrash,
 } from "react-icons/rx";
-import { ToastSuccess } from "../../UI/Toast/Toasts";
 
 export default function Actions({
   userId,
@@ -55,7 +57,11 @@ export default function Actions({
       if (response.status === 400) {
         toast(<ToastError message={response.message} />, {
           position: "bottom-left",
-          style: { background: "transparent" },
+          style: {
+            background: "transparent",
+            boxShadow: "none",
+            border: "none",
+          },
         });
       }
     } else {
@@ -71,14 +77,22 @@ export default function Actions({
     if (status === 400) {
       toast(<ToastError message={message} />, {
         position: "bottom-left",
-        style: { background: "transparent" },
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
       });
     }
 
     if (status === 200) {
       toast(<ToastSuccess message={message} />, {
         position: "bottom-left",
-        style: { background: "transparent" },
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
       });
     }
   };

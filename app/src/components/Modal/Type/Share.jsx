@@ -3,23 +3,21 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 // Components
+import Title from "../../UI/Title/Title";
 import Button from "../../UI/Button/Button";
+import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
 
 // Features
 import { SharePost } from "@/app/src/features/post";
-import Title from "../../UI/Title/Title";
 
 // Toast
 import toast from "react-hot-toast";
-import { ToastSuccess } from "../../UI/Toast/Toasts";
 
 export default function Share({ postId }) {
-  const [textarea, setTextarea] = useState();
-
   const router = useRouter();
 
-  // Transition with SA
-  let [isPending, startTransition] = useTransition();
+  const [textarea, setTextarea] = useState();
+  let [isPending, startTransition] = useTransition(); // SA transition
 
   // Share Post
   const Sharing = (textarea, postId, type) => {
@@ -29,7 +27,22 @@ export default function Share({ postId }) {
         router.back();
         toast(<ToastSuccess message={message} />, {
           position: "bottom-left",
-          style: { background: "transparent" },
+          style: {
+            background: "transparent",
+            boxShadow: "none",
+            border: "none",
+          },
+        });
+      }
+
+      if (status === 400) {
+        toast(<ToastError message={message} />, {
+          position: "bottom-left",
+          style: {
+            background: "transparent",
+            boxShadow: "none",
+            border: "none",
+          },
         });
       }
     });

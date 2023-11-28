@@ -9,6 +9,10 @@ import { useTransition, useState } from "react";
 
 // Feature
 import { followUser, unfollowUser } from "@/app/src/features/user";
+import { ToastSuccess, ToastError } from "../Toast/Toasts";
+
+// Toast
+import toast from "react-hot-toast";
 
 export default function FollowCard({ item, isMyProfil }) {
   const [isFollowed, setIsFollowed] = useState(item.user2 ? true : false);
@@ -23,23 +27,62 @@ export default function FollowCard({ item, isMyProfil }) {
         );
 
         if (status === 200) {
+          toast(<ToastSuccess message={message} />, {
+            position: "bottom-left",
+            style: {
+              background: "transparent",
+              boxShadow: "none",
+              border: "none",
+            },
+          });
           setIsFollowed(!isFollowed);
-        } else if (status === 400) {
-          alert(message);
+        }
+
+        if (status === 400) {
+          toast(<ToastError message={message} />, {
+            position: "bottom-left",
+            style: {
+              background: "transparent",
+              boxShadow: "none",
+              border: "none",
+            },
+          });
         }
       });
-    } else if (setIsFollowed) {
+    } else if (isFollowed) {
       startTransition(async () => {
-        const response = await unfollowUser(
+        const { message, status } = await unfollowUser(
           item.user2 ? item.user2.name : item.user1.name
         );
-        setIsFollowed(!isFollowed);
+
+        if (status === 200) {
+          setIsFollowed(!isFollowed);
+          toast(<ToastSuccess message={message} />, {
+            position: "bottom-left",
+            style: {
+              background: "transparent",
+              boxShadow: "none",
+              border: "none",
+            },
+          });
+        }
+
+        if (status === 400) {
+          toast(<ToastError message={message} />, {
+            position: "bottom-left",
+            style: {
+              background: "transparent",
+              boxShadow: "none",
+              border: "none",
+            },
+          });
+        }
       });
     }
   }
 
   return (
-    <div className="flex flex-1 p-2 flex-row gap-4 justify-between items-center dark:bg-night-300 rounded-lg">
+    <div className="flex flex-1 p-4 flex-row gap-4 justify-between items-center dark:bg-night-300 bg-light-100 rounded-lg">
       <div className="flex flex-row gap-4 items-center">
         <Picture
           name={item.user2 ? item.user2?.name : item.user1.name}
@@ -51,7 +94,9 @@ export default function FollowCard({ item, isMyProfil }) {
       </div>
       {item.user2 && isMyProfil && (
         <div onClick={follow}>
-          <Button>{isFollowed ? "Unfollow" : "Follow"}</Button>
+          <Button>
+            {isPending ? "Loading..." : isFollowed ? "Unfollow" : "Follow"}
+          </Button>
         </div>
       )}
     </div>

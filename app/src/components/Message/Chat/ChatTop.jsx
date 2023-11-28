@@ -12,17 +12,17 @@ export default function ChatTop({ picture, name }) {
   var color;
 
   if (colorScheme === "Watermelon") {
-    color = `rounded-t-lg dark:bg-night-300 bg-watermelon-400 p-4 flex flex-row gap-4 items-center border border-watermelon-300`;
+    color = `rounded-t-lg dark:bg-night-300 bg-watermelon-300 p-4 flex flex-row gap-4 items-center`;
   } else if (colorScheme === "harlequin") {
-    color = `rounded-t-lg dark:bg-night-300 bg-harlequin-400 p-4 flex flex-row gap-4 items-center border border-harlequin-300`;
+    color = `rounded-t-lg dark:bg-night-300 bg-harlequin-300 p-4 flex flex-row gap-4 items-center`;
   } else if (colorScheme === "royal-blue") {
-    color = `rounded-t-lg dark:bg-night-300 bg-royal-blue-400 p-4 flex flex-row gap-4 items-center border border-royal-blue-300`;
+    color = `rounded-t-lg dark:bg-night-300 bg-royal-blue-300 p-4 flex flex-row gap-4 items-center`;
   } else if (colorScheme === "cinnabar") {
-    color = `rounded-t-lg dark:bg-night-300 bg-cinnabar-400 p-4 flex flex-row gap-4 items-center border border-cinnabar-300`;
+    color = `rounded-t-lg dark:bg-night-300 bg-cinnabar-300 p-4 flex flex-row gap-4 items-center`;
   } else if (colorScheme === "purple-heart") {
-    color = `rounded-t-lg dark:bg-night-300 bg-purple-heart-400 p-4 flex flex-row gap-4 items-center border border-purple-heart-300`;
+    color = `rounded-t-lg dark:bg-night-300 bg-purple-heart-300 p-4 flex flex-row gap-4 items-center`;
   } else if (colorScheme === "fire-bush") {
-    color = `rounded-t-lg dark:bg-night-300 bg-fire-bush-400 p-4 flex flex-row gap-4 items-center border border-fire-bush-300`;
+    color = `rounded-t-lg dark:bg-night-300 bg-fire-bush-300 p-4 flex flex-row gap-4 items-center`;
   }
 
   return (

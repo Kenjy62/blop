@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 // Components
 import Button from "../../UI/Button/Button";
 import Title from "../../UI/Title/Title";
+import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
+
+// toast
+import toast from "react-hot-toast";
 
 // Features
 import { CreateBookmark } from "@/app/src/features/bookmark";
@@ -14,13 +18,28 @@ export default function Bookmark({ postId }) {
   const router = useRouter();
 
   const actionAddBookmarks = async () => {
-    const response = await CreateBookmark(postId, tag);
+    const { message, status } = await CreateBookmark(postId, tag);
 
-    if (response.status === 400) {
-      alert(response.message);
+    if (status === 400) {
+      toast(<ToastError message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
     }
 
-    if (response.status === 200) {
+    if (status === 200) {
+      toast(<ToastSuccess message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
       router.back();
     }
   };

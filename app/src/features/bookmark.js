@@ -15,22 +15,29 @@ export async function CreateBookmark(postId, tag) {
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  const user = await prisma.user.findFirst({
-    where: {
-      token: token.value,
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  const data = {
-    user_id: parseInt(user.id),
-    post_id: parseInt(postId),
-    tag: tag,
-  };
-
   try {
+    if (!tag || tag.length < 1) {
+      return {
+        message: fetch.bookmark.create.error.tooSmall.message,
+        status: fetch.bookmark.create.error.tooSmall.status,
+      };
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        token: token.value,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const data = {
+      user_id: parseInt(user.id),
+      post_id: parseInt(postId),
+      tag: tag,
+    };
+
     await prisma.bookmarks.create({ data });
 
     await prisma.post.update({
@@ -39,13 +46,13 @@ export async function CreateBookmark(postId, tag) {
     });
     revalidatePath("/Feed");
     return {
-      message: fetch.bookmark.success.message,
-      status: fetch.bookmark.success.status,
+      message: fetch.bookmark.create.success.message,
+      status: fetch.bookmark.create.success.status,
     };
   } catch (e) {
     return {
-      message: fetch.bookmark.error.message,
-      status: fetch.bookmark.error.status,
+      message: fetch.bookmark.create.error.message,
+      status: fetch.bookmark.create.error.status,
     };
   } finally {
     prisma.$disconnect();

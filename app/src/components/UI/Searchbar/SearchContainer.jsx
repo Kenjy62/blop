@@ -33,12 +33,14 @@ export default function SearchContainer() {
 
   if (state) {
     return (
-      <div className=" absolute top-[74px] h-[calc(100vh-74px)] w-full bg-white p-4 dark:bg-night-300 dark:text-white">
-        {userList?.length > 0 || post?.length > 0 ? (
-          <Result user={userList} post={post} />
-        ) : (
-          "Aucun résultat"
-        )}
+      <div className=" absolute top-[74px] h-[calc(100vh-74px)] w-full bg-white p-4 dark:bg-night-300 dark:text-white flex justify-center">
+        <div className="w-[1280px]">
+          {userList?.length > 0 || post?.length > 0 ? (
+            <Result user={userList} post={post} />
+          ) : (
+            "Aucun résultat"
+          )}
+        </div>
       </div>
     );
   }

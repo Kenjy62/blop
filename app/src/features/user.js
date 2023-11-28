@@ -265,435 +265,706 @@ export const getNotificationsSettings = async () => {
 
 // Get User Notifications Settings
 export const getConfidentialitySettings = async () => {
-  const me = await init();
-
   const prisma = new PrismaClient();
-  const response = await prisma.user.findFirst({
-    where: {
-      id: me.id,
-    },
-    select: {
-      display_follow: true,
-      display_follower: true,
-    },
-  });
 
-  return response;
+  return init()
+    .then(async ({ data }) => {
+      return prisma.user
+        .findFirst({
+          where: {
+            id: data.id,
+          },
+          select: {
+            display_follow: true,
+            display_follower: true,
+          },
+        })
+        .then(async (data) => {
+          return {
+            data: data,
+            message: fetch.user.get.success.message,
+            status: fetch.user.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.user.get.error.message,
+            status: fetch.user.get.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    });
 };
 
 export const getUserConfidentialitySettings = async (name) => {
   const prisma = new PrismaClient();
 
-  const response = await prisma.user.findFirst({
-    where: {
-      name: name,
-    },
-    select: {
-      display_follow: true,
-      display_follower: true,
-    },
-  });
-
-  return response;
+  return prisma.user
+    .findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        display_follow: true,
+        display_follower: true,
+      },
+    })
+    .then((data) => {
+      return {
+        data: data,
+        message: fetch.user.get.success.message,
+        status: fetch.user.get.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
+    });
 };
 
 // Update User Notifications Settings
 export const updateNotificationSetting = async (type, color) => {
-  const { data } = await init();
   const prisma = new PrismaClient();
 
-  if (type === "Like") {
-    const defaultValue = await prisma.user.findFirst({
-      where: { id: data.id },
-      select: { like_notification: true },
-    });
+  return init()
+    .then(async ({ data }) => {
+      if (type === "Like") {
+        return prisma.user
+          .findFirst({
+            where: {
+              id: data.id,
+            },
+            select: {
+              like_notification: true,
+            },
+          })
+          .then(async (oldValue) => {
+            return prisma.user
+              .update({
+                where: { id: data.id },
+                data: {
+                  like_notification: oldValue.like_notification === 0 ? 1 : 0,
+                },
+              })
+              .then(() => {
+                return {
+                  message: fetch.user.setting.update.success.message,
+                  status: fetch.user.setting.update.success.statut,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+                prisma.$disconnect();
+                return {
+                  message: fetch.user.setting.update.error.message,
+                  status: fetch.user.setting.update.error.statut,
+                };
+              });
+          })
+          .catch((error) => {
+            prisma.$disconnect();
+            console.log(error);
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.status,
+            };
+          });
+      }
 
-    await prisma.user.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        like_notification: defaultValue.like_notification === 0 ? 1 : 0,
-      },
-    });
-  } else if (type === "Comment") {
-    const defaultValue = await prisma.user.findFirst({
-      where: { id: data.id },
-      select: { comment_notification: true },
-    });
+      if (type === "Comment") {
+        return prisma.user
+          .findFirst({
+            where: { id: data.id },
+            select: { comment_notification: true },
+          })
+          .then(async (oldValue) => {
+            return prisma.user
+              .update({
+                where: {
+                  id: data.id,
+                },
+                data: {
+                  comment_notification:
+                    oldValue.comment_notification === 0 ? 1 : 0,
+                },
+              })
+              .then(() => {
+                return {
+                  message: fetch.user.setting.update.success.message,
+                  status: fetch.user.setting.update.success.statut,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+                prisma.$disconnect();
+                return {
+                  message: fetch.user.setting.update.error.message,
+                  status: fetch.user.setting.update.error.statut,
+                };
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.status,
+            };
+          });
+      }
 
-    await prisma.user.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        comment_notification: defaultValue.comment_notification === 0 ? 1 : 0,
-      },
-    });
-  } else if (type === "Message") {
-    const defaultValue = await prisma.user.findFirst({
-      where: { id: data.id },
-      select: { message_notification: true },
-    });
+      if (type === "Message") {
+        return prisma.user
+          .findFirst({
+            where: { id: data.id },
+            select: { message_notification: true },
+          })
+          .then(async (oldValue) => {
+            return prisma.user
+              .update({
+                where: {
+                  id: data.id,
+                },
+                data: {
+                  message_notification:
+                    oldValue.message_notification === 0 ? 1 : 0,
+                },
+              })
+              .then(() => {
+                return {
+                  message: fetch.user.setting.update.success.message,
+                  status: fetch.user.setting.update.success.statut,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+                prisma.$disconnect();
+                return {
+                  message: fetch.user.setting.update.error.message,
+                  status: fetch.user.setting.update.error.statut,
+                };
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.status,
+            };
+          });
+      }
 
-    await prisma.user.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        message_notification: defaultValue.message_notification === 0 ? 1 : 0,
-      },
-    });
-  } else if (type === "Dark Mode") {
-    const defaultValue = await prisma.user.findFirst({
-      where: { id: data.id },
-      select: { darkMode: true },
-    });
+      if (type === "Dark Mode") {
+        return prisma.user
+          .findFirst({
+            where: { id: data.id },
+            select: { darkMode: true },
+          })
+          .then(async (oldValue) => {
+            return prisma.user
+              .update({
+                where: { id: data.id },
+                data: {
+                  darkMode: oldValue.darkMode === false ? true : false,
+                },
+              })
+              .then(() => {
+                return {
+                  message: fetch.user.setting.update.success.message,
+                  status: fetch.user.setting.update.success.statut,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+                prisma.$disconnect();
+                return {
+                  message: fetch.user.setting.update.error.message,
+                  status: fetch.user.setting.update.error.statut,
+                };
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.statut,
+            };
+          });
+      }
 
-    await prisma.user.update({
-      where: { id: data.id },
-      data: { darkMode: defaultValue.darkMode === false ? true : false },
-    });
-  } else if (type === "Display Follows") {
-    const defaultValue = await prisma.user.findFirst({
-      where: {
-        id: data.id,
-      },
-      select: {
-        display_follow: true,
-      },
-    });
+      if (type === "Display Follows") {
+        return prisma.user
+          .findFirst({
+            where: {
+              id: data.id,
+            },
+            select: {
+              display_follow: true,
+            },
+          })
+          .then(async (oldValue) => {
+            return prisma.user
+              .update({
+                where: { id: data.id },
+                data: { display_follow: oldValue.display_follow === 1 ? 0 : 1 },
+              })
+              .then(() => {
+                return {
+                  message: fetch.user.setting.update.success.message,
+                  status: fetch.user.setting.update.success.statut,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+                prisma.$disconnect();
+                return {
+                  message: fetch.user.setting.update.error.message,
+                  status: fetch.user.setting.update.error.statut,
+                };
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.status,
+            };
+          });
+      }
 
-    await prisma.user.update({
-      where: { id: data.id },
-      data: { display_follow: defaultValue.display_follow === 1 ? 0 : 1 },
-    });
-  } else if (type === "Display Followers") {
-    const defaultValue = await prisma.user.findFirst({
-      where: {
-        id: data.id,
-      },
-      select: {
-        display_follower: true,
-      },
-    });
+      if (type === "Display Followers") {
+        return prisma.user
+          .findFirst({
+            where: {
+              id: data.id,
+            },
+            select: {
+              display_follower: true,
+            },
+          })
+          .then(async (oldValue) => {
+            return prisma.user.update({
+              where: { id: data.id },
+              data: {
+                display_follower: oldValue.display_follower === 1 ? 0 : 1,
+              },
+            });
+          })
+          .then(() => {
+            return {
+              message: fetch.user.setting.update.success.message,
+              status: fetch.user.setting.update.success.statut,
+            };
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.setting.update.error.message,
+              status: fetch.user.setting.update.error.statut,
+            };
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.status,
+            };
+          });
+      }
 
-    await prisma.user.update({
-      where: { id: data.id },
-      data: { display_follower: defaultValue.display_follower === 1 ? 0 : 1 },
+      if (type === "ColorScheme") {
+        return prisma.user
+          .update({
+            where: {
+              id: data.id,
+            },
+            data: {
+              colorScheme: color,
+            },
+          })
+          .then(() => {
+            return {
+              message: fetch.user.setting.update.success.message,
+              status: fetch.user.setting.update.success.statut,
+            };
+          })
+          .catch((error) => {
+            console.log(error);
+            prisma.$disconnect();
+            return {
+              message: fetch.user.setting.update.error.message,
+              status: fetch.user.setting.update.error.statut,
+            };
+          });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
     });
-  } else if (type === "ColorScheme") {
-    await prisma.user.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        colorScheme: color,
-      },
-    });
-  }
 };
 
 // Get User Posts
 export async function GetUserPosts(name) {
   const prisma = new PrismaClient();
 
-  try {
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         name: name,
       },
       select: {
         id: true,
       },
-    });
-
-    const response = await prisma.post.findMany({
-      where: {
-        author_id: parseInt(user.id),
-        type: "post",
-      },
-      select: {
-        id: true,
-        createdAt: true,
-        content: true,
-        author: {
+    })
+    .then(async (user) => {
+      return prisma.post
+        .findMany({
+          where: {
+            author_id: parseInt(user.id),
+            type: "post",
+          },
           select: {
             id: true,
-            name: true,
+            createdAt: true,
+            content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
             picture: true,
-          },
-        },
-        picture: true,
-        shares: true,
-        likes: true,
-        bookmarks: true,
-        type: true,
-        hashtags: true,
-        comments: {
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            author: {
-              select: {
-                id: true,
-                name: true,
-                picture: true,
-              },
-            },
-          },
-        },
-        userslist_likes: {
-          select: {
-            post_id: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-                picture: true,
-              },
-            },
-          },
-        },
-        bookmark_data: {
-          select: {
-            post_id: true,
-            user_id: true,
-          },
-        },
-        share_data: {
-          select: {
-            id: true,
-            createdAt: true,
-            content: true,
-            author: {
-              select: {
-                id: true,
-                name: true,
-                picture: true,
-              },
-            },
+            shares: true,
+            likes: true,
+            bookmarks: true,
+            type: true,
             hashtags: true,
+            comments: {
+              select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+              },
+            },
+            userslist_likes: {
+              select: {
+                post_id: true,
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+              },
+            },
+            bookmark_data: {
+              select: {
+                post_id: true,
+                user_id: true,
+              },
+            },
+            share_data: {
+              select: {
+                id: true,
+                createdAt: true,
+                content: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+                hashtags: true,
+              },
+            },
           },
-        },
-      },
+        })
+        .then((response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.post.getUserPosts.success.message,
+            status: fetch.post.getUserPosts.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.post.getUserPosts.error.message,
+            status: fetch.post.getUserPosts.error.status,
+          };
+        });
+    })
+    .catch(() => {
+      prisma.$disconnect();
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
     });
-
-    return {
-      data: response,
-      message: fetch.post.getUserPosts.success.message,
-      status: fetch.post.getUserPosts.success.status,
-    };
-  } catch (error) {
-    return {
-      message: fetch.post.getUserPosts.error.message,
-      status: fetch.post.getUserPosts.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 }
 
 // Get User Posts Liked
 export async function GetUserPostsLiked(name) {
   const prisma = new PrismaClient();
 
-  try {
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         name: name,
       },
       select: {
         id: true,
       },
-    });
-
-    const response = await prisma.post.findMany({
-      where: {
-        userslist_likes: {
-          some: {
-            user_id: user.id,
+    })
+    .then(async (user) => {
+      return prisma.post
+        .findMany({
+          where: {
+            userslist_likes: {
+              some: {
+                user_id: user.id,
+              },
+            },
           },
-        },
-      },
-      include: {
-        comments: {
-          select: {
-            id: true,
-            content: true,
+          include: {
+            comments: {
+              select: {
+                id: true,
+                content: true,
+                author: {
+                  select: {
+                    id: true,
+                    picture: true,
+                    name: true,
+                  },
+                },
+                createdAt: true,
+              },
+            },
             author: {
               select: {
                 id: true,
-                picture: true,
                 name: true,
+                picture: true,
               },
             },
-            createdAt: true,
-          },
-        },
-        author: {
-          select: {
-            id: true,
-            name: true,
-            picture: true,
-          },
-        },
-        userslist_likes: {
-          select: {
-            user: {
+            userslist_likes: {
+              select: {
+                user: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+            bookmark_data: {
+              select: {
+                user_id: true,
+                post_id: true,
+              },
+            },
+            share_data: {
               select: {
                 id: true,
-              },
-            },
-          },
-        },
-        bookmark_data: {
-          select: {
-            user_id: true,
-            post_id: true,
-          },
-        },
-        share_data: {
-          select: {
-            id: true,
-            content: true,
-            picture: true,
-            createdAt: true,
-            author: {
-              select: {
-                id: true,
+                content: true,
                 picture: true,
-                name: true,
+                createdAt: true,
+                author: {
+                  select: {
+                    id: true,
+                    picture: true,
+                    name: true,
+                  },
+                },
               },
             },
           },
-        },
-      },
+          orderBy: {
+            id: "desc",
+          },
+        })
+        .then((response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.user.post.get.liked.success.message,
+            status: fetch.user.post.get.liked.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.user.post.get.liked.error.message,
+            status: fetch.user.post.get.liked.error.status,
+          };
+        });
+    })
+    .catch(() => {
+      prisma.$disconnect();
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
     });
-
-    return {
-      data: response,
-      message: fetch.user.post.get.liked.success.message,
-      status: fetch.user.post.get.liked.success.status,
-    };
-  } catch {
-    return {
-      message: fetch.user.post.get.liked.error.message,
-      status: fetch.user.post.get.liked.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 }
 
 // Get User Posts Shared
 export async function GetUserPostsShared(name) {
   const prisma = new PrismaClient();
 
-  try {
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         name: name,
       },
       select: {
         id: true,
       },
-    });
-
-    const response = await prisma.post.findMany({
-      where: {
-        author_id: parseInt(user.id),
-        type: "share",
-      },
-      select: {
-        id: true,
-        createdAt: true,
-        content: true,
-        author: {
+    })
+    .then(async (user) => {
+      return prisma.post
+        .findMany({
+          where: {
+            author_id: parseInt(user.id),
+            type: "share",
+          },
           select: {
             id: true,
-            name: true,
+            createdAt: true,
+            content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
             picture: true,
-          },
-        },
-        picture: true,
-        shares: true,
-        likes: true,
-        bookmarks: true,
-        type: true,
-        hashtags: true,
-        bookmark_data: {
-          select: {
-            user_id: true,
-            post_id: true,
-          },
-        },
-        comments: {
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            author: {
-              select: {
-                id: true,
-                name: true,
-                picture: true,
-              },
-            },
-          },
-        },
-        userslist_likes: {
-          select: {
-            post_id: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-                picture: true,
-              },
-            },
-          },
-        },
-        share_data: {
-          select: {
-            id: true,
-            createdAt: true,
-            content: true,
-            author: {
-              select: {
-                id: true,
-                name: true,
-                picture: true,
-              },
-            },
+            shares: true,
+            likes: true,
+            bookmarks: true,
+            type: true,
             hashtags: true,
+            bookmark_data: {
+              select: {
+                user_id: true,
+                post_id: true,
+              },
+            },
+            comments: {
+              select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+              },
+            },
+            userslist_likes: {
+              select: {
+                post_id: true,
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+              },
+            },
+            share_data: {
+              select: {
+                id: true,
+                createdAt: true,
+                content: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
+                hashtags: true,
+              },
+            },
           },
-        },
-      },
+          orderBy: {
+            id: "desc",
+          },
+        })
+        .then((response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.user.post.get.shared.success.message,
+            status: fetch.user.post.get.shared.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.user.post.get.shared.error.message,
+            status: fetch.user.post.get.shared.error.status,
+          };
+        });
+    })
+    .catch(() => {
+      prisma.$disconnect();
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.message.status,
+      };
     });
-
-    return {
-      data: response,
-      message: fetch.user.post.get.shared.success.message,
-      status: fetch.user.post.get.shared.success.status,
-    };
-  } catch {
-    return {
-      message: fetch.user.post.get.shared.error.message,
-      status: fetch.user.post.get.shared.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 }
 
 // Get User Details
 export async function GetUserDetails(name) {
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         name: name,
       },
@@ -725,134 +996,168 @@ export async function GetUserDetails(name) {
           },
         },
       },
+    })
+    .then((response) => {
+      prisma.$disconnect();
+      return {
+        data: response,
+        message: fetch.user.get.success.message,
+        status: fetch.user.get.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
     });
-
-    return {
-      data: response,
-      message: fetch.user.get.success.message,
-      status: fetch.user.get.success.status,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: fetch.user.get.error.message,
-      status: fetch.user.get.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 }
 
 export const getNotifications = async () => {
-  const me = await init();
-
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.notification.findMany({
-      where: {
-        for_id: parseInt(me.data.id),
-      },
-      select: {
-        id: true,
-        isRead: true,
-        type: true,
-        author: {
+  return init()
+    .then(async ({ data }) => {
+      return prisma.notification
+        .findMany({
+          where: {
+            for_id: parseInt(data.id),
+          },
           select: {
             id: true,
-            picture: true,
-            name: true,
+            isRead: true,
+            type: true,
+            author: {
+              select: {
+                id: true,
+                picture: true,
+                name: true,
+              },
+            },
+            Conversation: {
+              select: {
+                id: true,
+              },
+            },
+            Post: {
+              select: {
+                id: true,
+              },
+            },
           },
-        },
-        Conversation: {
-          select: {
-            id: true,
-          },
-        },
-        Post: {
-          select: {
-            id: true,
-          },
-        },
-      },
+        })
+        .then(async (response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.user.notification.get.success.message,
+            status: fetch.user.notification.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.user.notification.get.error.message,
+            status: fetch.user.notification.get.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
     });
-
-    return {
-      data: response,
-      message: "Ok",
-      status: 200,
-    };
-  } catch (error) {
-    return {
-      message: "nop",
-      status: 400,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 };
 
 export const getConversations = async (searchParams) => {
   const prisma = new PrismaClient();
-  const { data, message, status } = await init();
 
-  if (status === 200) {
-    try {
-      const response = await prisma.conversation.findMany({
-        where: {
-          OR: [{ participant1Id: data.id }, { participant2Id: data.id }],
-        },
-        select: {
-          id: true,
-          participant1: {
-            select: {
-              name: true,
-              picture: true,
+  return init()
+    .then(async ({ data }) => {
+      return prisma.conversation
+        .findMany({
+          where: {
+            OR: [{ participant1Id: data.id }, { participant2Id: data.id }],
+          },
+          select: {
+            id: true,
+            participant1: {
+              select: {
+                name: true,
+                picture: true,
+              },
+            },
+            participant1Id: true,
+            participant2: {
+              select: {
+                name: true,
+                picture: true,
+              },
+            },
+            participant2Id: true,
+            messages: {
+              take: 1,
+              orderBy: { createdAt: "desc" },
             },
           },
-          participant1Id: true,
-          participant2: {
-            select: {
-              name: true,
-              picture: true,
-            },
-          },
-          participant2Id: true,
-          messages: {
-            take: 1,
-            orderBy: { createdAt: "desc" },
-          },
-        },
-      });
+        })
+        .then((response) => {
+          if (searchParams?.query?.length > 0) {
+            let filteredConversation = response.filter(
+              (conversation) =>
+                conversation.participant1.name
+                  .toLowerCase()
+                  .includes(searchParams.query.toLowerCase()) ||
+                conversation.participant2.name
+                  .toLowerCase()
+                  .includes(searchParams.query.toLowerCase())
+            );
 
-      if (searchParams?.query?.length > 0) {
-        let filteredConversation = response.filter(
-          (conversation) =>
-            conversation.participant1.name
-              .toLowerCase()
-              .includes(searchParams.query.toLowerCase()) ||
-            conversation.participant2.name
-              .toLowerCase()
-              .includes(searchParams.query.toLowerCase())
-        );
+            prisma.$disconnect();
+            return {
+              data: filteredConversation,
+              message: fetch.conversation.get.success.message,
+              status: fetch.conversation.get.success.status,
+            };
+          }
 
-        return { data: filteredConversation, message: "ok", status: 200 };
-      }
-
-      return { data: response, message: "ok", status: 200 };
-    } catch (error) {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.conversation.get.success.message,
+            status: fetch.conversation.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.conversation.get.error.message,
+            status: fetch.conversation.get.error.status,
+          };
+        });
+    })
+    .catch((error) => {
       console.log(error);
-    } finally {
       prisma.$disconnect();
-    }
-  }
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    });
 };
 
 export const getMessages = async (id) => {
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.message.findMany({
+  return prisma.message
+    .findMany({
       where: {
         conversationId: parseInt(id),
       },
@@ -884,102 +1189,136 @@ export const getMessages = async (id) => {
           },
         },
       },
+    })
+    .then((response) => {
+      prisma.$disconnect();
+      return {
+        data: response,
+        message: fetch.conversation.message.get.success.message,
+        status: fetch.conversation.message.get.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        data: response,
+        message: fetch.conversation.message.get.error.message,
+        status: fetch.conversation.message.get.error.status,
+      };
     });
-
-    return { data: response, message: "ok", status: 200 };
-  } catch (error) {
-    console.log(error);
-  } finally {
-    prisma.$disconnect();
-  }
 };
 
 export const followUser = async (name) => {
   const prisma = new PrismaClient();
 
-  try {
-    const { data, message, status } = await init();
-
-    if (status === 200) {
-      try {
-        const user = await prisma.user.findFirst({
+  return init()
+    .then(async ({ data }) => {
+      return prisma.user
+        .findFirst({
           where: { name: name },
           select: { id: true },
+        })
+        .then(async (user) => {
+          return prisma.follow
+            .create({
+              data: {
+                user1_id: data.id,
+                user2_id: user.id,
+              },
+            })
+            .then(() => {
+              prisma.$disconnect();
+              return {
+                message: fetch.follow.create.success.message,
+                status: fetch.follow.create.success.status,
+              };
+            })
+            .catch((error) => {
+              console.log(error);
+              prisma.$disconnect();
+              return {
+                message: fetch.follow.create.error.message,
+                status: fetch.follow.create.error.status,
+              };
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.user.get.error.message,
+            status: fetch.user.get.error.status,
+          };
         });
-
-        await prisma.follow.create({
-          data: {
-            user1_id: data.id,
-            user2_id: user.id,
-          },
-        });
-
-        return {
-          message: fetch.follow.create.success.message,
-          status: fetch.follow.create.success.status,
-        };
-      } catch (error) {
-        console.log(error);
-        return {
-          message: fetch.follow.create.error.message,
-          status: fetch.follow.create.error.status,
-        };
-      } finally {
-        prisma.$disconnect();
-      }
-    } else if (status === 400) {
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
       return {
-        message: fetch.user.get.error.message,
-        status: fetch.user.get.error.status,
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
       };
-    }
-  } catch (error) {
-    console.log(error);
-    return {
-      message: fetch.user.init.error.message,
-      status: fetch.user.init.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+    });
 };
 
 export const unfollowUser = async (name) => {
   const prisma = new PrismaClient();
 
-  const { data, message, status } = await init();
-
-  if (status === 200) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: { name: name },
-        select: { id: true },
-      });
-
-      await prisma.follow.deleteMany({
-        where: { user1_id: data.id, user2_id: user.id },
-      });
-
-      return true;
-    } catch (error) {
+  return init()
+    .then(async ({ data }) => {
+      return prisma.user
+        .findFirst({
+          where: { name: name },
+          select: { id: true },
+        })
+        .then(async (user) => {
+          return prisma.follow
+            .deleteMany({
+              where: { user1_id: data.id, user2_id: user.id },
+            })
+            .then(() => {
+              prisma.$disconnect();
+              return {
+                message: fetch.follow.delete.success.message,
+                status: fetch.follow.delete.success.status,
+              };
+            })
+            .catch((error) => {
+              console.log(error);
+              prisma.$disconnect();
+              return {
+                message: fetch.follow.delete.error.message,
+                status: fetch.follow.delete.error.status,
+              };
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.user.get.error.message,
+            status: fetch.user.get.error.status,
+          };
+        });
+    })
+    .catch((error) => {
       console.log(error);
-    } finally {
       prisma.$disconnect();
-    }
-  } else if (status === 400) {
-    return false;
-  }
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    });
 };
 
 export const getFollower = async () => {
   const prisma = new PrismaClient();
 
-  try {
-    const { data, message, status } = await init();
-
-    if (status === 200) {
-      try {
-        const response = await prisma.follow.findMany({
+  return init()
+    .then(async ({ data }) => {
+      return prisma.follow
+        .findMany({
           where: {
             user1_id: data.id,
           },
@@ -992,36 +1331,45 @@ export const getFollower = async () => {
               },
             },
           },
+        })
+        .then((response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.follow.get.success.message,
+            status: fetch.follow.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.follow.get.error.message,
+            status: fetch.follow.get.error.status,
+          };
         });
-
-        return { data: response, message: "ok", status: 200 };
-      } catch (error) {
-        console.log(error);
-        return { message: "nop", status: 400 };
-      } finally {
-        prisma.$disconnect();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    });
 };
 
 export const getSpecifiqueUserFollows = async (name) => {
   const prisma = new PrismaClient();
 
-  try {
-    const { data, message, status } = await init();
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: { name: name },
       select: { id: true },
-    });
-
-    if (status === 200) {
-      try {
-        const response = await prisma.follow.findMany({
+    })
+    .then(async (user) => {
+      return prisma.follow
+        .findMany({
           where: {
             user1_id: user.id,
           },
@@ -1034,36 +1382,46 @@ export const getSpecifiqueUserFollows = async (name) => {
               },
             },
           },
+        })
+        .then((response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.follow.get.success.message,
+            status: fetch.follow.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.follow.get.error.message,
+            status: fetch.follow.get.error.status,
+          };
         });
-
-        return { data: response, message: "ok", status: 200 };
-      } catch (error) {
-        console.log(error);
-        return { message: "nop", status: 400 };
-      } finally {
-        prisma.$disconnect();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .catch((error) => {
+      console.log(error);
+      prisma.$disconnect();
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
+    });
 };
 
 export const getSpecifiqueUserFollowers = async (name) => {
   const prisma = new PrismaClient();
 
-  try {
-    const { data, message, status } = await init();
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: { name: name },
       select: { id: true },
-    });
-
-    if (status === 200) {
-      try {
-        const response = await prisma.follow.findMany({
+    })
+    .then(async (user) => {
+      return prisma.follow
+        .findMany({
           where: {
             user2_id: user.id,
           },
@@ -1076,19 +1434,30 @@ export const getSpecifiqueUserFollowers = async (name) => {
               },
             },
           },
+        })
+        .then((response) => {
+          prisma.$disconnect();
+          return {
+            data: response,
+            message: fetch.follower.get.success.message,
+            status: fetch.follower.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          prisma.$disconnect();
+          return {
+            message: fetch.follower.get.error.message,
+            status: fetch.follower.get.error.status,
+          };
         });
-
-        return { data: response, message: "ok", status: 200 };
-      } catch (error) {
-        console.log(error);
-        return { message: "nop", status: 400 };
-      } finally {
-        prisma.$disconnect();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .catch((error) => {
+      prisma.$disconnect();
+      console.log(error);
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
+    });
 };

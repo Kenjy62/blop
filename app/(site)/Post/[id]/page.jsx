@@ -20,14 +20,6 @@ export default async function Page({ params }) {
     return (
       <div className="flex flex-col gap-4">
         <Post userId={user.data.id} post={data} />
-        {data.comments.length > 0 && (
-          <div className="flex justify-end">
-            <select>
-              <option value={"most_recent"}>Most Recent</option>
-              <option value={"most_popular"}>Most Popular</option>
-            </select>
-          </div>
-        )}
         {data.comments.length > 0 &&
           data.comments.reverse().map((comment) => {
             return <Comment key={comment.id} comment={comment} />;

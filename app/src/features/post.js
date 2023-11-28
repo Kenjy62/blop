@@ -6,7 +6,6 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect, useParams } from "next/navigation";
 import { fetch } from "../config/text";
 import { HashtagsExtrator } from "./hashtagsExtractor";
 import { io } from "socket.io-client";
@@ -510,38 +509,47 @@ export async function SharePost(textarea, files, type, postId) {
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  const user = await prisma.user.findFirst({
-    where: {
-      token: token.value,
-    },
-    select: {
-      id: true,
-    },
-  });
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        token: token.value,
+      },
+      select: {
+        id: true,
+      },
+    });
 
-  const data = {
-    content: textarea ? textarea : "",
-    author_id: user.id,
-    createdAt: new Date(),
-    likes: 0,
-    shares: 0,
-    bookmarks: 0,
-    type: "share",
-    updatedAt: new Date(),
-    share_id: parseInt(postId),
-  };
+    const data = {
+      content: textarea ? textarea : "",
+      author_id: user.id,
+      createdAt: new Date(),
+      likes: 0,
+      shares: 0,
+      bookmarks: 0,
+      type: "share",
+      updatedAt: new Date(),
+      share_id: parseInt(postId),
+    };
 
-  await prisma.post.create({ data });
+    await prisma.post.create({ data });
 
-  const socket = io.connect("http://localhost:3001");
-  const socketData = { userid: user.id, post_id: postId };
-  socket.emit("post_share", socketData);
+    const socket = io.connect("http://localhost:3001");
+    const socketData = { userid: user.id, post_id: postId };
+    socket.emit("post_share", socketData);
 
-  prisma.$disconnect();
-  return {
-    message: fetch.post.share.success.message,
-    status: fetch.post.share.success.status,
-  };
+    return {
+      message: fetch.post.share.success.message,
+      status: fetch.post.share.success.status,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: fetch.post.share.error.message,
+      status: fetch.post.share.error.status,
+    };
+  } finally {
+    prisma.$disconnect();
+  }
 }
 
 // Reply To Post

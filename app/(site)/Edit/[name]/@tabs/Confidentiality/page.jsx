@@ -5,18 +5,18 @@ import Setting from "@/app/src/components/User/Setting/Setting";
 import { getConfidentialitySettings } from "@/app/src/features/user";
 
 export default async function Page() {
-  const UserSettings = await getConfidentialitySettings();
+  const { data, message, status } = await getConfidentialitySettings();
 
   const settings = [
     {
       display: "Display Follows for other",
       name: "Display Follows",
-      authorized: UserSettings.display_follow === 1 ? true : false,
+      authorized: data.display_follow === 1 ? true : false,
     },
     {
       display: "Display Followers for other",
       name: "Display Followers",
-      authorized: UserSettings.display_follower === 1 ? true : false,
+      authorized: data.display_follower === 1 ? true : false,
     },
   ];
 

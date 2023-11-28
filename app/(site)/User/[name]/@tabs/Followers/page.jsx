@@ -16,7 +16,7 @@ export default async function Page({ params }) {
 
   const userAuthorization = await getUserConfidentialitySettings(params.name);
 
-  if (userAuthorization.display_follower === 0) {
+  if (userAuthorization.data.display_follower === 0) {
     return <p>This user doesn't allow to display followers</p>;
   }
 

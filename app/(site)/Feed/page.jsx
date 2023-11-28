@@ -10,8 +10,6 @@ import { GetAllPost, GetFollowedPost } from "@/app/src/features/post";
 import { init } from "@/app/src/features/user";
 
 export default async function Page({ searchParams }) {
-  console.log(searchParams.order);
-
   if (!searchParams.order || searchParams.order === "All") {
     const { data, message, status } = await GetAllPost(0, 5);
 
