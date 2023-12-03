@@ -1,13 +1,19 @@
 "use client";
 
-import { RxImage } from "react-icons/rx";
+// Required
 import { useRef, useState } from "react";
 import Image from "next/image";
+
+// Features
 import { Register } from "../../features/user";
+
+// Icons
+import { RxImage } from "react-icons/rx";
 
 export default function Form() {
   const avatar = useRef();
   const cover = useRef();
+  const divRef = useRef();
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -65,7 +71,10 @@ export default function Form() {
   return (
     <>
       {errorMsg}
-      <form className="flex flex-col gap-4 p-4 border rounded-lg min-w-[400px]">
+      <form
+        ref={divRef}
+        className="flex flex-col gap-4 p-4 border rounded-lg min-w-[400px]"
+      >
         <div className="flex flex-col">
           <div className="flex flex-row gap-4">
             <div className="w-[300px] h-32 bg-watermelon-300 rounded-lg flex justify-center relative">

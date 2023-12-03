@@ -18,14 +18,14 @@ export async function POST(req) {
 
     await writeFile(`public/Avatars/${me.data.name}_${file.name}`, buffer);
 
-    const response = await UpdateAvatar(
+    const { data, message, status } = await UpdateAvatar(
       `/Avatars/${me.data.name}_${file.name}`
     );
 
-    if (response === true) {
-      return NextResponse.json("Avatar update successfully!", { status: 200 });
+    if (status === 200) {
+      return NextResponse.json(message, { status: status });
     } else {
-      return NextResponse.json("An error occurred, try again", { status: 500 });
+      return NextResponse.json(message, { status: status });
     }
   } else if (type === "cover") {
     const bytes = await file.arrayBuffer();
@@ -33,12 +33,14 @@ export async function POST(req) {
 
     await writeFile(`public/Covers/${me.data.name}_${file.name}`, buffer);
 
-    const response = await UpdateCover(`/Covers/${me.data.name}_${file.name}`);
+    const { data, message, status } = await UpdateCover(
+      `/Covers/${me.data.name}_${file.name}`
+    );
 
-    if (response === true) {
-      return NextResponse.json("Cover update successfully", { status: 200 });
+    if (status === 200) {
+      return NextResponse.json(message, { status: status });
     } else {
-      return NextResponse.json("An error occurred, try again", { status: 500 });
+      return NextResponse.json(message, { status: status });
     }
   }
 }

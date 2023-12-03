@@ -24,7 +24,11 @@ export default async function Default({ params }) {
     const followsCount = data.userFollower.length;
     const followersCount = data.userFollowed.length;
     const repostCount = data.posts.filter((post) => post.type === "share");
-    const mediasCount = data.posts.filter((post) => post.picture !== null);
+    const mediasCount = data.posts.reduce(
+      (count, post) => count + post.picture.length,
+      0
+    );
+
     return (
       <>
         <div className="w-full">
@@ -51,7 +55,7 @@ export default async function Default({ params }) {
               <Vertical />
               <div className="flex flex-col">
                 <span>{repostCount.length} Reposts</span>
-                <span>{mediasCount?.length} Medias</span>
+                <span>{mediasCount ? mediasCount : "0"} Medias</span>
               </div>
               <Vertical />
               <div className="flex flex-col">

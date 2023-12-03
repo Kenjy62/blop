@@ -19,17 +19,17 @@ export default function UserCardBig({ user }) {
   var color;
 
   if (colorScheme === "Watermelon") {
-    color = `w-48 h-44 border  hover:border-watermelon-400 dark:hover:border-watermelon-400 dark:bg-night-400 rounded-lg`;
+    color = `w-48 h-44 border dark:border-night-200 hover:border-watermelon-400 dark:hover:border-watermelon-400 dark:bg-night-400 rounded-lg`;
   } else if (colorScheme === "purple-heart") {
-    color = `w-48 h-44 border  hover:border-purple-heart-400 dark:hover:border-purple-heart-400 dark:bg-night-400 rounded-lg`;
+    color = `w-48 h-44 border dark:border-night-200 hover:border-purple-heart-400 dark:hover:border-purple-heart-400 dark:bg-night-400 rounded-lg`;
   } else if (colorScheme === "cinnabar") {
-    color = `w-48 h-44 border  hover:border-cinnabar-400 dark:hover:border-cinnabar-400 dark:bg-night-400 rounded-lg`;
+    color = `w-48 h-44 border dark:border-night-200 hover:border-cinnabar-400 dark:hover:border-cinnabar-400 dark:bg-night-400 rounded-lg`;
   } else if (colorScheme === "harlequin") {
-    color = `w-48 h-44 border  hover:border-harlequin-400 dark:hover:border-harlequin-400 dark:bg-night-400 rounded-lg`;
+    color = `w-48 h-44 border dark:border-night-200 hover:border-harlequin-400 dark:hover:border-harlequin-400 dark:bg-night-400 rounded-lg`;
   } else if (colorScheme === "fire-bush") {
-    color = `w-48 h-44 border  hover:border-fire-bush-400 dark:hover:border-fire-bush-400 dark:bg-night-400 rounded-lg`;
+    color = `w-48 h-44 border dark:border-night-200 hover:border-fire-bush-400 dark:hover:border-fire-bush-400 dark:bg-night-400 rounded-lg`;
   } else if (colorScheme === "royal-blue") {
-    color = `w-48 h-44 border  hover:border-royal-blue-400 dark:hover:border-royal-blue-400 dark:bg-night-400 rounded-lg`;
+    color = `w-48 h-44 border dark:border-night-200 hover:border-royal-blue-400 dark:hover:border-royal-blue-400 dark:bg-night-400 rounded-lg`;
   }
 
   return (

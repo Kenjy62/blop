@@ -55,6 +55,10 @@ io.on("connection", (socket) => {
         },
       });
 
+      if (socketData.userid === response.author.id) {
+        return;
+      }
+
       // Create notification
       const notif = await prisma.notification.create({
         data: {
@@ -63,6 +67,7 @@ io.on("connection", (socket) => {
           for_id: response.author.id,
           isRead: 0,
           post_id: parseInt(socketData.post_id),
+          createdAt: new Date(),
         },
       });
 
@@ -121,6 +126,10 @@ io.on("connection", (socket) => {
         },
       });
 
+      if (socketData.userid === response.author.id) {
+        return;
+      }
+
       // Create notification
       const notif = await prisma.notification.create({
         data: {
@@ -129,6 +138,7 @@ io.on("connection", (socket) => {
           for_id: response.author.id,
           isRead: 0,
           post_id: parseInt(socketData.post_id),
+          createdAt: new Date(),
         },
       });
 
@@ -187,6 +197,10 @@ io.on("connection", (socket) => {
         },
       });
 
+      if (response.author.id === socketData.userid) {
+        return;
+      }
+
       // Create notification
       const notif = await prisma.notification.create({
         data: {
@@ -195,6 +209,7 @@ io.on("connection", (socket) => {
           for_id: response.author.id,
           isRead: 0,
           post_id: parseInt(socketData.post_id),
+          createdAt: new Date(),
         },
       });
 
@@ -260,19 +275,45 @@ io.on("connection", (socket) => {
         select: { socket: true },
       });
 
+      const data = {
+        type: "chat",
+        from: parseInt(socketData.from_id),
+        for_id: parseInt(conversation.participant1Id),
+        conversation_id: parseInt(socketData.conversation_id),
+        isRead: 0,
+        createdAt: new Date(),
+      };
+
       // Create notification
-      await prisma.notification.create({
-        data: {
-          type: "chat",
-          from: parseInt(socketData.from_id),
-          for_id: parseInt(conversation.participant1Id),
-          conversation_id: parseInt(socketData.conversation_id),
-          isRead: 0,
+      const response = await prisma.notification.create({
+        data,
+      });
+
+      const thisNotif = await prisma.notification.findFirst({
+        where: {
+          id: response.id,
+        },
+        select: {
+          id: true,
+          type: true,
+          isRead: true,
+          Conversation: {
+            select: {
+              id: true,
+            },
+          },
+          author: {
+            select: {
+              name: true,
+              id: true,
+              picture: true,
+            },
+          },
         },
       });
 
       io.to(user.socket).emit("new_message");
-      io.to(user.socket).emit("new_notification_message");
+      io.to(user.socket).emit("new_notification_message", thisNotif);
     } else {
       const user = await prisma.user.findFirst({
         where: { id: parseInt(conversation.participant2Id) },
@@ -287,6 +328,7 @@ io.on("connection", (socket) => {
           for_id: parseInt(conversation.participant2Id),
           conversation_id: parseInt(socketData.conversation_id),
           isRead: 0,
+          createdAt: new Date(),
         },
       });
 

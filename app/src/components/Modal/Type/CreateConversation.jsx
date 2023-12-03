@@ -8,6 +8,10 @@ import { newConversation } from "@/app/src/features/chat";
 // Components
 import Title from "../../UI/Title/Title";
 import Picture from "../../UI/User/Picture";
+import { ToastError } from "../../UI/Toast/Toasts";
+
+// Toast
+import toast from "react-hot-toast";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
@@ -49,7 +53,22 @@ export default function CreateConversation({ userFollowed }) {
 
   async function createConversation(id) {
     const { data, message, status } = await newConversation(id);
-    router.push(`/Message/Conversation/${data.id}`);
+
+    if (status === 200) {
+      router.push(`/Message/Conversation/${data.id}`);
+    }
+
+    if (status === 400) {
+      toast(<ToastError message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
+      return;
+    }
   }
 
   if (followed) {

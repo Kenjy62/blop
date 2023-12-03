@@ -8,14 +8,15 @@ import { ToastError } from "../../UI/Toast/Toasts";
 
 // Features
 import { ReplyToPost } from "@/app/src/features/post";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 // Toast
 import toast from "react-hot-toast";
 
-export default function Reply({ defaultTheme, postId }) {
+export default function Reply({ postId }) {
   const [textarea, setTextarea] = useState();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Transition with SA
   let [isPending, startTransition] = useTransition();
@@ -37,7 +38,12 @@ export default function Reply({ defaultTheme, postId }) {
       }
 
       if (status === 200) {
-        router.push(`/Post/${postId}`);
+        if (pathname !== `/Post/${postId}`) {
+          router.push(`/Post/${postId}`);
+        } else {
+          router.back();
+          router.refresh();
+        }
       }
     });
   };

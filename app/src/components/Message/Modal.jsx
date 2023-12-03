@@ -7,7 +7,8 @@ import CreateConversation from "../Modal/Type/CreateConversation";
 // Required
 import { usePathname, useRouter } from "next/navigation";
 
-export default function Modal({ userFollowed }) {
+export default function Modal({ userFollowed, defaultTheme }) {
+  console.log(defaultTheme);
   const router = useRouter();
 
   const pathname = usePathname();
@@ -19,7 +20,7 @@ export default function Modal({ userFollowed }) {
     <ReactModal
       isOpen={pathname.includes("/Message/Create") ? true : false}
       onRequestClose={() => router.push("/Message")}
-      overlayClassName={""}
+      overlayClassName={defaultTheme ? "dark" : ""}
       className={"bg-transparent"}
       style={{
         overlay: {

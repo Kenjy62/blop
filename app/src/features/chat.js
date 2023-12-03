@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { init } from "./user";
 import { io } from "socket.io-client";
 
+// Config
+import { fetch } from "../config/text";
+
 export const send = async (formData, conversation_id, sender_id) => {
   const prisma = new PrismaClient();
 
@@ -54,50 +57,76 @@ export const send = async (formData, conversation_id, sender_id) => {
 export const newConversation = async (id) => {
   const prisma = new PrismaClient();
 
-  try {
-    const { data, message, status } = await init();
+  return init()
+    .then(async ({ data }) => {
+      return prisma.conversation
+        .findFirst({
+          where: {
+            OR: [
+              { participant1Id: id, participant2Id: data.id },
+              { participant1Id: data.id, participant2Id: id },
+            ],
+          },
+          select: {
+            id: true,
+          },
+        })
+        .then(async (response) => {
+          if (response) {
+            return {
+              data: response,
+              message: fetch.conversation.create.alreadyExit.message,
+              status: fetch.conversation.create.alreadyExit.status,
+            };
+          }
 
-    const response = await prisma.conversation.findFirst({
-      where: {
-        OR: [
-          { participant1Id: id, participant2Id: data.id },
-          { participant1Id: data.id, participant2Id: id },
-        ],
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (response) {
-      return { data: response, message: "already", status: 200 };
-    }
-
-    const newConv = await prisma.conversation.create({
-      data: {
-        participant1Id: data.id,
-        participant2Id: id,
-      },
-    });
-
-    await prisma.message.create({
-      data: {
-        content: `${data.name} à crée une conversation avec vous.`,
-        createdAt: new Date(),
-        senderId: parseInt(data.id),
-        conversationId: parseInt(newConv.id),
-        isRead: false,
-      },
-    });
-
-    return { data: newConv, message: "create", status: 200 };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: "nop",
-      status: 400,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+          return prisma.conversation
+            .create({
+              data: {
+                participant1Id: data.id,
+                participant2Id: id,
+              },
+            })
+            .then(async (response) => {
+              return prisma.message
+                .create({
+                  data: {
+                    content: `${data.name} à crée une conversation avec vous.`,
+                    createdAt: new Date(),
+                    senderId: parseInt(data.id),
+                    conversationId: parseInt(response.id),
+                    isRead: false,
+                  },
+                })
+                .then(async () => {
+                  return {
+                    data: response,
+                    message: fetch.conversation.create.success.message,
+                    status: fetch.conversation.create.success.status,
+                  };
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+              return {
+                message: fetch.conversation.create.error.message,
+                status: fetch.conversation.create.error.statut,
+              };
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    })
+    .finally(() => prisma.$disconnect());
 };

@@ -50,27 +50,31 @@ export default function LoadMore({ user, order }) {
   }, []);
 
   async function load() {
-    setTimeout(async () => {
-      if (!order || order === "All") {
-        const { data, message, status } = await GetAllPost(skip, limit);
-        if (data.length < 5) {
-          setNoPost(true);
-        } else {
-          setSkip((prev) => prev + 5);
-          setLimit((prev) => prev + 5);
-          setPost(data);
+    if (!noPost) {
+      setTimeout(async () => {
+        if (!order || order === "All") {
+          const { data, message, status } = await GetAllPost(skip, limit);
+          if (data.length < 5) {
+            setPost(data);
+            setNoPost(true);
+          } else {
+            setSkip((prev) => prev + 5);
+            setLimit((prev) => prev + 5);
+            setPost(data);
+          }
+        } else if (order === "Followed") {
+          const { data, message, status } = await GetFollowedPost(skip, limit);
+          if (data.length < 5) {
+            setPost(data);
+            setNoPost(true);
+          } else {
+            setSkip((prev) => prev + 5);
+            setLimit((prev) => prev + 5);
+            setPost(data);
+          }
         }
-      } else if (order === "Followed") {
-        const { data, message, status } = await GetFollowedPost(skip, limit);
-        if (data.length === 0) {
-          setNoPost(true);
-        } else {
-          setSkip((prev) => prev + 5);
-          setLimit((prev) => prev + 5);
-          setPost(data);
-        }
-      }
-    }, 5000);
+      }, 5000);
+    }
   }
 
   useEffect(() => {
@@ -82,7 +86,7 @@ export default function LoadMore({ user, order }) {
   useEffect(() => {
     setPost([]);
     setNoPost(false);
-    setSkip(0);
+    setSkip(5);
     setLimit(5);
   }, [order]);
 

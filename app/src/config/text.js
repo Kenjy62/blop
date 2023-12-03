@@ -250,6 +250,18 @@ export const fetch = {
         },
       },
     },
+    profil: {
+      update: {
+        success: {
+          message: "Profile updated successfully",
+          status: 200,
+        },
+        error: {
+          message: "Profile could not updated successfully",
+          status: 400,
+        },
+      },
+    },
   },
   sidebar: {
     tophashtags: {
@@ -318,6 +330,20 @@ export const fetch = {
     },
   },
   conversation: {
+    create: {
+      alreadyExit: {
+        message: "A conversation already exists with this user",
+        status: 200,
+      },
+      success: {
+        message: "The conversation was created",
+        status: 200,
+      },
+      error: {
+        message: "The conversation could not be created, try again",
+        statut: 400,
+      },
+    },
     get: {
       success: {
         message: "The list conversations was successfully retrieved.",
@@ -337,11 +363,25 @@ export const fetch = {
           status: 200,
         },
         error: {
+          noExist: {
+            message: `This conversation doesn't exist.`,
+            status: 400,
+          },
           message:
             "The list of messages from this conversation could not be successfully retrieved.",
           status: 400,
         },
       },
+    },
+  },
+  searchbar: {
+    success: {
+      message: "Search results were found.",
+      status: 200,
+    },
+    error: {
+      message: "No results when searching",
+      status: 400,
     },
   },
 };

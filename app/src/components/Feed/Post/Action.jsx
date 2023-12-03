@@ -1,5 +1,6 @@
 // Required
 import Link from "next/link";
+import { useState } from "react";
 
 // Features
 import { DeletePost, ReactionPost } from "@/app/src/features/post";
@@ -11,7 +12,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 // Components
-import { ToastSuccess } from "../../UI/Toast/Toasts";
+import { ToastSuccess, ToastError } from "../../UI/Toast/Toasts";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
@@ -40,8 +41,8 @@ export default function Actions({
   isDeleteable,
   createdAt,
 }) {
-  const alreadyLike = UsersLikes.find(
-    (reaction) => reaction.user.id === parseInt(userId)
+  const [isLike, setIsLike] = useState(
+    UsersLikes.find((reaction) => reaction.user.id === parseInt(userId))
   );
 
   const alreadyBookmarks = UsersBookmarks.find(
@@ -97,6 +98,14 @@ export default function Actions({
     }
   };
 
+  const actionReact = async (type) => {
+    const { data, message, status } = await ReactionPost(postId, type);
+
+    if (status === 200) {
+      setIsLike(!isLike);
+    }
+  };
+
   const colorScheme = CheckColorScheme();
 
   var color;
@@ -136,13 +145,13 @@ export default function Actions({
           </span>
         </Link>
         <span className={hover}>
-          {alreadyLike ? (
+          {isLike ? (
             <RxHeartFilled
-              onClick={() => ReactionPost(postId, "remove")}
+              onClick={() => actionReact("remove")}
               className={color}
             />
           ) : (
-            <RxHeart onClick={() => ReactionPost(postId, "add")} />
+            <RxHeart onClick={() => actionReact("add")} />
           )}
         </span>
 
@@ -154,7 +163,7 @@ export default function Actions({
             />
           </span>
         ) : (
-          <Link href={`?bookmark=${postId}`} className={hover}>
+          <Link href={`?bookmark=${postId}`} scroll={false} className={hover}>
             <RxBookmark />
           </Link>
         )}

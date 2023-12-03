@@ -13,104 +13,109 @@ import { PrismaClient } from "@prisma/client";
 export async function Register(formData) {
   const prisma = new PrismaClient();
 
-  const ifExist = await prisma.user.findFirst({
-    where: {
-      OR: [
-        {
-          name: formData.get("name"),
-        },
-        { email: formData.get("email") },
-      ],
-    },
-  });
-
-  if (ifExist) {
-    return {
-      message: fetch.user.register.error.alreadyExist.message,
-      status: fetch.user.register.error.status,
-    };
-  }
-
-  if (!ifExist) {
-    const avatar = formData.get("avatar");
-    const cover = formData.get("cover");
-
-    if (!avatar.size === 0 || !cover.size === 0) {
-      try {
-        await prisma.user.create({
-          data: {
-            name: formData.get("name"),
-            email: formData.get("email"),
-            password: formData.get("password"),
-            picture: "/Avatars/Default.png",
-            cover: "/Covers/Default.png",
-          },
-        });
+  return prisma.user
+    .findFirst({
+      where: {
+        OR: [{ name: formData.get("name") }, { email: formData.get("email") }],
+      },
+    })
+    .then(async (data) => {
+      if (data !== null) {
         return {
-          message: fetch.user.register.success.message,
-          status: fetch.user.register.success.status,
+          message: fetch.user.register.error.alreadyExist.message,
+          status: fetch.user.register.error.alreadyExist.status,
         };
-      } catch {
-        return {
-          message: fetch.user.register.error.message,
-          status: fetch.user.register.error.status,
-        };
-      } finally {
-        prisma.$disconnect();
+      } else {
+        const avatar = formData.get("avatar");
+        const cover = formData.get("cover");
+
+        if (avatar.size === 0 || cover.size === 0) {
+          return prisma.user
+            .create({
+              data: {
+                name: formData.get("name"),
+                email: formData.get("email"),
+                password: formData.get("password"),
+                picture: "/Avatars/Default.png",
+                cover: "/Covers/Default.png",
+              },
+            })
+            .then(async () => {
+              return {
+                message: fetch.user.register.success.message,
+                status: fetch.user.register.success.status,
+              };
+            })
+            .catch((error) => {
+              console.log(error);
+              return {
+                message: fetch.user.register.error.message,
+                status: fetch.user.register.error.status,
+              };
+            });
+        }
+
+        if (avatar.size > 0 || cover.size > 0) {
+          const avatarBytes = await avatar.arrayBuffer();
+          const avatarBuffer = Buffer.from(avatarBytes);
+
+          const coverBytes = await cover.arrayBuffer();
+          const coverBuffer = Buffer.from(coverBytes);
+
+          await writeFile(
+            `public/Covers/${formData.get("name")}_${cover.name}`,
+            coverBuffer
+          );
+
+          await writeFile(
+            `public/Avatars/${formData.get("name")}_${avatar.name}`,
+            avatarBuffer
+          );
+
+          return prisma.user
+            .create({
+              data: {
+                name: formData.get("name"),
+                email: formData.get("email"),
+                password: formData.get("password"),
+                picture: `/Avatars/${formData.get("name")}_${avatar.name}`,
+                cover: `/Covers/${formData.get("name")}_${cover.name}`,
+              },
+            })
+            .then(() => {
+              return {
+                message: fetch.user.register.success.message,
+                status: fetch.user.register.success.status,
+              };
+            })
+            .catch((error) => {
+              console.log(error);
+              return {
+                message: fetch.user.register.error.message,
+                status: fetch.user.register.error.status,
+              };
+            });
+        }
       }
-    }
-
-    if (avatar.size > 0 || cover.size > 0) {
-      try {
-        const avatarBytes = await avatar.arrayBuffer();
-        const avatarBuffer = Buffer.from(avatarBytes);
-
-        const coverBytes = await cover.arrayBuffer();
-        const coverBuffer = Buffer.from(coverBytes);
-
-        await writeFile(
-          `public/Covers/${formData.get("name")}_${cover.name}`,
-          coverBuffer
-        );
-
-        await writeFile(
-          `public/Avatars/${formData.get("name")}_${avatar.name}`,
-          avatarBuffer
-        );
-
-        await prisma.user.create({
-          data: {
-            name: formData.get("name"),
-            email: formData.get("email"),
-            password: formData.get("password"),
-            picture: `/Avatars/${formData.get("name")}_${avatar.name}`,
-            cover: `/Covers/${formData.get("name")}_${cover.name}`,
-          },
-        });
-
-        return {
-          message: fetch.user.register.success.message,
-          status: fetch.user.register.success.status,
-        };
-      } catch (error) {
-        console.log(error);
-        return {
-          message: fetch.user.register.error.message,
-          status: fetch.user.register.error.status,
-        };
-      } finally {
-        prisma.$disconnect();
-      }
-    }
-  }
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.register.error.message,
+        status: fetch.user.register.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
 }
 
 // Login User
 export async function Login(formData) {
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         email: formData.get("email"),
         password: formData.get("password"),
@@ -120,31 +125,44 @@ export async function Login(formData) {
         name: true,
         picture: true,
       },
+    })
+    .then(async (data) => {
+      const token = jwt.sign({ token: data.id }, "randomKey");
+      return prisma.user
+        .update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            token: token,
+          },
+        })
+        .then(() => {
+          cookies().set("token", token);
+          return {
+            data: token,
+            message: fetch.user.login.success.message,
+            status: fetch.user.login.success.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.login.error.message,
+        status: fetch.user.login.error.statut,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.login.error.message,
+        status: fetch.user.login.error.statut,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
-
-    const token = jwt.sign({ token: response.id }, "randomKey");
-    await prisma.user.update({
-      where: {
-        id: response.id,
-      },
-      data: {
-        token: token,
-      },
-    });
-    cookies().set("token", token);
-    return {
-      data: token,
-      message: fetch.user.login.success.message,
-      status: fetch.user.login.success.status,
-    };
-  } catch {
-    return {
-      message: fetch.user.login.error.message,
-      status: fetch.user.login.error.statut,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 }
 
 // Logout User
@@ -169,8 +187,8 @@ export const init = async () => {
   const token = cookies().get("token")?.value;
   const prisma = new PrismaClient();
 
-  try {
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         token: token,
       },
@@ -185,82 +203,150 @@ export const init = async () => {
         notification: true,
         colorScheme: true,
       },
+    })
+    .then(async (data) => {
+      return {
+        data: data,
+        message: fetch.user.init.success.message,
+        status: fetch.user.init.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
-    return {
-      data: user,
-      message: fetch.user.init.success.message,
-      status: fetch.user.init.success.status,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: fetch.user.init.error.message,
-      status: fetch.user.init.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 };
 
 // Update User Avatar
 export const UpdateAvatar = async (filename) => {
-  const { data } = await init();
-
   const prisma = new PrismaClient();
 
-  try {
-    await prisma.user.update({
-      where: {
-        id: parseInt(data.id),
-      },
-      data: {
-        picture: filename,
-      },
+  return init()
+    .then(async ({ data }) => {
+      return prisma.user
+        .update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            picture: filename,
+          },
+        })
+        .then(() => {
+          return {
+            message: fetch.user.profil.update.success.message,
+            status: fetch.user.profil.update.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return {
+            message: fetch.user.profil.update.error.message,
+            status: fetch.user.profil.update.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
-    return true;
-  } catch (error) {
-    return false;
-  }
 };
 
 // Update User Cover
 export const UpdateCover = async (filename) => {
-  const { data } = await init();
-
   const prisma = new PrismaClient();
 
-  try {
-    await prisma.user.update({
-      where: {
-        id: parseInt(data.id),
-      },
-      data: {
-        cover: filename,
-      },
+  return init()
+    .then(async ({ data }) => {
+      return prisma.user
+        .update({
+          where: {
+            id: parseInt(data.id),
+          },
+          data: {
+            cover: filename,
+          },
+        })
+        .then(() => {
+          return {
+            message: fetch.user.profil.update.success.message,
+            status: fetch.user.profil.update.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return {
+            message: fetch.user.profil.update.error.message,
+            status: fetch.user.profil.update.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
-    return true;
-  } catch (error) {
-    return false;
-  }
 };
 
 // Get User Notifications Settings
 export const getNotificationsSettings = async () => {
-  const me = await init();
-
   const prisma = new PrismaClient();
-  const response = await prisma.user.findFirst({
-    where: {
-      id: me.id,
-    },
-    select: {
-      like_notification: true,
-      message_notification: true,
-      comment_notification: true,
-    },
-  });
 
-  return response;
+  return init()
+    .then(async ({ data }) => {
+      return prisma.user
+        .findFirst({
+          where: {
+            id: data.id,
+          },
+          select: {
+            like_notification: true,
+            message_notification: true,
+            comment_notification: true,
+          },
+        })
+        .then((response) => {
+          return {
+            data: response,
+            message: fetch.user.get.success.message,
+            status: fetch.user.get.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return {
+            message: fetch.user.get.error.message,
+            status: fetch.user.get.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
 };
 
 // Get User Notifications Settings
@@ -288,7 +374,6 @@ export const getConfidentialitySettings = async () => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.user.get.error.message,
             status: fetch.user.get.error.status,
@@ -297,11 +382,13 @@ export const getConfidentialitySettings = async () => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -327,11 +414,13 @@ export const getUserConfidentialitySettings = async (name) => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -367,7 +456,6 @@ export const updateNotificationSetting = async (type, color) => {
               })
               .catch((error) => {
                 console.log(error);
-                prisma.$disconnect();
                 return {
                   message: fetch.user.setting.update.error.message,
                   status: fetch.user.setting.update.error.statut,
@@ -375,7 +463,6 @@ export const updateNotificationSetting = async (type, color) => {
               });
           })
           .catch((error) => {
-            prisma.$disconnect();
             console.log(error);
             return {
               message: fetch.user.get.error.message,
@@ -409,7 +496,6 @@ export const updateNotificationSetting = async (type, color) => {
               })
               .catch((error) => {
                 console.log(error);
-                prisma.$disconnect();
                 return {
                   message: fetch.user.setting.update.error.message,
                   status: fetch.user.setting.update.error.statut,
@@ -418,7 +504,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.get.error.message,
               status: fetch.user.get.error.status,
@@ -451,7 +536,6 @@ export const updateNotificationSetting = async (type, color) => {
               })
               .catch((error) => {
                 console.log(error);
-                prisma.$disconnect();
                 return {
                   message: fetch.user.setting.update.error.message,
                   status: fetch.user.setting.update.error.statut,
@@ -460,7 +544,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.get.error.message,
               status: fetch.user.get.error.status,
@@ -490,7 +573,6 @@ export const updateNotificationSetting = async (type, color) => {
               })
               .catch((error) => {
                 console.log(error);
-                prisma.$disconnect();
                 return {
                   message: fetch.user.setting.update.error.message,
                   status: fetch.user.setting.update.error.statut,
@@ -499,7 +581,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.get.error.message,
               status: fetch.user.get.error.statut,
@@ -531,7 +612,6 @@ export const updateNotificationSetting = async (type, color) => {
               })
               .catch((error) => {
                 console.log(error);
-                prisma.$disconnect();
                 return {
                   message: fetch.user.setting.update.error.message,
                   status: fetch.user.setting.update.error.statut,
@@ -540,7 +620,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.get.error.message,
               status: fetch.user.get.error.status,
@@ -574,7 +653,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.setting.update.error.message,
               status: fetch.user.setting.update.error.statut,
@@ -582,7 +660,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.get.error.message,
               status: fetch.user.get.error.status,
@@ -608,7 +685,6 @@ export const updateNotificationSetting = async (type, color) => {
           })
           .catch((error) => {
             console.log(error);
-            prisma.$disconnect();
             return {
               message: fetch.user.setting.update.error.message,
               status: fetch.user.setting.update.error.statut,
@@ -618,11 +694,13 @@ export const updateNotificationSetting = async (type, color) => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -713,7 +791,6 @@ export async function GetUserPosts(name) {
           },
         })
         .then((response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.post.getUserPosts.success.message,
@@ -722,7 +799,6 @@ export async function GetUserPosts(name) {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.post.getUserPosts.error.message,
             status: fetch.post.getUserPosts.error.status,
@@ -730,11 +806,13 @@ export async function GetUserPosts(name) {
         });
     })
     .catch(() => {
-      prisma.$disconnect();
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 }
 
@@ -819,7 +897,6 @@ export async function GetUserPostsLiked(name) {
           },
         })
         .then((response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.user.post.get.liked.success.message,
@@ -828,7 +905,6 @@ export async function GetUserPostsLiked(name) {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.user.post.get.liked.error.message,
             status: fetch.user.post.get.liked.error.status,
@@ -836,11 +912,13 @@ export async function GetUserPostsLiked(name) {
         });
     })
     .catch(() => {
-      prisma.$disconnect();
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 }
 
@@ -934,7 +1012,6 @@ export async function GetUserPostsShared(name) {
           },
         })
         .then((response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.user.post.get.shared.success.message,
@@ -943,7 +1020,6 @@ export async function GetUserPostsShared(name) {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.user.post.get.shared.error.message,
             status: fetch.user.post.get.shared.error.status,
@@ -951,11 +1027,65 @@ export async function GetUserPostsShared(name) {
         });
     })
     .catch(() => {
-      prisma.$disconnect();
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.message.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
+}
+
+export async function GetUserMedias(name) {
+  const prisma = new PrismaClient();
+
+  return prisma.user
+    .findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        id: true,
+      },
+    })
+    .then(async (user) => {
+      return prisma.post
+        .findMany({
+          where: {
+            author_id: user.id,
+          },
+          select: {
+            id: true,
+            picture: true,
+          },
+        })
+        .then(async (data) => {
+          const filteredData = data.filter((post) => post.picture.length > 0);
+
+          return {
+            data: filteredData,
+            message: "ok",
+            status: 200,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return {
+            message: "lol",
+            status: 400,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.get.error.message,
+        status: fetch.user.get.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 }
 
@@ -998,7 +1128,6 @@ export async function GetUserDetails(name) {
       },
     })
     .then((response) => {
-      prisma.$disconnect();
       return {
         data: response,
         message: fetch.user.get.success.message,
@@ -1007,11 +1136,13 @@ export async function GetUserDetails(name) {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 }
 
@@ -1049,7 +1180,6 @@ export const getNotifications = async () => {
           },
         })
         .then(async (response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.user.notification.get.success.message,
@@ -1058,7 +1188,6 @@ export const getNotifications = async () => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.user.notification.get.error.message,
             status: fetch.user.notification.get.error.status,
@@ -1067,11 +1196,13 @@ export const getNotifications = async () => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1119,7 +1250,6 @@ export const getConversations = async (searchParams) => {
                   .includes(searchParams.query.toLowerCase())
             );
 
-            prisma.$disconnect();
             return {
               data: filteredConversation,
               message: fetch.conversation.get.success.message,
@@ -1127,7 +1257,6 @@ export const getConversations = async (searchParams) => {
             };
           }
 
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.conversation.get.success.message,
@@ -1136,7 +1265,6 @@ export const getConversations = async (searchParams) => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.conversation.get.error.message,
             status: fetch.conversation.get.error.status,
@@ -1145,11 +1273,13 @@ export const getConversations = async (searchParams) => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1190,22 +1320,29 @@ export const getMessages = async (id) => {
         },
       },
     })
-    .then((response) => {
-      prisma.$disconnect();
-      return {
-        data: response,
-        message: fetch.conversation.message.get.success.message,
-        status: fetch.conversation.message.get.success.status,
-      };
+    .then(async (response) => {
+      if (response.length === 0) {
+        return {
+          message: fetch.conversation.message.get.error.noExist.message,
+          status: fetch.conversation.message.get.error.noExist.status,
+        };
+      } else {
+        return {
+          data: response,
+          message: fetch.conversation.message.get.success.message,
+          status: fetch.conversation.message.get.success.status,
+        };
+      }
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
-        data: response,
         message: fetch.conversation.message.get.error.message,
         status: fetch.conversation.message.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1228,7 +1365,6 @@ export const followUser = async (name) => {
               },
             })
             .then(() => {
-              prisma.$disconnect();
               return {
                 message: fetch.follow.create.success.message,
                 status: fetch.follow.create.success.status,
@@ -1236,7 +1372,6 @@ export const followUser = async (name) => {
             })
             .catch((error) => {
               console.log(error);
-              prisma.$disconnect();
               return {
                 message: fetch.follow.create.error.message,
                 status: fetch.follow.create.error.status,
@@ -1245,7 +1380,6 @@ export const followUser = async (name) => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.user.get.error.message,
             status: fetch.user.get.error.status,
@@ -1254,11 +1388,13 @@ export const followUser = async (name) => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1278,7 +1414,6 @@ export const unfollowUser = async (name) => {
               where: { user1_id: data.id, user2_id: user.id },
             })
             .then(() => {
-              prisma.$disconnect();
               return {
                 message: fetch.follow.delete.success.message,
                 status: fetch.follow.delete.success.status,
@@ -1286,7 +1421,6 @@ export const unfollowUser = async (name) => {
             })
             .catch((error) => {
               console.log(error);
-              prisma.$disconnect();
               return {
                 message: fetch.follow.delete.error.message,
                 status: fetch.follow.delete.error.status,
@@ -1295,7 +1429,6 @@ export const unfollowUser = async (name) => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.user.get.error.message,
             status: fetch.user.get.error.status,
@@ -1304,11 +1437,13 @@ export const unfollowUser = async (name) => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1333,7 +1468,6 @@ export const getFollower = async () => {
           },
         })
         .then((response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.follow.get.success.message,
@@ -1342,7 +1476,6 @@ export const getFollower = async () => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.follow.get.error.message,
             status: fetch.follow.get.error.status,
@@ -1351,11 +1484,13 @@ export const getFollower = async () => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.init.error.message,
         status: fetch.user.init.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1384,7 +1519,6 @@ export const getSpecifiqueUserFollows = async (name) => {
           },
         })
         .then((response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.follow.get.success.message,
@@ -1393,7 +1527,6 @@ export const getSpecifiqueUserFollows = async (name) => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.follow.get.error.message,
@@ -1403,11 +1536,13 @@ export const getSpecifiqueUserFollows = async (name) => {
     })
     .catch((error) => {
       console.log(error);
-      prisma.$disconnect();
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };
 
@@ -1436,7 +1571,6 @@ export const getSpecifiqueUserFollowers = async (name) => {
           },
         })
         .then((response) => {
-          prisma.$disconnect();
           return {
             data: response,
             message: fetch.follower.get.success.message,
@@ -1445,7 +1579,6 @@ export const getSpecifiqueUserFollowers = async (name) => {
         })
         .catch((error) => {
           console.log(error);
-          prisma.$disconnect();
           return {
             message: fetch.follower.get.error.message,
             status: fetch.follower.get.error.status,
@@ -1453,11 +1586,13 @@ export const getSpecifiqueUserFollowers = async (name) => {
         });
     })
     .catch((error) => {
-      prisma.$disconnect();
       console.log(error);
       return {
         message: fetch.user.get.error.message,
         status: fetch.user.get.error.status,
       };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
 };

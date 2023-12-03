@@ -43,7 +43,7 @@ export default function Messages({ user_id, data }) {
   const [isOpen, setIsOpen] = useState(false);
   const divRef = useRef();
 
-  const { socketInit, socket } = useContext(UserContext);
+  const { socket } = useContext(UserContext);
 
   const handleClick = () => {
     setIsOpen(!isOpen);

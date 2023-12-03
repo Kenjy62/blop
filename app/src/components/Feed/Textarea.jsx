@@ -27,6 +27,8 @@ import { ToastError } from "../UI/Toast/Toasts";
 export default function Textarea() {
   const colorScheme = CheckColorScheme();
 
+  const buttonRef = useRef();
+
   // States
   const [files, setFiles] = useState([]);
   const [textarea, setTextarea] = useState();
@@ -131,7 +133,7 @@ export default function Textarea() {
   // Liste if key enter is pressed
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      post();
+      buttonRef.current.click();
     }
   };
 
@@ -184,7 +186,7 @@ export default function Textarea() {
               />
             </div>
             <div>
-              <button formAction={post}>
+              <button ref={buttonRef} formAction={post}>
                 <Button>
                   {isPending ? "Loading..." : <RxPaperPlane size={18} />}
                 </Button>

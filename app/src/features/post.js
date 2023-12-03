@@ -16,8 +16,8 @@ import { getFollower } from "./user";
 export async function GetAllPost(skip, limit) {
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.post.findMany({
+  return prisma.post
+    .findMany({
       select: {
         id: true,
         createdAt: true,
@@ -73,21 +73,22 @@ export async function GetAllPost(skip, limit) {
       },
       skip: skip,
       take: limit,
-    });
-    return {
-      data: response,
-      message: fetch.post.getAll.success.message,
-      status: fetch.post.getAll.success.status,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: fetch.post.getAll.error.message,
-      status: fetch.post.getAll.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .then(async (response) => {
+      return {
+        data: response,
+        message: fetch.post.getAll.success.message,
+        status: fetch.post.getAll.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.post.getAll.error.message,
+        status: fetch.post.getAll.error.status,
+      };
+    })
+    .finally(() => prisma.$disconnect());
 }
 
 // Get Followed Post List for Feed
@@ -103,8 +104,8 @@ export async function GetFollowedPost(skip, limit) {
 
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.post.findMany({
+  return prisma.post
+    .findMany({
       where: {
         author_id: {
           in: followedList,
@@ -165,22 +166,22 @@ export async function GetFollowedPost(skip, limit) {
       },
       skip: skip,
       take: limit,
-    });
-
-    return {
-      data: response,
-      message: "ok",
-      status: 200,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: "nop",
-      status: 400,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .then(async (response) => {
+      return {
+        data: response,
+        message: "ok",
+        status: 200,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: "nop",
+        status: 400,
+      };
+    })
+    .finally(() => prisma.$disconnect());
 }
 
 // Create a new Post
@@ -196,103 +197,106 @@ export async function CreatePost(formData, type) {
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  try {
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: { token: token.value },
       select: { id: true },
-    });
-
-    if (!user) {
-      return {
-        message: fetch.post.create.user.error.message,
-        status: fetch.post.create.user.error.status,
-      };
-    }
-
-    if (type === "post") {
-      // Hashtags Extractor
-      const hashtags = await HashtagsExtrator(formData.get("text"));
-
-      // Prepare data for create post
-      const data = {
-        content: formData?.get("text").toString(),
-        author_id: user.id,
-        createdAt: new Date(),
-        likes: 0,
-        shares: 0,
-        bookmarks: 0,
-        type: "post",
-        updatedAt: new Date(),
-        hashtags: {
-          create: hashtags.map((tag) => ({
-            content: tag,
-          })),
-        },
-      };
-
-      // Create a post
-      const response = await prisma.post.create({ data });
-
-      // Upload File
-      for (const entry of formData.entries()) {
-        const [name, value] = entry;
-
-        if (name === "pictures" && value.size > 0) {
-          const pictureBytes = await value.arrayBuffer();
-          const pictureBuffer = Buffer.from(pictureBytes);
-
-          await writeFile(
-            `public/Posts/${value.size}_${value.name}`,
-            pictureBuffer
-          );
-
-          // Write into Database
-          await prisma.postPicture.create({
-            data: {
-              post_id: response.id,
-              url: `/Posts/${value.size}_${value.name}`,
-            },
-          });
-        }
+    })
+    .then((user) => {
+      if (!user) {
+        return Promise.resolve({
+          message: fetch.post.create.user.error.message,
+          status: fetch.post.create.user.error.status,
+        });
       }
 
-      revalidatePath("/Feed");
+      if (type === "post") {
+        console.log("here");
+        // Hashtags Extractor
+        return HashtagsExtrator(formData.get("text")).then((hashtags) => {
+          // Prepare data for create post
+          const data = {
+            content: formData?.get("text").toString(),
+            author_id: user.id,
+            createdAt: new Date(),
+            likes: 0,
+            shares: 0,
+            bookmarks: 0,
+            type: "post",
+            updatedAt: new Date(),
+            hashtags: {
+              create: hashtags.map((tag) => ({
+                content: tag,
+              })),
+            },
+          };
+
+          // Create a post
+          return prisma.post.create({ data }).then(async (response) => {
+            // Upload File
+            for (const entry of formData.entries()) {
+              const [name, value] = entry;
+
+              if (name === "pictures" && value.size > 0) {
+                const pictureBytes = await value.arrayBuffer();
+                const pictureBuffer = Buffer.from(pictureBytes);
+
+                await writeFile(
+                  `public/Posts/${value.size}_${value.name}`,
+                  pictureBuffer
+                );
+
+                // Write into Database
+                await prisma.postPicture.create({
+                  data: {
+                    post_id: response.id,
+                    url: `/Posts/${value.size}_${value.name}`,
+                  },
+                });
+              }
+            }
+
+            revalidatePath("/Feed");
+            return {
+              message: fetch.post.create.success.message,
+              status: fetch.post.create.success.status,
+            };
+          });
+        });
+      } else {
+        // If it is a share
+        // Prepare data
+        const data = {
+          content: textarea ? textarea : "",
+          author_id: user.id,
+          createdAt: new Date(),
+          likes: 0,
+          share_data: 0,
+          bookmarks: 0,
+          type: "share",
+          updatedAt: new Date(),
+          share_id: parseInt(postId),
+        };
+
+        return prisma.post.create({ data }).then(() => {
+          revalidatePath("/Feed");
+          return {
+            message: fetch.post.create.success.message,
+            status: fetch.post.create.success.status,
+          };
+        });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
       return {
-        message: fetch.post.create.success.message,
-        status: fetch.post.create.success.status,
+        message: "Internal Server Error, try again",
+        status: 500,
       };
-    } else {
-      // If is a share
-
-      // Prepare data
-      const data = {
-        content: textarea ? textarea : "",
-        author_id: user.id,
-        createdAt: new Date(),
-        likes: 0,
-        share_data: 0,
-        bookmarks: 0,
-        type: "share",
-        updatedAt: new Date(),
-        share_id: parseInt(postId),
-      };
-
-      await prisma.post.create({ data });
-
-      revalidatePath("/Feed");
-      return {
-        message: fetch.post.create.success.message,
-        status: fetch.post.create.success.status,
-      };
-    }
-  } catch (error) {
-    return {
-      message: "Internal Server Error, try again",
-      status: 500,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
 }
 
 // Delete a Recent Post
@@ -300,52 +304,64 @@ export async function DeletePost(postId) {
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  const user = await prisma.user.findFirst({
-    where: {
-      token: token.value,
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  if (!user) {
-    return {
-      message: fetch.delete.user.error.message,
-      status: fetch.delete.user.error.status,
-    };
-  }
-
-  try {
-    await prisma.post.delete({
+  return prisma.user
+    .findFirst({
       where: {
-        id: postId,
-        author_id: user.id,
+        token: token.value,
       },
-    });
+      select: {
+        id: true,
+      },
+    })
+    .then(async (user) => {
+      if (!user) {
+        return {
+          message: fetch.delete.user.error.message,
+          status: fetch.delete.user.error.status,
+        };
+      }
 
-    revalidatePath("/Feed");
-    return {
-      message: fetch.post.delete.success.message,
-      status: fetch.post.delete.success.status,
-    };
-  } catch (e) {
-    return {
-      message: fetch.post.delete.error.message,
-      status: fetch.post.delete.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+      return prisma.hashtags
+        .deleteMany({
+          where: {
+            post_id: postId,
+          },
+        })
+        .then(async () => {
+          return prisma.post
+            .delete({
+              where: {
+                id: postId,
+                author_id: user.id,
+              },
+            })
+            .then(() => {
+              revalidatePath("/Feed");
+              return {
+                message: fetch.post.delete.success.message,
+                status: fetch.post.delete.success.status,
+              };
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => prisma.$disconnect());
 }
 
 // Get a Post Details
-
 export async function GetPostDetails(id) {
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.post.findFirst({
+  return prisma.post
+    .findFirst({
       where: {
         id: parseInt(id),
       },
@@ -414,46 +430,47 @@ export async function GetPostDetails(id) {
           },
         },
       },
-    });
-
-    return {
-      data: response,
-      message: fetch.post.getDetails.success.message,
-      status: fetch.post.getDetails.success.status,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: fetch.post.getDetails.error.message,
-      status: fetch.post.getDetails.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .then(async (response) => {
+      return {
+        data: response,
+        message: fetch.post.getDetails.success.message,
+        status: fetch.post.getDetails.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.post.getDetails.error.message,
+        status: fetch.post.getDetails.error.status,
+      };
+    })
+    .finally(() => prisma.$disconnect());
 }
 
 export async function GetImage(image_id) {
   const prisma = new PrismaClient();
-  try {
-    const response = await prisma.postPicture.findFirst({
+
+  return prisma.postPicture
+    .findFirst({
       where: {
         id: parseInt(image_id),
       },
       select: {
         url: true,
       },
-    });
-
-    return {
-      data: response,
-      message: "ok",
-      status: 200,
-    };
-  } catch (error) {
-    console.log(error);
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .then(async (response) => {
+      return {
+        data: response,
+        message: "ok",
+        status: 200,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => prisma.$disconnect());
 }
 
 // Reaction to Post (Like/Dislike)
@@ -461,47 +478,80 @@ export const ReactionPost = async (postId, value) => {
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  const user = await prisma.user.findFirst({
-    where: {
-      token: token.value,
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  const data = {
-    post_id: postId,
-    user_id: user.id,
-  };
-
-  if (value === "add") {
-    await prisma.postsLiked.create({ data });
-    await prisma.post.update({
-      where: { id: postId },
-      data: { likes: { increment: 1 } },
-    });
-
-    const socket = io.connect("http://localhost:3001");
-    const socketData = { userid: user.id, post_id: postId };
-    socket.emit("post_like", socketData);
-  }
-
-  if (value === "remove") {
-    await prisma.postsLiked.deleteMany({
+  return prisma.user
+    .findFirst({
       where: {
-        post_id: parseInt(postId),
-        user_id: parseInt(user.id),
+        token: token.value,
       },
-    });
-    await prisma.post.update({
-      where: { id: postId },
-      data: { likes: { decrement: 1 } },
-    });
-  }
+      select: {
+        id: true,
+      },
+    })
+    .then(async (user) => {
+      const data = {
+        post_id: postId,
+        user_id: user.id,
+      };
 
-  revalidatePath("/Feed");
-  prisma.$disconnect();
+      if (value === "add") {
+        return prisma.postsLiked
+          .create({ data })
+          .then(async () => {
+            return prisma.post
+              .update({
+                where: { id: postId },
+                data: { likes: { increment: 1 } },
+              })
+              .then(async () => {
+                const socket = io.connect("http://localhost:3001");
+                const socketData = { userid: user.id, post_id: postId };
+                socket.emit("post_like", socketData);
+                return {
+                  message: "ok",
+                  status: 200,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      if (value === "remove") {
+        return prisma.postsLiked
+          .deleteMany({
+            where: {
+              post_id: parseInt(postId),
+              user_id: parseInt(user.id),
+            },
+          })
+          .then(async () => {
+            return prisma.post
+              .update({
+                where: { id: postId },
+                data: { likes: { decrement: 1 } },
+              })
+              .then(() => {
+                return { message: "ok", status: 200 };
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
 };
 
 // Share a Post
@@ -509,47 +559,49 @@ export async function SharePost(textarea, files, type, postId) {
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 
-  try {
-    const user = await prisma.user.findFirst({
+  return prisma.user
+    .findFirst({
       where: {
         token: token.value,
       },
       select: {
         id: true,
       },
+    })
+    .then(async (user) => {
+      const data = {
+        content: textarea ? textarea : "",
+        author_id: user.id,
+        createdAt: new Date(),
+        likes: 0,
+        shares: 0,
+        bookmarks: 0,
+        type: "share",
+        updatedAt: new Date(),
+        share_id: parseInt(postId),
+      };
+
+      return prisma.post.create({ data }).then(() => {
+        const socket = io.connect("http://localhost:3001");
+        const socketData = { userid: user.id, post_id: postId };
+        socket.emit("post_share", socketData);
+
+        return {
+          message: fetch.post.share.success.message,
+          status: fetch.post.share.success.status,
+        };
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.post.share.error.message,
+        status: fetch.post.share.error.status,
+      };
+    })
+    .finally(() => {
+      prisma.$disconnect();
     });
-
-    const data = {
-      content: textarea ? textarea : "",
-      author_id: user.id,
-      createdAt: new Date(),
-      likes: 0,
-      shares: 0,
-      bookmarks: 0,
-      type: "share",
-      updatedAt: new Date(),
-      share_id: parseInt(postId),
-    };
-
-    await prisma.post.create({ data });
-
-    const socket = io.connect("http://localhost:3001");
-    const socketData = { userid: user.id, post_id: postId };
-    socket.emit("post_share", socketData);
-
-    return {
-      message: fetch.post.share.success.message,
-      status: fetch.post.share.success.status,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: fetch.post.share.error.message,
-      status: fetch.post.share.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
 }
 
 // Reply To Post
@@ -615,12 +667,11 @@ export const ReplyToPost = async (content, postId) => {
 };
 
 // Get trends
-
 export const GetTrend = async (query) => {
   const prisma = new PrismaClient();
 
-  try {
-    const response = await prisma.hashtags.findMany({
+  return prisma.hashtags
+    .findMany({
       where: {
         content: `#${query}`,
       },
@@ -678,19 +729,20 @@ export const GetTrend = async (query) => {
           },
         },
       },
-    });
-
-    return {
-      data: response,
-      message: fetch.post.getTrend.success.message,
-      status: fetch.post.getTrend.success.status,
-    };
-  } catch (error) {
-    return {
-      message: fetch.post.getTrend.error.message,
-      status: fetch.post.getTrend.error.status,
-    };
-  } finally {
-    prisma.$disconnect();
-  }
+    })
+    .then(async (response) => {
+      return {
+        data: response,
+        message: fetch.post.getTrend.success.message,
+        status: fetch.post.getTrend.success.status,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.post.getTrend.error.message,
+        status: fetch.post.getTrend.error.status,
+      };
+    })
+    .finally(() => prisma.$disconnect());
 };

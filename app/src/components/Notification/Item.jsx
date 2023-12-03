@@ -1,3 +1,8 @@
+// DayJS
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+
 // Required
 import Link from "next/link";
 
@@ -29,7 +34,8 @@ export default function Item({ item }) {
           style="rounded-full h-10 w-10 cursor-pointer object-cover"
         />
         <span className="w-fit">
-          {item.author.name} has {item.type} your post : date
+          {item.author.name} has {item.type} your post{" "}
+          {dayjs(item.createdAt).fromNow()}
         </span>
         {item.isRead === 0 && (
           <div className="flex flex-1 justify-end align-top">

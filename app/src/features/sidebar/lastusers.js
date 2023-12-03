@@ -10,7 +10,7 @@ export async function GetLastUsers() {
 
   try {
     const result = await prisma.user.findMany({
-      orderBy: { id: "asc" },
+      orderBy: { id: "desc" },
       skip: 0,
       take: parseInt(config.lastusers.limit),
     });

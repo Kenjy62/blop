@@ -7,7 +7,7 @@ import { getNotifications } from "@/app/src/features/user";
 
 export default async function Tools({ user }) {
   const { data, message, status } = await getNotifications(user.id, {
-    next: { tags: ["notifications"] },
+    next: { tags: ["notificationsBar"] },
   });
 
   return (

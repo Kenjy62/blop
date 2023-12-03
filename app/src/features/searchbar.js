@@ -1,12 +1,16 @@
 "use server";
 
+// Required
 import { PrismaClient } from "@prisma/client";
+
+// Config
+import { fetch } from "../config/text";
 
 export const onSearch = async (data) => {
   const prisma = new PrismaClient();
 
-  try {
-    const user = await prisma.user.findMany({
+  return prisma.user
+    .findMany({
       where: {
         name: {
           contains: data,
@@ -17,34 +21,37 @@ export const onSearch = async (data) => {
         picture: true,
         cover: true,
       },
-    });
-
-    const post = await prisma.post.findMany({
-      where: {
-        content: {
-          contains: data,
-        },
-      },
-      select: {
-        id: true,
-        content: true,
-        createdAt: true,
-        updatedAt: true,
-        picture: true,
-        author: {
+    })
+    .then(async (user) => {
+      return prisma.post
+        .findMany({
+          where: {
+            content: {
+              contains: data,
+            },
+          },
           select: {
             id: true,
-            name: true,
+            content: true,
+            createdAt: true,
+            updatedAt: true,
             picture: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                picture: true,
+              },
+            },
           },
-        },
-      },
-    });
-
-    return { user, post };
-  } catch (error) {
-    return false;
-  } finally {
-    prisma.$disconnect();
-  }
+        })
+        .then(async (post) => {
+          return { user, post };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return false;
+    })
+    .finally(() => prisma.$disconnect());
 };

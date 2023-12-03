@@ -12,7 +12,7 @@ import Bookmark from "./Type/Bookmark";
 // Set Modal
 ReactModal.setAppElement("html");
 
-export default function Modal({ defaultTheme, userFollowed }) {
+export default function Modal({ defaultTheme }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
