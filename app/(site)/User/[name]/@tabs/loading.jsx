@@ -1,3 +1,10 @@
+// Components
+import { SyncLoader } from "react-spinners";
+
 export default function Loading() {
-  return <p>Loading post...</p>;
+  return (
+    <div className="flex justify-center w-full">
+      <SyncLoader color="white" />
+    </div>
+  );
 }

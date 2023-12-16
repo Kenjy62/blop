@@ -8,7 +8,6 @@ import Theme from "../src/components/Tricky/Theme";
 import Overlay from "../src/components/Overlay/Overlay";
 
 // Toast
-
 import { Toaster } from "react-hot-toast";
 
 // Context
@@ -18,7 +17,7 @@ import Provider from "@/app/src/context/provider";
 import { init } from "../src/features/user";
 
 export default async function Layout({ children }) {
-  const { data, message, status } = await init();
+  const { data } = await init();
 
   return (
     <Provider

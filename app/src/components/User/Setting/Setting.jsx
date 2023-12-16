@@ -1,10 +1,12 @@
 "use client";
 
 // Required
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 
 // Components
 import { Switch } from "@headlessui/react";
+
+// Features
 import { updateNotificationSetting } from "@/app/src/features/user";
 
 // Context
@@ -12,7 +14,7 @@ import { ThemeContext } from "@/app/src/context/theme";
 
 export default function Setting({ display, name, authorized }) {
   const [isAuthorized, setIsAuthorized] = useState(authorized);
-  const { toggleTheme, theme } = useContext(ThemeContext);
+  const { toggleTheme } = useContext(ThemeContext);
 
   const update = async (type) => {
     await updateNotificationSetting(type);

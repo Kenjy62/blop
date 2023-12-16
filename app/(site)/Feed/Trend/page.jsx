@@ -1,5 +1,9 @@
+// Components
+import ComponentError from "@/app/src/components/Error/ComponentError";
 import Post from "@/app/src/components/Feed/Post/Post";
 import Title from "@/app/src/components/UI/Title/Title";
+
+// Features
 import { GetTrend } from "@/app/src/features/post";
 import { init } from "@/app/src/features/user";
 
@@ -12,8 +16,8 @@ export default async function Page({ searchParams }) {
       return (
         <div className="w-full flex flex-col gap-4">
           <Title>Post with : {`#${searchParams.q}`}</Title>
-          {data.reverse().map((post) => (
-            <Post userId={user.data.id} post={post.post} />
+          {data.reverse().map((post, id) => (
+            <Post key={id} userId={user.data.id} post={post.post} />
           ))}
         </div>
       );
@@ -29,6 +33,6 @@ export default async function Page({ searchParams }) {
   }
 
   if (status === 400) {
-    return <div className="w-full">{message}</div>;
+    return <ComponentError message={message} />;
   }
 }

@@ -16,33 +16,69 @@ import { setIsRead } from "../../features/notification";
 // Hooks
 
 export default function Item({ item }) {
+  console.log(item);
+
   const onHover = async (id) => {
     await setIsRead(id);
   };
 
-  return (
-    <Link href="#">
-      <div
-        onMouseEnter={() => item.isRead === 0 && onHover(item.id)}
-        key={item.id}
-        className="flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200"
-      >
-        <Picture
-          url={item.author.picture}
-          name={item.author.name}
-          link={false}
-          style="rounded-full h-10 w-10 cursor-pointer object-cover"
-        />
-        <span className="w-fit">
-          {item.author.name} has {item.type} your post{" "}
-          {dayjs(item.createdAt).fromNow()}
-        </span>
-        {item.isRead === 0 && (
-          <div className="flex flex-1 justify-end align-top">
-            <Tag state={"Active"}>New</Tag>
-          </div>
-        )}
-      </div>
-    </Link>
-  );
+  if (
+    item.type === "like" ||
+    item.type === "comment" ||
+    item.type === "share"
+  ) {
+    return (
+      <Link href={`Post/${item.Post.id}`}>
+        <div
+          onMouseEnter={() => item.isRead === 0 && onHover(item.id)}
+          key={item.id}
+          className="flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200"
+        >
+          <Picture
+            url={item.author.picture}
+            name={item.author.name}
+            link={false}
+            style="rounded-full h-10 w-10 cursor-pointer object-cover"
+          />
+          <span className="w-fit">
+            {item.author.name} has {item.type} your post
+          </span>
+          <span>-</span>
+          <span>{dayjs(item.createdAt).fromNow()}</span>
+          {item.isRead === 0 && (
+            <div className="flex flex-1 justify-end align-top">
+              <Tag state={"Active"}>New</Tag>
+            </div>
+          )}
+        </div>
+      </Link>
+    );
+  } else if (item.type === "chat") {
+    return (
+      <Link href={`Message/Conversation/${item.Conversation.id}`}>
+        <div
+          onMouseEnter={() => item.isRead === 0 && onHover(item.id)}
+          key={item.id}
+          className="flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200"
+        >
+          <Picture
+            url={item.author.picture}
+            name={item.author.name}
+            link={false}
+            style="rounded-full h-10 w-10 cursor-pointer object-cover"
+          />
+          <span className="w-fit">
+            {item.author.name} has {item.type} your post
+          </span>
+          <span>-</span>
+          <span>{dayjs(item.createdAt).fromNow()}</span>
+          {item.isRead === 0 && (
+            <div className="flex flex-1 justify-end align-top">
+              <Tag state={"Active"}>New</Tag>
+            </div>
+          )}
+        </div>
+      </Link>
+    );
+  }
 }

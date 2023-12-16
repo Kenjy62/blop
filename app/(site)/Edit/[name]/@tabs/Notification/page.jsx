@@ -5,23 +5,23 @@ import { getNotificationsSettings } from "@/app/src/features/user";
 import Setting from "@/app/src/components/User/Setting/Setting";
 
 export default async function Page() {
-  const UserSettings = await getNotificationsSettings();
+  const { data } = await getNotificationsSettings();
 
   const settings = [
     {
       display: "Like Notification Sound",
       name: "Like",
-      authorized: UserSettings.like_notification ? true : false,
+      authorized: data.like_notification === 1 ? true : false,
     },
     {
       display: "Comment Notification Sound",
       name: "Comment",
-      authorized: UserSettings.comment_notification ? true : false,
+      authorized: data.comment_notification === 1 ? true : false,
     },
     {
       display: "Message Notification Sound",
       name: "Message",
-      authorized: UserSettings.message_notification ? true : false,
+      authorized: data.message_notification === 1 ? true : false,
     },
   ];
 

@@ -2,14 +2,12 @@
 
 // Required
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 // Hooks
 import { CheckColorScheme } from "../../hooks/colorScheme";
 
 export default function Order({ selected }) {
   const router = useRouter();
-  const [active, setActive] = useState(!selected ? "All" : selected);
 
   const colorScheme = CheckColorScheme();
 

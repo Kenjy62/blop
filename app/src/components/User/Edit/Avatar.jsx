@@ -23,17 +23,17 @@ export default function Avatar({ picture }) {
   var color;
 
   if (colorScheme === "Watermelon") {
-    color = `text-white text-2xl p-1 bg-watermelon-400 rounded-full`;
+    color = `text-white text-2xl p-1 bg-watermelon-400 rounded-full cursor-pointer`;
   } else if (colorScheme === "royal-blue") {
-    color = `text-white text-2xl p-1 bg-royal-blue-400 rounded-full`;
+    color = `text-white text-2xl p-1 bg-royal-blue-400 rounded-full cursor-pointer`;
   } else if (colorScheme === "harlequin") {
-    color = `text-white text-2xl p-1 bg-harlequin-400 rounded-full`;
+    color = `text-white text-2xl p-1 bg-harlequin-400 rounded-full cursor-pointer`;
   } else if (colorScheme === "fire-bush") {
-    color = `text-white text-2xl p-1 bg-fire-bush-400 rounded-full`;
+    color = `text-white text-2xl p-1 bg-fire-bush-400 rounded-full cursor-pointer`;
   } else if (colorScheme === "cinnabar") {
-    color = `text-white text-2xl p-1 bg-cinnabar-400 rounded-full`;
+    color = `text-white text-2xl p-1 bg-cinnabar-400 rounded-full cursor-pointer`;
   } else if (colorScheme === "purple-heart") {
-    color = `text-white text-2xl p-1 bg-purple-heart-400 rounded-full`;
+    color = `text-white text-2xl p-1 bg-purple-heart-400 rounded-full cursor-pointer`;
   }
 
   // Open the input files

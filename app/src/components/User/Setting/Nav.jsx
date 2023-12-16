@@ -30,19 +30,19 @@ export default function Nav({ name }) {
 
   const nav = [
     {
-      name: "Display",
+      name: "Account",
       path: `/Edit/${name}`,
       isActive: pathname === `/Edit/${name}` ? true : false,
+    },
+    {
+      name: "Display",
+      path: `/Edit/${name}/Display`,
+      isActive: pathname === `/Edit/${name}/Display` ? true : false,
     },
     {
       name: "Notification",
       path: `/Edit/${name}/Notification`,
       isActive: pathname === `/Edit/${name}/Notification` ? true : false,
-    },
-    {
-      name: "Security",
-      path: `/Edit/${name}/Security`,
-      isActive: pathname === `/Edit/${name}/Security` ? true : false,
     },
     {
       name: "Confidentiality",

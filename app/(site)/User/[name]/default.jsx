@@ -3,30 +3,25 @@ import ComponentsError from "@/app/src/components/Error/ComponentError";
 import { Vertical } from "@/app/src/components/UI/Globals/Separators";
 import Picture from "@/app/src/components/UI/User/Picture";
 import Cover from "@/app/src/components/User/Cover";
+import ProfilStats from "@/app/src/components/User/ProfilStats";
 import Tabs from "@/app/src/components/User/Tabs";
 
 // Features
 import { init, GetUserDetails } from "@/app/src/features/user";
-import Link from "next/link";
+
+import { notFound } from "next/navigation";
 
 export default async function Default({ params }) {
   const { data, message, status } = await GetUserDetails(params.name);
 
   if (status === 400) {
-    return <ComponentsError message={message} />;
+    return notFound();
   }
 
   if (status === 200) {
     const me = await init();
     const alreadyFollow = data.userFollowed.filter(
       (user) => user.user1_id === me.data.id && user.user2_id === data.id
-    );
-    const followsCount = data.userFollower.length;
-    const followersCount = data.userFollowed.length;
-    const repostCount = data.posts.filter((post) => post.type === "share");
-    const mediasCount = data.posts.reduce(
-      (count, post) => count + post.picture.length,
-      0
     );
 
     return (
@@ -47,22 +42,7 @@ export default async function Default({ params }) {
               />
               <span>France</span>
             </div>
-            <div className="flex flex-row gap-4">
-              <div className="flex flex-col">
-                <span>{data.posts.length} Posts</span>
-                <span>{data.posts_liked.length} Likes</span>
-              </div>
-              <Vertical />
-              <div className="flex flex-col">
-                <span>{repostCount.length} Reposts</span>
-                <span>{mediasCount ? mediasCount : "0"} Medias</span>
-              </div>
-              <Vertical />
-              <div className="flex flex-col">
-                <span>{followsCount} Follows</span>
-                <span>{followersCount} Followers</span>
-              </div>
-            </div>
+            <ProfilStats data={data} />
           </div>
         </div>
         <Tabs />

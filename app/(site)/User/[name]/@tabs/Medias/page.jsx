@@ -1,17 +1,19 @@
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
+import LoadMore from "@/app/src/components/Profil/LoadMore";
 
 // Features
-import { GetUserMedias } from "@/app/src/features/user";
+import { GetUserMedias, init } from "@/app/src/features/user";
 
 // Required
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Page({ params }) {
-  const { data, message, status } = await GetUserMedias(params.name);
+  const { data, message, status } = await GetUserMedias(params.name, 0);
 
   if (status === 200) {
+    const user = await init();
     return (
       <div className="w-full flex flex-row gap-4 flex-wrap">
         {data.length > 0 &&
@@ -34,7 +36,7 @@ export default async function Page({ params }) {
               );
             });
           })}
-
+        {data.length > 0 && <LoadMore user={user} type="Media" />}
         {data.length < 1 && <p>No medias for this moment.</p>}
       </div>
     );

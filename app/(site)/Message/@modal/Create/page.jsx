@@ -1,4 +1,8 @@
+// Components
+import ComponentError from "@/app/src/components/Error/ComponentError";
 import Modal from "@/app/src/components/Message/Modal";
+
+// Features
 import { getFollower, init } from "@/app/src/features/user";
 
 export default async function Page() {
@@ -15,6 +19,6 @@ export default async function Page() {
   }
 
   if (status === 400) {
-    return <p>error</p>;
+    return <ComponentError message={message} />;
   }
 }

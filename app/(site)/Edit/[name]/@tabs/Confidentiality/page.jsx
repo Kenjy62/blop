@@ -18,6 +18,11 @@ export default async function Page() {
       name: "Display Followers",
       authorized: data.display_follower === 1 ? true : false,
     },
+    {
+      display: "Display my location",
+      name: "Display Location",
+      authorized: true,
+    },
   ];
 
   return (

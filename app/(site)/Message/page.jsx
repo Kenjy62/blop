@@ -48,8 +48,8 @@ export default async function Page({ searchParams }) {
             <Button>Create Conversation</Button>
           </Link>
         </div>
-        {sortedConversations.map((item) => (
-          <Item conversation={item} data={user.data} />
+        {sortedConversations.map((item, id) => (
+          <Item key={id} conversation={item} data={user.data} />
         ))}
       </div>
     );

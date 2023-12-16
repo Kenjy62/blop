@@ -196,12 +196,14 @@ export const init = async () => {
         id: true,
         name: true,
         picture: true,
+        email: true,
         token: true,
         darkMode: true,
         display_follow: true,
         display_follower: true,
         notification: true,
         colorScheme: true,
+        followedFeedView: true,
       },
     })
     .then(async (data) => {
@@ -431,6 +433,7 @@ export const updateNotificationSetting = async (type, color) => {
   return init()
     .then(async ({ data }) => {
       if (type === "Like") {
+        console.log(data);
         return prisma.user
           .findFirst({
             where: {
@@ -441,6 +444,7 @@ export const updateNotificationSetting = async (type, color) => {
             },
           })
           .then(async (oldValue) => {
+            console.log(oldValue);
             return prisma.user
               .update({
                 where: { id: data.id },
@@ -691,6 +695,44 @@ export const updateNotificationSetting = async (type, color) => {
             };
           });
       }
+
+      if (type === "Default Feed") {
+        return prisma.user
+          .findFirst({
+            where: { id: data.id },
+            select: { followedFeedView: true },
+          })
+          .then(async (oldValue) => {
+            return prisma.user
+              .update({
+                where: { id: data.id },
+                data: {
+                  followedFeedView:
+                    oldValue.followedFeedView === false ? true : false,
+                },
+              })
+              .then(() => {
+                return {
+                  message: fetch.user.setting.update.success.message,
+                  status: fetch.user.setting.update.success.statut,
+                };
+              })
+              .catch((error) => {
+                console.log(error);
+                return {
+                  message: fetch.user.setting.update.error.message,
+                  status: fetch.user.setting.update.error.statut,
+                };
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            return {
+              message: fetch.user.get.error.message,
+              status: fetch.user.get.error.statut,
+            };
+          });
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -705,7 +747,7 @@ export const updateNotificationSetting = async (type, color) => {
 };
 
 // Get User Posts
-export async function GetUserPosts(name) {
+export async function GetUserPosts(name, skip) {
   const prisma = new PrismaClient();
 
   return prisma.user
@@ -789,8 +831,11 @@ export async function GetUserPosts(name) {
               },
             },
           },
+          orderBy: { id: "desc" },
+          skip: skip,
+          take: 5,
         })
-        .then((response) => {
+        .then(async (response) => {
           return {
             data: response,
             message: fetch.post.getUserPosts.success.message,
@@ -817,7 +862,7 @@ export async function GetUserPosts(name) {
 }
 
 // Get User Posts Liked
-export async function GetUserPostsLiked(name) {
+export async function GetUserPostsLiked(name, skip) {
   const prisma = new PrismaClient();
 
   return prisma.user
@@ -895,6 +940,8 @@ export async function GetUserPostsLiked(name) {
           orderBy: {
             id: "desc",
           },
+          skip: skip,
+          take: 5,
         })
         .then((response) => {
           return {
@@ -923,7 +970,7 @@ export async function GetUserPostsLiked(name) {
 }
 
 // Get User Posts Shared
-export async function GetUserPostsShared(name) {
+export async function GetUserPostsShared(name, skip) {
   const prisma = new PrismaClient();
 
   return prisma.user
@@ -953,7 +1000,6 @@ export async function GetUserPostsShared(name) {
                 picture: true,
               },
             },
-            picture: true,
             shares: true,
             likes: true,
             bookmarks: true,
@@ -1010,6 +1056,8 @@ export async function GetUserPostsShared(name) {
           orderBy: {
             id: "desc",
           },
+          skip: skip,
+          take: 5,
         })
         .then((response) => {
           return {
@@ -1037,7 +1085,7 @@ export async function GetUserPostsShared(name) {
     });
 }
 
-export async function GetUserMedias(name) {
+export async function GetUserMedias(name, skip) {
   const prisma = new PrismaClient();
 
   return prisma.user
@@ -1059,6 +1107,11 @@ export async function GetUserMedias(name) {
             id: true,
             picture: true,
           },
+          orderBy: {
+            id: "asc",
+          },
+          skip: skip,
+          take: 5,
         })
         .then(async (data) => {
           const filteredData = data.filter((post) => post.picture.length > 0);
@@ -1104,6 +1157,7 @@ export async function GetUserDetails(name) {
         picture: true,
         cover: true,
         darkMode: true,
+        followedFeedView: true,
         posts: {
           select: { id: true, type: true, picture: true },
         },
@@ -1128,6 +1182,13 @@ export async function GetUserDetails(name) {
       },
     })
     .then((response) => {
+      if (response === null) {
+        return {
+          message: fetch.user.get.error.message,
+          status: fetch.user.get.error.status,
+        };
+      }
+
       return {
         data: response,
         message: fetch.user.get.success.message,
@@ -1160,6 +1221,7 @@ export const getNotifications = async () => {
             id: true,
             isRead: true,
             type: true,
+            createdAt: true,
             author: {
               select: {
                 id: true,

@@ -22,7 +22,7 @@ export default function LoadMore({ user, order }) {
   const [skip, setSkip] = useState(5);
   const [limit, setLimit] = useState(5);
   const [noPost, setNoPost] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [color, setColor] = useState("#ffffff");
 
   const handleScroll = () => {
@@ -50,36 +50,56 @@ export default function LoadMore({ user, order }) {
   }, []);
 
   async function load() {
-    if (!noPost) {
-      setTimeout(async () => {
-        if (!order || order === "All") {
-          const { data, message, status } = await GetAllPost(skip, limit);
-          if (data.length < 5) {
-            setPost(data);
-            setNoPost(true);
-          } else {
-            setSkip((prev) => prev + 5);
-            setLimit((prev) => prev + 5);
-            setPost(data);
-          }
-        } else if (order === "Followed") {
-          const { data, message, status } = await GetFollowedPost(skip, limit);
-          if (data.length < 5) {
-            setPost(data);
-            setNoPost(true);
-          } else {
-            setSkip((prev) => prev + 5);
-            setLimit((prev) => prev + 5);
-            setPost(data);
-          }
+    setLoading(true);
+    if (!order || order === "All") {
+      const { data, message, status } = await GetAllPost(skip, limit);
+      setSkip((prev) => prev + 5);
+
+      if (data.length === 5) {
+        setNoPost(false);
+        if (post.length > 0) {
+          setPost((prev) => [...prev, ...data]);
+        } else {
+          setPost(data);
         }
-      }, 5000);
+      } else {
+        setNoPost(true);
+        if (post.length > 0) {
+          setPost((prev) => [...prev, ...data]);
+        } else {
+          setPost(data);
+        }
+      }
     }
+
+    if (order === "Followed") {
+      const { data, message, status } = await GetFollowedPost(skip, limit);
+      setSkip((prev) => prev + 5);
+
+      if (data.length === 5) {
+        setNoPost(false);
+        if (post.length > 0) {
+          setPost((prev) => [...prev, ...data]);
+        } else {
+          setPost(data);
+        }
+      } else {
+        setNoPost(true);
+        if (post.length > 0) {
+          setPost((prev) => [...prev, ...data]);
+        } else {
+          setPost(data);
+        }
+      }
+    }
+    setLoading(false);
   }
 
   useEffect(() => {
     if (isVisible) {
-      load();
+      if (!noPost && !loading) {
+        load();
+      }
     }
   }, [isVisible]);
 
