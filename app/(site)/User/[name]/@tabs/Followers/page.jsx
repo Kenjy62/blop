@@ -8,16 +8,20 @@ import {
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
 import FollowCard from "@/app/src/components/UI/Cards/FollowCard";
+import LoadMore from "@/app/src/components/User/LoadMore";
 
 export default async function Page({ params }) {
   const { data, message, status } = await getSpecifiqueUserFollowers(
-    params.name
+    params.name,
+    0
   );
+
+  const me = await init();
 
   const userAuthorization = await getUserConfidentialitySettings(params.name);
 
   if (userAuthorization.data.display_follower === 0) {
-    return <p>This user doesn't allow to display followers</p>;
+    return <p>This user doesn&apos;t allow to display followers</p>;
   }
 
   if (status === 200 && data.length > 0) {
@@ -27,6 +31,7 @@ export default async function Page({ params }) {
           {data.map((item, id) => {
             return <FollowCard key={id} item={item} />;
           })}
+          {data.length > 0 && <LoadMore user={me} type="Follower" />}
         </div>
       </div>
     );

@@ -13,12 +13,12 @@ export const SearchProvider = ({ children }) => {
   };
 
   const startSearch = (data) => {
-    if (data.length > 0) {
+    if (data.length > 3) {
       if (!state) {
         setState(!state);
       }
 
-      setQuery(data);
+      setQuery(data.replace("#", ""));
     } else if (data.length < 1 && state) {
       setState(!state);
     }

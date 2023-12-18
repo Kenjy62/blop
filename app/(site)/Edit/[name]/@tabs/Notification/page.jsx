@@ -27,15 +27,17 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col w-full p-4 gap-4">
-      {settings.map((setting) => {
+      {settings.map((setting, id) => {
         return (
           <Setting
+            key={id}
             display={setting.display}
             name={setting.name}
             authorized={setting.authorized}
           />
         );
       })}
+      <div className="flex justify-center">(soon)</div>
     </div>
   );
 }

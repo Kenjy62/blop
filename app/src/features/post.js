@@ -1,6 +1,3 @@
-// TODO: Fix Delete When Post have Hashtags and when is a Shared Post
-// TODO: Close Modal when Share Post
-
 "use server";
 
 import { PrismaClient } from "@prisma/client";
@@ -301,6 +298,8 @@ export async function CreatePost(formData, type) {
 
 // Delete a Recent Post
 export async function DeletePost(postId) {
+  console.log(postId);
+
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 

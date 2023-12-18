@@ -1,5 +1,5 @@
 // Components
-import Searchbar from "../Searchbar/Searchbar";
+import Searchbar from "../Searchbar/Input";
 import UserBar from "../User/UserBar";
 import Logo from "./Header/Logo";
 

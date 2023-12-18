@@ -8,7 +8,7 @@ export default function ImageLoader({ url }) {
       src={`/Posts/${url}`}
       height={1080}
       width={1920}
-      className="w-full h-full object-cover object-center"
+      className="w-full h-full object-cover object-center rounded-lg"
     />
   );
 }

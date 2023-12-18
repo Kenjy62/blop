@@ -332,8 +332,31 @@ io.on("connection", (socket) => {
         },
       });
 
+      const thisNotif = await prisma.notification.findFirst({
+        where: {
+          id: notif.id,
+        },
+        select: {
+          id: true,
+          type: true,
+          isRead: true,
+          Conversation: {
+            select: {
+              id: true,
+            },
+          },
+          author: {
+            select: {
+              name: true,
+              id: true,
+              picture: true,
+            },
+          },
+        },
+      });
+
       io.to(user.socket).emit("new_message");
-      io.to(user.socket).emit("new_notification_message", notif);
+      io.to(user.socket).emit("new_notification_message", thisNotif);
     }
   });
 

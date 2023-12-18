@@ -14,7 +14,7 @@ export default function Item({ item }) {
     <Link
       href={
         item.type === "chat"
-          ? `/Conversation/${item.Conversation.id}`
+          ? `/Message/Conversation/${item.Conversation.id}`
           : `/Post/${item.Post.id}`
       }
       className="flex flex-row w-full p-2 gap-2 items-center dark:hover:bg-night-200"

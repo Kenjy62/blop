@@ -32,7 +32,7 @@ export default async function Page() {
         )}
         {data.response.length < 1 && (
           <div className="flex justify-center">
-            You don't have any bookmarks at the moment
+            You don&apos;t have any bookmarks at the moment
           </div>
         )}
       </>

@@ -4,24 +4,29 @@
 import { useRef, useEffect, useState } from "react";
 
 // Features
-import { GetAllPost, GetFollowedPost } from "../../features/post";
-
-// Components
-import Post from "./Post/Post";
+import {
+  getSpecifiqueUserFollowers,
+  getSpecifiqueUserFollows,
+} from "../../features/user";
 
 // Spinner
 import { SyncLoader } from "react-spinners";
 
-export default function LoadMore({ user, order }) {
+// Components
+import FollowCard from "../UI/Cards/FollowCard";
+import { useParams } from "next/navigation";
+
+export default function LoadMore({ user, type }) {
+  const params = useParams();
+
   // References
   const divRef = useRef();
 
   // State
   const [isVisible, setIsVisible] = useState(false);
-  const [post, setPost] = useState([]);
-  const [skip, setSkip] = useState(5);
-  const [limit, setLimit] = useState(5);
-  const [noPost, setNoPost] = useState(false);
+  const [datas, setDatas] = useState([]);
+  const [skip, setSkip] = useState(6);
+  const [noDatas, setNoDatas] = useState(false);
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState("#ffffff");
 
@@ -51,77 +56,84 @@ export default function LoadMore({ user, order }) {
 
   async function load() {
     setLoading(true);
-    if (!order || order === "All") {
-      const { data, message, status } = await GetAllPost(skip, limit);
+
+    if (type === "Follow") {
+      const { data, message, status } = await getSpecifiqueUserFollows(
+        user.data.name,
+        skip
+      );
+
       setSkip((prev) => prev + 5);
 
       if (data.length === 5) {
-        setNoPost(false);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
+        setNoDatas(false);
+        if (datas.length > 0) {
+          setDatas((prev) => [...prev, ...data]);
         } else {
-          setPost(data);
+          setDatas(data);
         }
       } else {
-        setNoPost(true);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
+        setNoDatas(true);
+        if (datas.length > 0) {
+          setDatas((prev) => [...prev, ...data]);
         } else {
-          setPost(data);
+          setDatas(data);
         }
       }
     }
 
-    if (order === "Followed") {
-      const { data, message, status } = await GetFollowedPost(skip, limit);
+    if (type === "Follower") {
+      const { data, message, status } = await getSpecifiqueUserFollowers(
+        user.data.name,
+        skip
+      );
+
       setSkip((prev) => prev + 5);
 
       if (data.length === 5) {
-        setNoPost(false);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
+        setNoDatas(false);
+        if (datas.length > 0) {
+          setDatas((prev) => [...prev, ...data]);
         } else {
-          setPost(data);
+          setDatas(data);
         }
       } else {
-        setNoPost(true);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
+        setNoDatas(true);
+        if (datas.length > 0) {
+          setDatas((prev) => [...prev, ...data]);
         } else {
-          setPost(data);
+          setDatas(data);
         }
       }
     }
+
     setLoading(false);
   }
 
   useEffect(() => {
     if (isVisible) {
-      if (!noPost && !loading) {
+      if (!noDatas && !loading) {
         load();
       }
     }
   }, [isVisible]);
 
-  useEffect(() => {
-    setPost([]);
-    setNoPost(false);
-    setSkip(5);
-    setLimit(5);
-  }, [order]);
-
   return (
     <>
-      {post?.length > 0 &&
-        post.map((item) => (
-          <Post key={item.id} userId={user.data.id} post={item} />
+      {datas?.length > 0 &&
+        datas.map((item, id) => (
+          <FollowCard
+            key={id}
+            item={item}
+            isMyProfil={params.name === user.data.name ? true : false}
+          />
         ))}
-      <div ref={divRef} className="flex justify-center">
+      <div ref={divRef} className="flex justify-center w-full">
         {isVisible ? (
-          !noPost ? (
+          !noDatas ? (
             <SyncLoader color={color} loading={loading} />
           ) : (
-            "There are no more posts"
+            "No more data.."
           )
         ) : null}
       </div>

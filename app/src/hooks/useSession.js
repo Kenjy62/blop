@@ -3,7 +3,7 @@
 import { useDispatch } from "react-redux";
 import { AuthLogin } from "../redux/Features/User";
 
-export const isUserLoggedIn = () => {
+export const useIsLogged = () => {
   const dispatch = useDispatch();
 
   var user = localStorage.getItem("user");

@@ -40,11 +40,11 @@ export default function Cover({ cover, isMyProfil, isFollowed }) {
   }
 
   return (
-    <div className={`h-64 rounded-lg w-full bg-red-200 relative`}>
+    <div className={`h-64 rounded-lg w-full relative`}>
       <Image
         src={cover}
-        height={800}
-        width={800}
+        height={1080}
+        width={1920}
         className="w-full h-64 object-cover object-center rounded-lg"
         alt={`${name} cover`}
       />

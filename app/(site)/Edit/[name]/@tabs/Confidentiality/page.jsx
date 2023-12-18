@@ -19,7 +19,7 @@ export default async function Page() {
       authorized: data.display_follower === 1 ? true : false,
     },
     {
-      display: "Display my location",
+      display: "Display my location (soon)",
       name: "Display Location",
       authorized: true,
     },
@@ -27,9 +27,10 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col w-full p-4 gap-4">
-      {settings.map((setting) => {
+      {settings.map((setting, id) => {
         return (
           <Setting
+            key={id}
             display={setting.display}
             name={setting.name}
             authorized={setting.authorized}

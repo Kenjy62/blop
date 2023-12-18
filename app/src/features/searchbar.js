@@ -23,7 +23,7 @@ export const onSearch = async (data) => {
       },
     })
     .then(async (user) => {
-      return prisma.post
+      return prisma.hashtags
         .findMany({
           where: {
             content: {
@@ -31,19 +31,25 @@ export const onSearch = async (data) => {
             },
           },
           select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            updatedAt: true,
-            picture: true,
-            author: {
+            post: {
               select: {
                 id: true,
-                name: true,
+                content: true,
+                createdAt: true,
+                updatedAt: true,
                 picture: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    picture: true,
+                  },
+                },
               },
             },
           },
+          skip: 0,
+          take: 10,
         })
         .then(async (post) => {
           return { user, post };

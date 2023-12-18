@@ -24,7 +24,7 @@ export default function SearchContainer() {
   };
 
   useEffect(() => {
-    if (query?.length > 0) test();
+    if (query?.length > 3) test();
     if (query?.length < 1) {
       setUserList();
       setPost();

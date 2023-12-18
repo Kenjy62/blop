@@ -27,7 +27,7 @@ export default function Modal({ defaultTheme }) {
       }
       onRequestClose={() => router.back()}
       overlayClassName={!defaultTheme ? "" : "dark"}
-      className={"dark:bg-night-300"}
+      className={"dark:bg-night-300 bg-white"}
       style={{
         overlay: {
           position: "fixed",

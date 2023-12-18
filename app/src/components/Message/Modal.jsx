@@ -8,7 +8,6 @@ import CreateConversation from "../Modal/Type/CreateConversation";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Modal({ userFollowed, defaultTheme }) {
-  console.log(defaultTheme);
   const router = useRouter();
 
   const pathname = usePathname();

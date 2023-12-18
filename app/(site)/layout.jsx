@@ -3,7 +3,7 @@ import Modal from "@/app/src/components/Modal/Modal";
 import Header from "@/app/src/components/UI/Structure/Header";
 import Navbar from "@/app/src/components/UI/Structure/Navbar";
 import Rightbar from "@/app/src/components/UI/Structure/Rightbar";
-import SearchContainer from "../src/components/UI/Searchbar/SearchContainer";
+import SearchContainer from "../src/components/UI/Searchbar/Container";
 import Theme from "../src/components/Tricky/Theme";
 import Overlay from "../src/components/Overlay/Overlay";
 
@@ -41,7 +41,7 @@ export default async function Layout({ children }) {
           </div>
         </div>
         <SearchContainer />
-        <Overlay />
+        <Overlay defaultTheme={data?.darkMode ? data.darkMode : false} />
         <Modal defaultTheme={data?.darkMode ? data.darkMode : false} />
       </Theme>
     </Provider>

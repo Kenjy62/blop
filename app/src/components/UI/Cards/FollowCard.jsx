@@ -82,7 +82,7 @@ export default function FollowCard({ item, isMyProfil }) {
   }
 
   return (
-    <div className="flex flex-1 p-4 flex-row gap-4 justify-between items-center dark:bg-night-300 bg-light-100 rounded-lg">
+    <div className="flex w-[calc(50%-16px)] p-4 flex-row gap-4 justify-between items-center dark:bg-night-300 bg-light-100 rounded-lg">
       <div className="flex flex-row gap-4 items-center">
         <Picture
           name={item.user2 ? item.user2?.name : item.user1.name}

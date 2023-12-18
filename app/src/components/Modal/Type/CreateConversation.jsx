@@ -86,7 +86,7 @@ export default function CreateConversation({ userFollowed }) {
         />
         <div className="flex flex-row gap-2 flex-wrap justify-center">
           {followed.length > 0 ? (
-            followed.map((user, id) => (
+            followed.slice(0, 5).map((user, id) => (
               <div
                 onClick={() => createConversation(user.user2.id)}
                 key={id}
@@ -102,7 +102,7 @@ export default function CreateConversation({ userFollowed }) {
               </div>
             ))
           ) : followed.length < 1 && query?.length > 0 ? (
-            <p>No result for : {query}</p>
+            <p>No result for: {query}</p>
           ) : (
             <p>You are not following any users, please follow a user first.</p>
           )}

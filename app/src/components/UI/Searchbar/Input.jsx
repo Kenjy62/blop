@@ -34,7 +34,7 @@ export default function Searchbar() {
       onChange={(e) => startSearch(e.currentTarget.value)}
       className={color}
       type="text"
-      placeholder="Search user and post.."
+      placeholder="Search user and/or hashtag..."
     />
   );
 }

@@ -1556,7 +1556,7 @@ export const getFollower = async () => {
     });
 };
 
-export const getSpecifiqueUserFollows = async (name) => {
+export const getSpecifiqueUserFollows = async (name, skip) => {
   const prisma = new PrismaClient();
 
   return prisma.user
@@ -1579,6 +1579,8 @@ export const getSpecifiqueUserFollows = async (name) => {
               },
             },
           },
+          skip: skip,
+          take: 6,
         })
         .then((response) => {
           return {
@@ -1608,7 +1610,7 @@ export const getSpecifiqueUserFollows = async (name) => {
     });
 };
 
-export const getSpecifiqueUserFollowers = async (name) => {
+export const getSpecifiqueUserFollowers = async (name, skip) => {
   const prisma = new PrismaClient();
 
   return prisma.user
@@ -1631,6 +1633,8 @@ export const getSpecifiqueUserFollowers = async (name) => {
               },
             },
           },
+          skip: skip,
+          take: 6,
         })
         .then((response) => {
           return {

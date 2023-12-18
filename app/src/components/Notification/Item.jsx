@@ -14,9 +14,25 @@ import Tag from "../UI/Tag/Tag";
 import { setIsRead } from "../../features/notification";
 
 // Hooks
+import { CheckColorScheme } from "../../hooks/colorScheme";
 
 export default function Item({ item }) {
-  console.log(item);
+  const colorScheme = CheckColorScheme();
+  var color;
+
+  if (colorScheme === "Watermelon") {
+    color = `flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200`;
+  } else if (colorScheme === "harlequin") {
+    color = `flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-harlequin-100 hover:rounded-lg border-b dark:border-night-200`;
+  } else if (colorScheme === "fire-bush") {
+    color = `flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-fire-bush-100 hover:rounded-lg border-b dark:border-night-200`;
+  } else if (colorScheme === "cinnabar") {
+    color = `flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-cinnabar-100 hover:rounded-lg border-b dark:border-night-200`;
+  } else if (colorScheme === "purple-heart") {
+    color = `flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-purple-heart-100 hover:rounded-lg border-b dark:border-night-200`;
+  } else if (colorScheme === "royal-blue") {
+    color = `flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-royal-blue-100 hover:rounded-lg border-b dark:border-night-200`;
+  }
 
   const onHover = async (id) => {
     await setIsRead(id);
@@ -32,7 +48,7 @@ export default function Item({ item }) {
         <div
           onMouseEnter={() => item.isRead === 0 && onHover(item.id)}
           key={item.id}
-          className="flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200"
+          className={color}
         >
           <Picture
             url={item.author.picture}
@@ -59,7 +75,7 @@ export default function Item({ item }) {
         <div
           onMouseEnter={() => item.isRead === 0 && onHover(item.id)}
           key={item.id}
-          className="flex flex-row gap-2 p-4 items-center cursor-pointer dark:bg-night-400 hover:dark:bg-night-200 hover:bg-watermelon-100 hover:rounded-lg border-b dark:border-night-200"
+          className={color}
         >
           <Picture
             url={item.author.picture}

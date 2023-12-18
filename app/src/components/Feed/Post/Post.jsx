@@ -92,8 +92,8 @@ export default function Post({ userId, post }) {
                     <Image
                       className="rounded-lg w-full"
                       src={pic.url}
-                      width={500}
-                      height={500}
+                      width={1920}
+                      height={1080}
                       alt={`post picture`}
                     />
                   </Link>

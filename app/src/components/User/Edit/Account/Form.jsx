@@ -56,7 +56,7 @@ export default function Form({ data }) {
         <div className={"flex flex-row gap-2 items-center"}>
           <p className="w-28">Secret Key : </p>
           <input disabled placeholder={"test"} className={style} />
-          <div className="flex justify-center items-center bg-red-500 dark:bg-night-300 border dark:border-night-200 cursor-pointer p-1 rounded-lg">
+          <div className="flex justify-center items-center bg-light-100 dark:bg-night-300 border dark:border-night-200 cursor-pointer p-1 rounded-lg">
             <RxClipboard />
           </div>
         </div>

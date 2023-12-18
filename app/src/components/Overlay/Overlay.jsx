@@ -10,7 +10,7 @@ import ImageLoader from "./Type/Image";
 // Set Modal
 ReactModal.setAppElement("html");
 
-export default function Overlay() {
+export default function Overlay({ defaultTheme }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -18,6 +18,8 @@ export default function Overlay() {
     <ReactModal
       isOpen={searchParams.get("picture") ? true : false}
       onRequestClose={() => router.back()}
+      overlayClassName={!defaultTheme ? "" : "dark"}
+      className={"dark:bg-night-300"}
       style={{
         overlay: {
           position: "fixed",
@@ -25,7 +27,6 @@ export default function Overlay() {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "#00000085",
           display: "flex",
           justifyContent: "center",
           justifyItems: "center",
@@ -44,6 +45,7 @@ export default function Overlay() {
           margin: 0,
           overflow: "hidden",
           inset: 0,
+          border: "none",
         },
       }}
     >

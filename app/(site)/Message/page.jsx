@@ -12,6 +12,8 @@ import { init } from "@/app/src/features/user";
 import Link from "next/link";
 
 export default async function Page({ searchParams }) {
+  console.log("reeeenders");
+
   const { data, message, status } = await getConversations(searchParams);
 
   const user = await init();

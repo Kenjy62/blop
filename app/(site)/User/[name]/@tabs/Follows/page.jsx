@@ -8,14 +8,18 @@ import {
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
 import FollowCard from "@/app/src/components/UI/Cards/FollowCard";
+import LoadMore from "@/app/src/components/User/LoadMore";
 
 export default async function Page({ params }) {
-  const { data, message, status } = await getSpecifiqueUserFollows(params.name);
+  const { data, message, status } = await getSpecifiqueUserFollows(
+    params.name,
+    0
+  );
   const userAuthorization = await getUserConfidentialitySettings(params.name);
   const me = await init();
 
   if (userAuthorization.display_follow === 0) {
-    return <p>This user doesn't allow to display follows</p>;
+    return <p>This user doesn&apos;t allow to display follows</p>;
   }
 
   if (status === 200 && data.length > 0) {
@@ -31,6 +35,7 @@ export default async function Page({ params }) {
               />
             );
           })}
+          {data.length > 0 && <LoadMore user={me} type="Follow" />}
         </div>
       </div>
     );
