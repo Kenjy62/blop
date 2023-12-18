@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model User {
+  id                   Int            @id @default(autoincrement())
+  email                String         @db.VarChar(255)
+  name                 String         @db.VarChar(255)
+  password             String         @db.VarChar(255)
+  picture              String?        @db.VarChar(255)
+  cover                String?        @db.VarChar(255)
+  posts                Post[]
+  comments             Comment[] // List of user comments
+  posts_liked          PostsLiked[] // List of user post liked
+  display_follow       Int            @default(1)
+  display_follower     Int            @default(1)
+  socket               String?        @db.VarChar(255)
+  token                String?        @db.VarChar(255)
+  notification         Notification[]
+  darkMode             Boolean        @default(false)
+  conversationsFrom    Conversation[] @relation("conversationsFrom")
+  conversationsFor     Conversation[] @relation("conversationsFor")
+  Message              Message[]
+  userFollower         Follow[]       @relation("userFollower")
+  userFollowed         Follow[]       @relation("userFollowed")
+  like_notification    Int            @default(1)
+  message_notification Int            @default(1)
+  comment_notification Int            @default(1)
+  colorScheme          String         @default("Watermelon")
+  followedFeedView     Boolean        @default(false)
+
+  @@unique([id, name, token, email])
+}
+
+model Notification {
+  id              Int           @id @default(autoincrement())
+  type            String?       @db.VarChar(255)
+  author          User          @relation(fields: [from], references: [id])
+  from            Int
+  for_id          Int?
+  isRead          Int           @default(0)
+  post_id         Int?
+  conversation_id Int?
+  Post            Post?         @relation(fields: [post_id], references: [id])
+  Conversation    Conversation? @relation(fields: [conversation_id], references: [id])
+  createdAt       DateTime
+}
+
+model Post {
+  id              Int            @id @default(autoincrement())
+  createdAt       DateTime
+  updatedAt       DateTime?
+  content         String?        @db.VarChar(1000)
+  author          User           @relation(fields: [author_id], references: [id])
+  author_id       Int
+  picture         PostPicture[]
+  shares          Int            @default(0)
+  share           Post[]         @relation("Share_Relation")
+  share_data      Post?          @relation("Share_Relation", fields: [share_id], references: [id])
+  share_id        Int?
+  likes           Int            @default(0)
+  userslist_likes PostsLiked[]
+  bookmarks       Int            @default(0)
+  bookmark_data   Bookmarks[]
+  type            String         @db.VarChar(1000)
+  hashtags        Hashtags[]
+  comments        Comment[]
+  Notification    Notification[]
+}
+
+model PostPicture {
+  id      Int    @id @default(autoincrement())
+  url     String @db.VarChar(1000)
+  post_id Int
+  post    Post   @relation(fields: [post_id], references: [id])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.VarChar(1000)
+  createdAt DateTime
+  author    User     @relation(fields: [author_id], references: [id])
+  author_id Int
+  post      Post     @relation(fields: [post_id], references: [id])
+  post_id   Int
+}
+
+model Hashtags {
+  id      Int    @id @default(autoincrement())
+  count   Int    @default(1)
+  post    Post   @relation(fields: [post_id], references: [id])
+  post_id Int
+  content String @db.VarChar(1000)
+}
+
+model PostsLiked {
+  id      Int  @id @default(autoincrement())
+  post    Post @relation(fields: [post_id], references: [id])
+  post_id Int
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+}
+
+model Bookmarks {
+  id      Int     @id @default(autoincrement())
+  user_id Int
+  post    Post    @relation(fields: [post_id], references: [id])
+  post_id Int
+  tag     String? @db.VarChar(255)
+}
+
+model Conversation {
+  id             Int            @id @default(autoincrement())
+  participant1   User           @relation("conversationsFrom", fields: [participant1Id], references: [id])
+  participant1Id Int
+  participant2   User           @relation("conversationsFor", fields: [participant2Id], references: [id])
+  participant2Id Int
+  messages       Message[]      @relation("ConversationMessages")
+  Notification   Notification[]
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String       @db.VarChar(1000)
+  createdAt      DateTime
+  sender         User         @relation(fields: [senderId], references: [id])
+  senderId       Int
+  conversation   Conversation @relation("ConversationMessages", fields: [conversationId], references: [id])
+  conversationId Int
+  isRead         Boolean      @default(false)
+}
+
+model Follow {
+  id       Int  @id @default(autoincrement())
+  user1    User @relation("userFollower", fields: [user1_id], references: [id])
+  user1_id Int
+  user2    User @relation("userFollowed", fields: [user2_id], references: [id])
+  user2_id Int
+}

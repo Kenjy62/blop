@@ -13,6 +13,7 @@
     "@next/font": "^13.4.19",
     "@prisma/client": "5.3.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@vercel/postgres": "^0.5.1",
     "autoprefixer": "10.4.15",
     "bufferutil": "^4.0.8",
     "cors": "^2.8.5",
