@@ -1,31 +1,20 @@
 "use client";
 
 // Required
-import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-// DayJS
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
 
 // Components
-import Share from "./Share/Share";
 import Actions from "./Action";
 import Picture from "../../UI/User/Picture";
+import Date from "../../UI/Globals/Date";
+import Infos from "./Infos";
+import Pictures from "./Pictures";
+import Content from "./Content";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 
-// Icons
-import { RxClock } from "react-icons/rx";
-
 export default function Post({ userId, post }) {
-  const now = dayjs();
-  const dateDiff = now.diff(post.createdAt, "minute");
-  const pathname = usePathname();
-
   const colorScheme = CheckColorScheme();
 
   var color;
@@ -61,61 +50,15 @@ export default function Post({ userId, post }) {
             className="w-full flex flex-col gap-2"
           >
             <div className="flex flex-row justify-between items-center">
-              <div className="flex flex-row gap-2 items-center">
-                <span className="font-medium">{post.author.name} </span>
-                <span className="text-sm">
-                  {pathname.includes("/Likes")
-                    ? "has liked"
-                    : post.type === "post"
-                    ? "has posted"
-                    : "has shared"}
-                </span>
-              </div>
-              <span className="font-light text-xs flex flex-row items-center gap-1">
-                <RxClock /> {dayjs(post.createdAt).fromNow()}
-              </span>
+              <Infos name={post.author.name} type={post.type} />
+              <Date date={post.createdAt} />
             </div>
-            {post.type === "post" ? (
-              <div className="font-normal">{post.content}</div>
-            ) : (
-              <>
-                <div className="font-normal">{post.content}</div>
-                <Share post={post.share_data} />
-              </>
-            )}
+            <Content post={post} />
           </Link>
-          {post.picture?.length > 0 && (
-            <div className="flex flex-row gap-2">
-              {post.picture.map((pic, id) => (
-                <div className="flex-1" key={id}>
-                  <Link href={`?picture=${pic.url.replace("/Posts/", "")}`}>
-                    <Image
-                      className="rounded-lg w-full"
-                      src={pic.url}
-                      width={1920}
-                      height={1080}
-                      alt={`post picture`}
-                    />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
+          {post.picture?.length > 0 && <Pictures post={post} />}
         </div>
       </div>
-      <Actions
-        userId={userId}
-        postAuthorId={post.author.id}
-        postId={post.id}
-        comments={post.comment}
-        likes={post.likes}
-        shares={post.shares}
-        Bookmarks={post.bookmarks}
-        UsersBookmarks={post.bookmark_data}
-        UsersLikes={post.userslist_likes}
-        isDeleteable={dateDiff > 5 ? false : true}
-        createdAt={post.createdAt}
-      />
+      <Actions userId={userId} post={post} />
     </div>
   );
 }

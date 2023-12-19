@@ -6,7 +6,11 @@ import ChatList from "@/app/src/components/Message/Chat/ChatList";
 import ChatTop from "@/app/src/components/Message/Chat/ChatTop";
 
 // Features
-import { getMessages, init } from "@/app/src/features/user";
+import {
+  getMessages,
+  init,
+  setConversationRead,
+} from "@/app/src/features/user";
 
 export default async function Page({ params }) {
   const { data, message, status } = await getMessages(params.id);
@@ -24,6 +28,8 @@ export default async function Page({ params }) {
           ? data[0].conversation.participant1.picture
           : data[0].conversation.participant2.picture,
     };
+
+    await setConversationRead(params.id);
 
     return (
       <ChatContainer>

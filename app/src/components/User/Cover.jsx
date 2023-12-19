@@ -5,14 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 // Components
 import Button from "../UI/Button/Button";
 
 // Features
 import { followUser, unfollowUser } from "../../features/user";
+import { newConversation } from "../../features/chat";
 
-export default function Cover({ cover, isMyProfil, isFollowed }) {
+export default function Cover({ isMyProfil, isFollowed, user }) {
+  const router = useRouter();
+
   const { name } = useParams();
   const [alreadyFollow, setAlreadyFollow] = useState(
     isFollowed.length > 0 ? true : false
@@ -33,16 +37,36 @@ export default function Cover({ cover, isMyProfil, isFollowed }) {
       });
     } else if (alreadyFollow) {
       startTransition(async () => {
-        const response = await unfollowUser(name);
+        await unfollowUser(name);
         setAlreadyFollow(!alreadyFollow);
       });
+    }
+  }
+
+  async function createConversation(userId) {
+    const { data, message, status } = await newConversation(userId);
+
+    if (status === 200) {
+      router.push(`/Message/Conversation/${data.id}`);
+    }
+
+    if (status === 400) {
+      toast(<ToastError message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
+      return;
     }
   }
 
   return (
     <div className={`h-64 rounded-lg w-full relative`}>
       <Image
-        src={cover}
+        src={user.cover}
         height={1080}
         width={1920}
         className="w-full h-64 object-cover object-center rounded-lg"
@@ -56,11 +80,14 @@ export default function Cover({ cover, isMyProfil, isFollowed }) {
         </div>
       )}
       {!isMyProfil && (
-        <div className="absolute top-4 right-4">
+        <div className="absolute flex flex-col gap-2 top-4 right-4">
           <div onClick={follow}>
             <Button>
               {isPending ? "Loading.." : alreadyFollow ? "Unfollow" : "Follow"}
             </Button>
+          </div>
+          <div onClick={() => createConversation(user.id)}>
+            <Button>Message</Button>
           </div>
         </div>
       )}

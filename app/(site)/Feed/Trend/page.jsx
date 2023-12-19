@@ -1,6 +1,7 @@
 // Components
 import ComponentError from "@/app/src/components/Error/ComponentError";
 import Post from "@/app/src/components/Feed/Post/Post";
+import LoadMore from "@/app/src/components/Feed/Trend/LoadMore";
 import Title from "@/app/src/components/UI/Title/Title";
 
 // Features
@@ -16,9 +17,10 @@ export default async function Page({ searchParams }) {
       return (
         <div className="w-full flex flex-col gap-4">
           <Title>Post with : {`#${searchParams.q}`}</Title>
-          {data.reverse().map((post, id) => (
+          {data.map((post, id) => (
             <Post key={id} userId={user.data.id} post={post.post} />
           ))}
+          <LoadMore query={searchParams.q} user={user} />
         </div>
       );
     }

@@ -1,3 +1,4 @@
+// Components
 import Post from "./Post/Post";
 import Order from "./Order";
 import LoadMore from "./Loadmore";

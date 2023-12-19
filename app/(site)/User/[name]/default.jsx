@@ -1,14 +1,14 @@
 // Components
-import ComponentsError from "@/app/src/components/Error/ComponentError";
-import { Vertical } from "@/app/src/components/UI/Globals/Separators";
 import Picture from "@/app/src/components/UI/User/Picture";
 import Cover from "@/app/src/components/User/Cover";
+import Location from "@/app/src/components/User/Location";
 import ProfilStats from "@/app/src/components/User/ProfilStats";
 import Tabs from "@/app/src/components/User/Tabs";
 
 // Features
 import { init, GetUserDetails } from "@/app/src/features/user";
 
+// Required
 import { notFound } from "next/navigation";
 
 export default async function Default({ params }) {
@@ -28,7 +28,7 @@ export default async function Default({ params }) {
       <>
         <div className="w-full">
           <Cover
-            cover={data.cover}
+            user={data}
             isMyProfil={data.id === me.data.id ? true : false}
             isFollowed={alreadyFollow}
           />
@@ -40,7 +40,7 @@ export default async function Default({ params }) {
                 name={`${data.name}`}
                 style={`w-28 h-28 rounded-full border-4 border-white dark:border-night-300 object-cover`}
               />
-              <span>France</span>
+              <Location />
             </div>
             <ProfilStats data={data} />
           </div>

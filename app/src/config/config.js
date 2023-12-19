@@ -17,3 +17,5 @@ export const colorScheme = [
   { name: "cinnabar", hex: "#ff6868", selected: false },
   { name: "purple-heart", hex: "#9d82ff", selected: false },
 ];
+
+export const notificationsTabs = ["All", "Comment", "Like", "Chat", "Share"];

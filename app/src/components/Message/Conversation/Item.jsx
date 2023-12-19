@@ -5,7 +5,7 @@ import Link from "next/link";
 
 // Components
 import Picture from "../../UI/User/Picture";
-import Date from "../Other/Date";
+import Date from "../../UI/Globals/Date";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";

@@ -1,7 +1,9 @@
 "use client";
 
-// Context
+// Required
 import { useContext } from "react";
+
+// Context
 import { ThemeContext } from "../../context/theme";
 
 export default function Theme({ children }) {

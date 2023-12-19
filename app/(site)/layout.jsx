@@ -1,16 +1,15 @@
 // Components
-import Modal from "@/app/src/components/Modal/Modal";
 import Header from "@/app/src/components/UI/Structure/Header";
 import Navbar from "@/app/src/components/UI/Structure/Navbar";
 import Rightbar from "@/app/src/components/UI/Structure/Rightbar";
 import SearchContainer from "../src/components/UI/Searchbar/Container";
 import Theme from "../src/components/Tricky/Theme";
-import Overlay from "../src/components/Overlay/Overlay";
+import Popup from "../src/components/Popup/Popup";
 
 // Toast
 import { Toaster } from "react-hot-toast";
 
-// Context
+// Provider Tree
 import Provider from "@/app/src/context/provider";
 
 // Features
@@ -40,9 +39,10 @@ export default async function Layout({ children }) {
             </div>
           </div>
         </div>
+        <Popup />
         <SearchContainer />
-        <Overlay defaultTheme={data?.darkMode ? data.darkMode : false} />
-        <Modal defaultTheme={data?.darkMode ? data.darkMode : false} />
+        {/* <Overlay defaultTheme={data?.darkMode ? data.darkMode : false} /> */}
+        {/* <Modal defaultTheme={data?.darkMode ? data.darkMode : false} /> */}
       </Theme>
     </Provider>
   );

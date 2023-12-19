@@ -3,6 +3,7 @@ import ComponentError from "@/app/src/components/Error/ComponentError";
 import Feed from "@/app/src/components/Feed/Feed";
 import Order from "@/app/src/components/Feed/Order";
 import Textarea from "@/app/src/components/Feed/Textarea";
+import Message from "@/app/src/components/UI/Globals/Message";
 
 // Features
 import { GetAllPost, GetFollowedPost } from "@/app/src/features/post";
@@ -33,7 +34,7 @@ export default async function Page({ searchParams }) {
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
           <Textarea />
           <Order selected={"Followed"} />
-          <div>No followed post for this moment!</div>
+          <Message>No followed post for this moment!</Message>
         </div>
       );
     }
@@ -59,10 +60,10 @@ export default async function Page({ searchParams }) {
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
           <Textarea />
-          <div className="flex justify-center">
+          <Message>
             No posts yet, be the first by writing a post with the field just
-            above.
-          </div>
+            above!
+          </Message>
         </div>
       );
     }
@@ -90,7 +91,7 @@ export default async function Page({ searchParams }) {
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
           <Textarea />
           <Order selected={searchParams?.order} />
-          <div>No followed post for this moment!</div>
+          <Message>No followed post for this moment!</Message>
         </div>
       );
     }

@@ -62,10 +62,10 @@ export default function Form({ data }) {
         </div>
         <div className="flex flex-col gap-2 items-center justify-center">
           <Link href="#" className="text-watermelon-400">
-            Télécharger toutes mes données
+            Download my data
           </Link>
           <Link href="#" className="text-red-400">
-            Supprimer mon compte
+            Delete my account
           </Link>
         </div>
         <div className="flex justify-end">

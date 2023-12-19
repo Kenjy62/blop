@@ -3,6 +3,7 @@ import ComponentError from "@/app/src/components/Error/ComponentError";
 import Item from "@/app/src/components/Message/Conversation/Item";
 import SearchBar from "@/app/src/components/Message/Searchbar";
 import Button from "@/app/src/components/UI/Button/Button";
+import Message from "@/app/src/components/UI/Globals/Message";
 
 // Features
 import { getConversations } from "@/app/src/features/user";
@@ -12,8 +13,6 @@ import { init } from "@/app/src/features/user";
 import Link from "next/link";
 
 export default async function Page({ searchParams }) {
-  console.log("reeeenders");
-
   const { data, message, status } = await getConversations(searchParams);
 
   const user = await init();
@@ -31,14 +30,13 @@ export default async function Page({ searchParams }) {
       return new Date(lastMessageB) - new Date(lastMessageA);
     }
 
-    // Si l'une des conversations n'a pas de messages, elle sera placée à la fin.
     if (a.messages && a.messages.length > 0) {
       return -1;
     } else if (b.messages && b.messages.length > 0) {
       return 1;
     }
 
-    return 0; // Les deux conversations n'ont pas de messages, l'ordre initial est conservé.
+    return 0;
   });
 
   if (status === 200 && data.length > 0) {
@@ -66,7 +64,7 @@ export default async function Page({ searchParams }) {
             <Button>Create Conversation</Button>
           </Link>
         </div>
-        <div>Unknow result with : {searchParams.query}</div>
+        <Message>Unknow result with : {searchParams.query}</Message>
       </div>
     );
   }
@@ -80,9 +78,7 @@ export default async function Page({ searchParams }) {
             <Button>Create Conversation</Button>
           </Link>
         </div>
-        <div className="flex justify-center">
-          No Conversations for this moment
-        </div>
+        <Message>No Conversations for this moment!</Message>
       </div>
     );
   }

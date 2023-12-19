@@ -10,13 +10,13 @@ import { useState } from "react";
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 
 export default function ChatArea({ conversationId, userId }) {
-  const [textarea, setTextarea] = useState(""); // Initialiser avec une chaîne vide
+  const [textarea, setTextarea] = useState("");
 
   async function sendChat(formData) {
     const { message, status } = await send(formData, conversationId, userId);
 
     if (status === 200) {
-      setTextarea(""); // Réinitialiser le champ de texte après l'envoi du message
+      setTextarea("");
     }
 
     if (status === 400) {

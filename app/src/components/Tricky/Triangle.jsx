@@ -1,5 +1,6 @@
 "use client";
 
+// Hooks
 import { CheckColorScheme } from "../../hooks/colorScheme";
 
 export const TriangleTop = () => {

@@ -84,7 +84,7 @@ export default function Item({ item }) {
             style="rounded-full h-10 w-10 cursor-pointer object-cover"
           />
           <span className="w-fit">
-            {item.author.name} has {item.type} your post
+            {item.author.name} send {item.type}
           </span>
           <span>-</span>
           <span>{dayjs(item.createdAt).fromNow()}</span>

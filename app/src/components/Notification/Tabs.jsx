@@ -7,15 +7,17 @@ import { useEffect, useState } from "react";
 import Tag from "../UI/Tag/Tag";
 import List from "./List";
 
+// Config
+import { notificationsTabs } from "../../config/config";
+
 export default function Tabs({ data }) {
-  const Tabs = ["All", "Comment", "Like", "Share", "Chat"];
   const [notifications, setNotifications] = useState(data);
   const [isActive, setIsActive] = useState("All");
   const [unreadCounts, setUnreadCounts] = useState({});
 
   useEffect(() => {
     const tabCounts = {};
-    Tabs.forEach((tab) => {
+    notificationsTabs.forEach((tab) => {
       tabCounts[tab] = data.filter(
         (item) =>
           (tab === "All" || item.type.toLowerCase() === tab.toLowerCase()) &&
@@ -38,7 +40,7 @@ export default function Tabs({ data }) {
   return (
     <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-row h-fit gap-2">
-        {Tabs.map((tab, id) => {
+        {notificationsTabs.map((tab, id) => {
           return (
             <div key={id} onClick={() => setIsActive(tab)}>
               <Tag key={id} state={isActive === tab ? "Active" : "Unactive"}>
@@ -48,7 +50,7 @@ export default function Tabs({ data }) {
           );
         })}
       </div>
-      <List list={notifications} />
+      <List list={notifications} tab={isActive} />
     </div>
   );
 }

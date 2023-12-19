@@ -1,7 +1,6 @@
+// Components
+import Message from "@/app/src/components/UI/Globals/Message";
+
 export default function NotFound() {
-  return (
-    <div className="w-full justify-center flex">
-      <p> User doesn&apos;t Exist </p>
-    </div>
-  );
+  return <Message>User doesn&apos;t Exist</Message>;
 }

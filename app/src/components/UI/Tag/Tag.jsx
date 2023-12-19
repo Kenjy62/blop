@@ -1,5 +1,6 @@
 "use client";
 
+// Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
 
 export default function Tag({ children, state }) {

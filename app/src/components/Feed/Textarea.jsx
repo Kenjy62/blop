@@ -2,6 +2,7 @@
 
 // Required
 import { useTransition, useRef, useState } from "react";
+import Image from "next/image";
 
 // Features
 import { CreatePost } from "../../features/post";
@@ -17,11 +18,12 @@ import {
   RxCalendar,
   RxCross1,
 } from "react-icons/rx";
-import Image from "next/image";
-import Button from "../UI/Button/Button";
 
 // Toast
 import toast from "react-hot-toast";
+
+// Components
+import Button from "../UI/Button/Button";
 import { ToastError } from "../UI/Toast/Toasts";
 
 export default function Textarea() {

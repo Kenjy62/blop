@@ -6,6 +6,7 @@ import { init } from "@/app/src/features/user";
 import Post from "@/app/src/components/Feed/Post/Post";
 import ComponentError from "@/app/src/components/Error/ComponentError";
 import LoadMore from "@/app/src/components/Profil/LoadMore";
+import Message from "@/app/src/components/UI/Globals/Message";
 
 export default async function Page({ params }) {
   const { data, message, status } = await GetUserPosts(params.name, 0);
@@ -25,7 +26,7 @@ export default async function Page({ params }) {
 
         {data.length > 0 && <LoadMore user={user} type="Post" />}
         {data.length < 1 && (
-          <p>The user has no posts to his credit at the moment</p>
+          <Message>The user has no posts to his credit at the moment!</Message>
         )}
       </div>
     );

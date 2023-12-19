@@ -4,7 +4,7 @@
 import { CheckColorScheme } from "../../../hooks/colorScheme";
 
 // Components
-import Date from "./Date";
+import Date from "../../UI/Globals/Date";
 
 export default function Sender({ data }) {
   const colorScheme = CheckColorScheme();
@@ -31,7 +31,7 @@ export default function Sender({ data }) {
         <div className={color}>{data.content}</div>
       </div>
       <div className="flex flex-row justify-start">
-        <Date data={data.createdAt} />
+        <Date date={data.createdAt} />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 // Features
 import { init } from "@/app/src/features/user";
 
-// Icons
+// Components
 import Items from "./Navbar/Item";
 
 export default async function Navbar({ colorScheme }) {

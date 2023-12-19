@@ -666,7 +666,7 @@ export const ReplyToPost = async (content, postId) => {
 };
 
 // Get trends
-export const GetTrend = async (query) => {
+export const GetTrend = async (query, skip) => {
   const prisma = new PrismaClient();
 
   return prisma.hashtags
@@ -727,6 +727,11 @@ export const GetTrend = async (query) => {
             },
           },
         },
+      },
+      skip: skip,
+      take: 5,
+      orderBy: {
+        id: "desc",
       },
     })
     .then(async (response) => {

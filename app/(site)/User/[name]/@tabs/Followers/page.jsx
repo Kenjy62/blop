@@ -9,6 +9,7 @@ import {
 import ComponentError from "@/app/src/components/Error/ComponentError";
 import FollowCard from "@/app/src/components/UI/Cards/FollowCard";
 import LoadMore from "@/app/src/components/User/LoadMore";
+import Message from "@/app/src/components/UI/Globals/Message";
 
 export default async function Page({ params }) {
   const { data, message, status } = await getSpecifiqueUserFollowers(
@@ -21,7 +22,9 @@ export default async function Page({ params }) {
   const userAuthorization = await getUserConfidentialitySettings(params.name);
 
   if (userAuthorization.data.display_follower === 0) {
-    return <p>This user doesn&apos;t allow to display followers</p>;
+    return (
+      <Message>This user doesn&apos;t allow to display followers!</Message>
+    );
   }
 
   if (status === 200 && data.length > 0) {
@@ -38,7 +41,7 @@ export default async function Page({ params }) {
   }
 
   if (status === 200 && data.length < 1) {
-    return <p>No follower for this moment</p>;
+    return <Message>No follower for this moment!</Message>;
   }
 
   if (status === 400) {

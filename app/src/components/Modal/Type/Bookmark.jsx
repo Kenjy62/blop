@@ -1,11 +1,15 @@
 // Required
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
+
+// Context
+import { PopupContext } from "@/app/src/context/popup";
 
 // Components
 import Button from "../../UI/Button/Button";
 import Title from "../../UI/Title/Title";
 import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
+import CloseButton from "../../Popup/CloseButton";
 
 // toast
 import toast from "react-hot-toast";
@@ -16,6 +20,8 @@ import { CreateBookmark } from "@/app/src/features/bookmark";
 export default function Bookmark({ postId }) {
   const [tag, setTag] = useState();
   const router = useRouter();
+
+  const { togglePopup } = useContext(PopupContext);
 
   const actionAddBookmarks = async () => {
     const { message, status } = await CreateBookmark(postId, tag);
@@ -40,13 +46,16 @@ export default function Bookmark({ postId }) {
           border: "none",
         },
       });
-      router.back();
+      togglePopup();
     }
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full bg-white dark:bg-night-300 p-4 rounded-lg dark:text-white">
-      <Title>Add To Bookmark</Title>
+    <div className="flex flex-col gap-4 z-50 bg-white dark:bg-night-300 p-4 rounded-lg w-96">
+      <div className="flex flex-row justify-between">
+        <Title>Reply to post</Title>
+        <CloseButton />
+      </div>
       <div className="flex flex-col w-full gap-4">
         <div className="flex flex-row gap-4 items-center">
           <label>Tag :</label>

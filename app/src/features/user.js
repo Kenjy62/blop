@@ -1207,7 +1207,7 @@ export async function GetUserDetails(name) {
     });
 }
 
-export const getNotifications = async () => {
+export const getNotifications = async (skip) => {
   const prisma = new PrismaClient();
 
   return init()
@@ -1240,6 +1240,10 @@ export const getNotifications = async () => {
               },
             },
           },
+
+          skip: skip,
+          take: 10,
+          orderBy: { id: "desc" },
         })
         .then(async (response) => {
           return {
@@ -1406,6 +1410,26 @@ export const getMessages = async (id) => {
     .finally(() => {
       prisma.$disconnect();
     });
+};
+
+export const setConversationRead = async (id) => {
+  const prisma = new PrismaClient();
+
+  return init().then(async ({ data }) => {
+    return prisma.notification
+      .updateMany({
+        where: {
+          AND: [{ for_id: data.id }, { conversation_id: parseInt(id) }],
+        },
+        data: {
+          isRead: 1,
+        },
+      })
+      .then(async (res) => {
+        console.log(res);
+      })
+      .catch((error) => console.log(error));
+  });
 };
 
 export const followUser = async (name) => {

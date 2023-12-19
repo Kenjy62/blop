@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import Message from "../../UI/Globals/Message";
 
 export default function CreateConversation({ userFollowed }) {
   const colorScheme = CheckColorScheme();
@@ -102,14 +103,16 @@ export default function CreateConversation({ userFollowed }) {
               </div>
             ))
           ) : followed.length < 1 && query?.length > 0 ? (
-            <p>No result for: {query}</p>
+            <Message>No result for: {query}</Message>
           ) : (
-            <p>You are not following any users, please follow a user first.</p>
+            <Message>
+              You are not following any users, please follow a user first!
+            </Message>
           )}
         </div>
       </div>
     );
   }
 
-  return <p>error</p>;
+  return <Message>Error!</Message>;
 }

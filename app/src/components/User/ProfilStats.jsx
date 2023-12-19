@@ -1,3 +1,4 @@
+// Components
 import { Vertical } from "../UI/Globals/Separators";
 
 export default function ProfilStats({ data }) {

@@ -38,7 +38,9 @@ export default function SearchContainer() {
           {userList?.length > 0 || post?.length > 0 ? (
             <Result user={userList} post={post} />
           ) : (
-            "Aucun résultat"
+            <div className="flex justify-center">
+              Unknow results for this query
+            </div>
           )}
         </div>
       </div>
