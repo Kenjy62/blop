@@ -1,6 +1,6 @@
 // Components
 import Bookmarks from "@/app/src/components/Bookmark/Bookmarks";
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Message from "@/app/src/components/UI/Globals/Message";
 
 // Features

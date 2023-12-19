@@ -5,7 +5,7 @@ import Tools from "./Tools";
 
 // Actions
 import { init } from "@/app/src/features/user";
-import ComponentError from "../../Error/ComponentError";
+import ComponentError from "../Error/ComponentError";
 
 export default async function UserBar() {
   const { data, message, status } = await init();

@@ -433,7 +433,6 @@ export const updateNotificationSetting = async (type, color) => {
   return init()
     .then(async ({ data }) => {
       if (type === "Like") {
-        console.log(data);
         return prisma.user
           .findFirst({
             where: {
@@ -444,7 +443,6 @@ export const updateNotificationSetting = async (type, color) => {
             },
           })
           .then(async (oldValue) => {
-            console.log(oldValue);
             return prisma.user
               .update({
                 where: { id: data.id },

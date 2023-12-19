@@ -10,6 +10,7 @@ import { SearchContext } from "@/app/src/context/search";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import Date from "../../Globals/Date";
 
 export default function PostCardLittle({ post }) {
   const { toggle } = useContext(SearchContext);
@@ -49,7 +50,7 @@ export default function PostCardLittle({ post }) {
           <div className="flex flex-col gap-2 w-full">
             <div className="flex w-full flex-row justify-between  h-fit">
               <span> {post.author.name}</span>
-              <span className="text-sm">date</span>
+              <Date date={post.createdAt} />
             </div>
             <span className="text-sm">{post.content}</span>
           </div>

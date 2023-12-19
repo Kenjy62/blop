@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Item from "@/app/src/components/Message/Conversation/Item";
 import SearchBar from "@/app/src/components/Message/Searchbar";
 import Button from "@/app/src/components/UI/Button/Button";

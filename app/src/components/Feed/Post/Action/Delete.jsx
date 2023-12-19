@@ -8,12 +8,17 @@ import useDateDiff from "@/app/src/hooks/useDateDiff";
 // Features
 import { DeletePost } from "@/app/src/features/post";
 
+// Components
+import { ToastError } from "../../../UI/Toast/Toasts";
+
+// Toast
+import toast from "react-hot-toast";
+
 export default function Delete({ post, userId }) {
   const isDeleteable = useDateDiff(post.createdAt);
+  const dateDiff = useDateDiff(post.createdAt);
 
   const actionDelete = async () => {
-    const dateDiff = useDateDiff(post.createdAt);
-
     if (dateDiff < 5) {
       const response = await DeletePost(post.id);
       if (response.status === 400) {

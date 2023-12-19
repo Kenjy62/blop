@@ -9,6 +9,10 @@ import { useRouter } from "next/navigation";
 
 // Components
 import Button from "../UI/Button/Button";
+import { ToastError } from "../UI/Toast/Toasts";
+
+// Toast
+import toast from "react-hot-toast";
 
 // Features
 import { followUser, unfollowUser } from "../../features/user";

@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Modal from "@/app/src/components/Message/Modal";
 
 // Features

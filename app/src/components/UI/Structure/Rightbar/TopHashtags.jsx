@@ -1,6 +1,6 @@
 // Components
 import Title from "../../Title/Title";
-import ComponentError from "../../../Error/ComponentError";
+import ComponentError from "../../Error/ComponentError";
 
 // Features
 import { GetTopHashtags } from "@/app/src/features/sidebar/hashtags";

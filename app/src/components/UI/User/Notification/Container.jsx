@@ -2,8 +2,6 @@
 import Item from "./Item";
 
 export default function Container({ colorScheme, data, type }) {
-  console.log(data);
-
   var color;
 
   if (colorScheme === "Watermelon") {

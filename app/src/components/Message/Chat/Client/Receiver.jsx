@@ -1,10 +1,10 @@
 "use client";
 
 // Hooks
-import { CheckColorScheme } from "../../../hooks/colorScheme";
+import { CheckColorScheme } from "../../../../hooks/colorScheme";
 
 // Components
-import Date from "../../UI/Globals/Date";
+import Date from "../../../UI/Globals/Date";
 
 export default function Receiver({ data }) {
   const colorScheme = CheckColorScheme();

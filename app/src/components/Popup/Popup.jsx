@@ -11,6 +11,7 @@ import Reply from "../Modal/Type/Reply";
 import Overlay from "./Overlay";
 import Share from "../Modal/Type/Share";
 import Bookmark from "../Modal/Type/Bookmark";
+import Media from "./Type/Media";
 
 export default function Popup() {
   const { isOpen, type, data } = useContext(PopupContext);
@@ -21,6 +22,7 @@ export default function Popup() {
         {type === "comment" && <Reply postId={data} />}
         {type === "share" && <Share postId={data} />}
         {type === "bookmark" && <Bookmark postId={data} />}
+        {type === "media" && <Media media={data} />}
       </Overlay>
     );
   }

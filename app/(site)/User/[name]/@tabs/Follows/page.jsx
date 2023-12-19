@@ -6,7 +6,7 @@ import {
 } from "@/app/src/features/user";
 
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import FollowCard from "@/app/src/components/UI/Cards/FollowCard";
 import LoadMore from "@/app/src/components/User/LoadMore";
 import Message from "@/app/src/components/UI/Globals/Message";

@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import ChatArea from "@/app/src/components/Message/Chat/ChatArea";
 import ChatContainer from "@/app/src/components/Message/Chat/ChatContainer";
 import ChatList from "@/app/src/components/Message/Chat/ChatList";

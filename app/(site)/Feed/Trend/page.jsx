@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Post from "@/app/src/components/Feed/Post/Post";
 import LoadMore from "@/app/src/components/Feed/Trend/LoadMore";
 import Title from "@/app/src/components/UI/Title/Title";

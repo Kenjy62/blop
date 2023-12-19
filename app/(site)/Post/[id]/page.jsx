@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Comments from "@/app/src/components/Feed/Post/Comment/Comments";
 import Post from "@/app/src/components/Feed/Post/Post";
 

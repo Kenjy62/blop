@@ -1,4 +1,4 @@
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import { init } from "@/app/src/features/user";
 
 export default async function Layout(props) {

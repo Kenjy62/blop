@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import LoadMore from "@/app/src/components/Profil/LoadMore";
 import Media from "@/app/src/components/Profil/Tabs/Media";
 import Message from "@/app/src/components/UI/Globals/Message";

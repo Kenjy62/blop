@@ -1,5 +1,5 @@
 // Components
-import Share from "./Share/Share";
+import Share from "./Share";
 
 export default function Content({ post }) {
   return post.type === "post" ? (

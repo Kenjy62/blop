@@ -4,7 +4,7 @@ import Image from "next/image";
 // DayJS
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Picture from "../../../UI/User/Picture";
+import Picture from "../../UI/User/Picture";
 dayjs.extend(relativeTime);
 
 // Icons

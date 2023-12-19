@@ -4,7 +4,7 @@ import { GetUserPostsLiked } from "@/app/src/features/user";
 
 // Components
 import Post from "@/app/src/components/Feed/Post/Post";
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import LoadMore from "@/app/src/components/Profil/LoadMore";
 import Message from "@/app/src/components/UI/Globals/Message";
 

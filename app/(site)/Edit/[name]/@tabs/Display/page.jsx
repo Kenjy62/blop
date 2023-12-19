@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import ColorSelector from "@/app/src/components/User/ColorSelector/ColorSelector";
 import Avatar from "@/app/src/components/User/Edit/Avatar";
 import Cover from "@/app/src/components/User/Edit/Cover";

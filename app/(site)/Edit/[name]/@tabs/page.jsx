@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Button from "@/app/src/components/UI/Button/Button";
 import Form from "@/app/src/components/User/Edit/Account/Form";
 import Avatar from "@/app/src/components/User/Edit/Avatar";

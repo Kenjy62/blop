@@ -8,8 +8,8 @@ import { UserContext } from "@/app/src/context/user";
 import { useRouter } from "next/navigation";
 
 // Components
-import Receiver from "../Other/Receiver";
-import Sender from "../Other/Sender";
+import Receiver from "./Client/Receiver";
+import Sender from "./Client/Sender";
 
 // Hooks
 import { CheckColorScheme } from "@/app/src/hooks/colorScheme";

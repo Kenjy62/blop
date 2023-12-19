@@ -1,6 +1,6 @@
 // Components
 import Title from "../../Title/Title";
-import ComponentError from "../../../Error/ComponentError";
+import ComponentError from "../../Error/ComponentError";
 import UserCard from "../../Cards/User/UserCard";
 
 // Features

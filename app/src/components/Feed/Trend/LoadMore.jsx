@@ -53,7 +53,6 @@ export default function LoadMore({ query, user }) {
     setLoading(true);
 
     const { data, message, status } = await GetTrend(query, skip);
-    console.log(data);
 
     if (data.length === 5) {
       setNoPost(false);

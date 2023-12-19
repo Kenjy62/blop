@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation";
 
 // Components
-import Button from "../UI/Button/Button";
+import Button from "../Button/Button";
 
 export default function ComponentError({ message }) {
   const router = useRouter();

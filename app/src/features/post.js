@@ -208,7 +208,6 @@ export async function CreatePost(formData, type) {
       }
 
       if (type === "post") {
-        console.log("here");
         // Hashtags Extractor
         return HashtagsExtrator(formData.get("text")).then((hashtags) => {
           // Prepare data for create post
@@ -298,8 +297,6 @@ export async function CreatePost(formData, type) {
 
 // Delete a Recent Post
 export async function DeletePost(postId) {
-  console.log(postId);
-
   const prisma = new PrismaClient();
   const token = cookies().get("token");
 

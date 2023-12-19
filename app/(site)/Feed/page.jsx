@@ -1,5 +1,5 @@
 // Components
-import ComponentError from "@/app/src/components/Error/ComponentError";
+import ComponentError from "@/app/src/components/UI/Error/ComponentError";
 import Feed from "@/app/src/components/Feed/Feed";
 import Order from "@/app/src/components/Feed/Order";
 import Textarea from "@/app/src/components/Feed/Textarea";
