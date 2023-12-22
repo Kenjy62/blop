@@ -14,11 +14,11 @@ import { ToastError } from "../../UI/Toast/Toasts";
 import toast from "react-hot-toast";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 import Message from "../../UI/Globals/Message";
 
 export default function CreateConversation({ userFollowed }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

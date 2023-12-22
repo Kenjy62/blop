@@ -9,6 +9,9 @@ import { writeFile } from "fs/promises";
 // Prisma
 import { PrismaClient } from "@prisma/client";
 
+// Vercel Upload
+import { put } from "@vercel/blob";
+
 // Register User
 export async function Register(formData) {
   const prisma = new PrismaClient();
@@ -29,73 +32,45 @@ export async function Register(formData) {
         const avatar = formData.get("avatar");
         const cover = formData.get("cover");
 
-        if (avatar.size === 0 || cover.size === 0) {
-          return prisma.user
-            .create({
-              data: {
-                name: formData.get("name"),
-                email: formData.get("email"),
-                password: formData.get("password"),
-                picture: "/Avatars/Default.png",
-                cover: "/Covers/Default.png",
-              },
-            })
-            .then(async () => {
-              return {
-                message: fetch.user.register.success.message,
-                status: fetch.user.register.success.status,
-              };
-            })
-            .catch((error) => {
-              console.log(error);
-              return {
-                message: fetch.user.register.error.message,
-                status: fetch.user.register.error.status,
-              };
-            });
+        if (avatar.size > 0) {
+          var blobAvatar = await put(avatar.name, formData.get("avatar"), {
+            access: "public",
+            token:
+              "vercel_blob_rw_Kf4COCuR5c677G4e_c1MW0zOxCFi3ini5U6hHAMmAiUXk0g",
+          });
         }
 
-        if (avatar.size > 0 || cover.size > 0) {
-          const avatarBytes = await avatar.arrayBuffer();
-          const avatarBuffer = Buffer.from(avatarBytes);
-
-          const coverBytes = await cover.arrayBuffer();
-          const coverBuffer = Buffer.from(coverBytes);
-
-          await writeFile(
-            `public/Covers/${formData.get("name")}_${cover.name}`,
-            coverBuffer
-          );
-
-          await writeFile(
-            `public/Avatars/${formData.get("name")}_${avatar.name}`,
-            avatarBuffer
-          );
-
-          return prisma.user
-            .create({
-              data: {
-                name: formData.get("name"),
-                email: formData.get("email"),
-                password: formData.get("password"),
-                picture: `/Avatars/${formData.get("name")}_${avatar.name}`,
-                cover: `/Covers/${formData.get("name")}_${cover.name}`,
-              },
-            })
-            .then(() => {
-              return {
-                message: fetch.user.register.success.message,
-                status: fetch.user.register.success.status,
-              };
-            })
-            .catch((error) => {
-              console.log(error);
-              return {
-                message: fetch.user.register.error.message,
-                status: fetch.user.register.error.status,
-              };
-            });
+        if (cover.size > 0) {
+          var blobCover = await put(cover.name, formData.get("cover"), {
+            access: "public",
+            token:
+              "vercel_blob_rw_Kf4COCuR5c677G4e_c1MW0zOxCFi3ini5U6hHAMmAiUXk0g",
+          });
         }
+
+        return prisma.user
+          .create({
+            data: {
+              name: formData.get("name"),
+              email: formData.get("email"),
+              password: formData.get("password"),
+              picture: blobAvatar ? blobAvatar.url : "/Avatars/Default.png",
+              cover: blobCover ? blobCover.url : "/Avatars/Default.png",
+            },
+          })
+          .then(async () => {
+            return {
+              message: fetch.user.register.success.message,
+              status: fetch.user.register.success.status,
+            };
+          })
+          .catch((error) => {
+            console.log(error);
+            return {
+              message: fetch.user.register.error.message,
+              status: fetch.user.register.error.status,
+            };
+          });
       }
     })
     .catch((error) => {
@@ -222,6 +197,100 @@ export const init = async () => {
     })
     .finally(() => {
       prisma.$disconnect();
+    });
+};
+
+export const AvatarUpdate = async (formData) => {
+  const prisma = new PrismaClient();
+
+  return init()
+    .then(async ({ data }) => {
+      var blobAvatar = await put(
+        formData.get("avatar").name,
+        formData.get("avatar"),
+        {
+          access: "public",
+          token:
+            "vercel_blob_rw_Kf4COCuR5c677G4e_c1MW0zOxCFi3ini5U6hHAMmAiUXk0g",
+        }
+      );
+
+      return prisma.user
+        .update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            picture: blobAvatar.url,
+          },
+        })
+        .then(() => {
+          return {
+            message: fetch.user.profil.update.success.message,
+            status: fetch.user.profil.update.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return {
+            message: fetch.user.profil.update.error.message,
+            status: fetch.user.profil.update.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
+    });
+};
+
+export const CoverUpdate = async (formData) => {
+  const prisma = new PrismaClient();
+
+  return init()
+    .then(async ({ data }) => {
+      var blobCover = await put(
+        formData.get("cover").name,
+        formData.get("cover"),
+        {
+          access: "public",
+          token:
+            "vercel_blob_rw_Kf4COCuR5c677G4e_c1MW0zOxCFi3ini5U6hHAMmAiUXk0g",
+        }
+      );
+
+      return prisma.user
+        .update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            cover: blobCover.url,
+          },
+        })
+        .then(() => {
+          return {
+            message: fetch.user.profil.update.success.message,
+            status: fetch.user.profil.update.success.status,
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return {
+            message: fetch.user.profil.update.error.message,
+            status: fetch.user.profil.update.error.status,
+          };
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      return {
+        message: fetch.user.init.error.message,
+        status: fetch.user.init.error.status,
+      };
     });
 };
 

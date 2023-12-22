@@ -5,10 +5,10 @@ import Item from "./Item";
 import Message from "../../../UI/Globals/Message";
 
 // Hook
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Comments({ comments }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

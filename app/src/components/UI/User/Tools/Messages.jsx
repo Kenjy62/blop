@@ -15,14 +15,14 @@ import Container from "../Notification/Container";
 import Indicator from "../Notification/Indicator";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Messages({ user_id, data }) {
   const [notifications, setNotifications] = useState(
     data.filter((item) => item.isRead === 0 && item.type === "chat")
   );
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 

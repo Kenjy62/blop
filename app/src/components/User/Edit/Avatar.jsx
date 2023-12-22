@@ -13,9 +13,11 @@ import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
 
 // Toast
 import toast from "react-hot-toast";
+import { AvatarUpdate } from "@/app/src/features/user";
 
 export default function Avatar({ picture }) {
   const AvatarFile = useRef();
+  const buttonRef = useRef();
   const [file, setFile] = useState();
 
   const { colorScheme } = useContext(ThemeContext);
@@ -50,28 +52,35 @@ export default function Avatar({ picture }) {
       };
       reader.readAsDataURL(File);
 
-      const data = new FormData();
-      data.append("type", "avatar");
-      data.append("file", File);
-
-      await fetch(`http://localhost:3000/api/Edit`, {
-        method: "POST",
-        body: data,
-      }).then((response) => {
-        if (response.status === 200) {
-          toast(<ToastSuccess message={"Avatar Update Successfully!"} />, {
-            position: "bottom-left",
-            style: { background: "transparent" },
-          });
-        } else {
-          toast(<ToastError message={"An error occurred, try again"} />, {
-            position: "bottom-left",
-            style: { background: "transparent" },
-          });
-        }
-      });
+      buttonRef.current.click();
     } else {
       setImage(null);
+    }
+  };
+
+  const sendUpdate = async (formData) => {
+    const { message, status } = await AvatarUpdate(formData);
+
+    if (status === 200) {
+      toast(<ToastSuccess message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
+    }
+
+    if (status === 400) {
+      toast(<ToastError message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
     }
   };
 
@@ -87,12 +96,16 @@ export default function Avatar({ picture }) {
       <div className="absolute h-full w-full top-0 left-0 flex justify-center items-center">
         <RxPencil1 onClick={() => Edit()} className={color} />
       </div>
-      <input
-        onChange={(e) => Update(e)}
-        ref={AvatarFile}
-        type="file"
-        className="hidden"
-      ></input>
+      <form>
+        <input
+          onChange={(e) => Update(e)}
+          ref={AvatarFile}
+          type="file"
+          className="hidden"
+          name="avatar"
+        />
+        <button ref={buttonRef} formAction={sendUpdate} className="hidden" />
+      </form>
     </div>
   );
 }

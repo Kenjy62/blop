@@ -10,7 +10,7 @@ import { RxBell } from "react-icons/rx";
 import { UserContext } from "@/app/src/context/user";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 // Components
 import { TriangleTop } from "../../../Tricky/Triangle";
@@ -27,7 +27,7 @@ export default function Notifications({ user_id, data }) {
 
   const { socketInit, socket } = useContext(UserContext);
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 

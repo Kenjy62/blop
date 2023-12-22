@@ -8,6 +8,7 @@ import Message from "@/app/src/components/UI/Globals/Message";
 // Features
 import { GetAllPost, GetFollowedPost } from "@/app/src/features/post";
 import { init } from "@/app/src/features/user";
+import AlertBox from "@/app/src/components/UI/Alert/AlertBox";
 
 export default async function Page({ searchParams }) {
   const user = await init();
@@ -23,6 +24,11 @@ export default async function Page({ searchParams }) {
       const user = await init();
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+          <AlertBox
+            message={
+              "The notification system is functional but disabled for this demonstration for technical reasons."
+            }
+          />
           <Textarea />
           <Feed post={data} user={user} order={"Followed"} />
         </div>
@@ -32,6 +38,11 @@ export default async function Page({ searchParams }) {
     if (status === 200 && data.length < 1) {
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+          <AlertBox
+            message={
+              "The notification system is functional but disabled for this demonstration for technical reasons."
+            }
+          />
           <Textarea />
           <Order selected={"Followed"} />
           <Message>No followed post for this moment!</Message>
@@ -50,6 +61,11 @@ export default async function Page({ searchParams }) {
     if (status === 200 && data.length > 0) {
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+          <AlertBox
+            message={
+              "The notification system is functional but disabled for this demonstration for technical reasons."
+            }
+          />
           <Textarea />
           <Feed post={data} user={user} order={searchParams?.order} />
         </div>
@@ -59,6 +75,11 @@ export default async function Page({ searchParams }) {
     if (status === 200 && data.length < 1) {
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+          <AlertBox
+            message={
+              "The notification system is functional but disabled for this demonstration for technical reasons."
+            }
+          />
           <Textarea />
           <Message>
             No posts yet, be the first by writing a post with the field just
@@ -80,6 +101,11 @@ export default async function Page({ searchParams }) {
       const user = await init();
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+          <AlertBox
+            message={
+              "The notification system is functional but disabled for this demonstration for technical reasons."
+            }
+          />
           <Textarea />
           <Feed post={data} user={user} order={searchParams?.order} />
         </div>
@@ -89,6 +115,11 @@ export default async function Page({ searchParams }) {
     if (status === 200 && data.length < 1) {
       return (
         <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+          <AlertBox
+            message={
+              "The notification system is functional but disabled for this demonstration for technical reasons."
+            }
+          />
           <Textarea />
           <Order selected={searchParams?.order} />
           <Message>No followed post for this moment!</Message>

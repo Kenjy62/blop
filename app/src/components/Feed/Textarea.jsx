@@ -8,7 +8,7 @@ import Image from "next/image";
 import { CreatePost } from "../../features/post";
 
 // Hooks
-import { CheckColorScheme } from "../../hooks/colorScheme";
+import { useColorScheme } from "../../hooks/useColorScheme";
 
 // Icons
 import {
@@ -25,9 +25,10 @@ import toast from "react-hot-toast";
 // Components
 import Button from "../UI/Button/Button";
 import { ToastError } from "../UI/Toast/Toasts";
+import { Tooltip } from "react-tooltip";
 
 export default function Textarea() {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   const buttonRef = useRef();
 
@@ -176,8 +177,19 @@ export default function Textarea() {
           <div className="flex flex-row gap-4 items-center justify-between">
             <div className="flex flex-row gap-4">
               <RxImage onClick={userAddImages} className="cursor-pointer" />
-              <RxFace className="cursor-pointer" />
-              <RxCalendar className="cursor-pointer" />
+              <RxFace
+                className="cursor-pointer"
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Coming soon.."
+                data-tooltip-place="top"
+              />
+              <Tooltip id="my-tooltip" />
+              <RxCalendar
+                className="cursor-pointer"
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Coming soon.."
+                data-tooltip-place="top"
+              />
               <input
                 name="pictures"
                 multiple

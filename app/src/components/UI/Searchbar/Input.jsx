@@ -7,12 +7,12 @@ import { useContext } from "react";
 import { SearchContext } from "@/app/src/context/search";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Searchbar() {
   const { startSearch } = useContext(SearchContext);
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

@@ -5,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Picture({ name, url, style, link }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 

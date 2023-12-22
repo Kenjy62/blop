@@ -8,6 +8,7 @@ import { HashtagsExtrator } from "./hashtagsExtractor";
 import { io } from "socket.io-client";
 import { writeFile } from "fs/promises";
 import { getFollower } from "./user";
+import { put } from "@vercel/blob";
 
 // Get All Post List for Feed
 export async function GetAllPost(skip, limit) {
@@ -234,19 +235,17 @@ export async function CreatePost(formData, type) {
               const [name, value] = entry;
 
               if (name === "pictures" && value.size > 0) {
-                const pictureBytes = await value.arrayBuffer();
-                const pictureBuffer = Buffer.from(pictureBytes);
-
-                await writeFile(
-                  `public/Posts/${value.size}_${value.name}`,
-                  pictureBuffer
-                );
+                const blob = await put(value.name, value, {
+                  access: "public",
+                  token:
+                    "vercel_blob_rw_Kf4COCuR5c677G4e_c1MW0zOxCFi3ini5U6hHAMmAiUXk0g",
+                });
 
                 // Write into Database
                 await prisma.postPicture.create({
                   data: {
                     post_id: response.id,
-                    url: `/Posts/${value.size}_${value.name}`,
+                    url: blob.url,
                   },
                 });
               }
@@ -317,26 +316,37 @@ export async function DeletePost(postId) {
         };
       }
 
-      return prisma.hashtags
+      return prisma.postPicture
         .deleteMany({
           where: {
             post_id: postId,
           },
         })
         .then(async () => {
-          return prisma.post
-            .delete({
+          return prisma.hashtags
+            .deleteMany({
               where: {
-                id: postId,
-                author_id: user.id,
+                post_id: postId,
               },
             })
-            .then(() => {
-              revalidatePath("/Feed");
-              return {
-                message: fetch.post.delete.success.message,
-                status: fetch.post.delete.success.status,
-              };
+            .then(async () => {
+              return prisma.post
+                .delete({
+                  where: {
+                    id: postId,
+                    author_id: user.id,
+                  },
+                })
+                .then(() => {
+                  revalidatePath("/Feed");
+                  return {
+                    message: fetch.post.delete.success.message,
+                    status: fetch.post.delete.success.status,
+                  };
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             })
             .catch((error) => {
               console.log(error);
@@ -344,6 +354,10 @@ export async function DeletePost(postId) {
         })
         .catch((error) => {
           console.log(error);
+          return {
+            message: fetch.post.delete.error.message,
+            status: fetch.post.delete.error.status,
+          };
         });
     })
     .catch((error) => {
@@ -428,11 +442,18 @@ export async function GetPostDetails(id) {
       },
     })
     .then(async (response) => {
-      return {
-        data: response,
-        message: fetch.post.getDetails.success.message,
-        status: fetch.post.getDetails.success.status,
-      };
+      if (response !== null) {
+        return {
+          data: response,
+          message: fetch.post.getDetails.success.message,
+          status: fetch.post.getDetails.success.status,
+        };
+      } else {
+        return {
+          message: fetch.post.getDetails.error.message,
+          status: fetch.post.getDetails.error.status,
+        };
+      }
     })
     .catch((error) => {
       console.log(error);

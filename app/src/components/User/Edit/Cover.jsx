@@ -13,9 +13,11 @@ import { ThemeContext } from "@/app/src/context/theme";
 // Components
 import { RxPencil1 } from "react-icons/rx";
 import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
+import { CoverUpdate } from "@/app/src/features/user";
 
 export default function Cover({ picture }) {
   const CoverFile = useRef();
+  const buttonRef = useRef();
   const [file, setFile] = useState();
 
   const { colorScheme } = useContext(ThemeContext);
@@ -50,28 +52,35 @@ export default function Cover({ picture }) {
       };
       reader.readAsDataURL(File);
 
-      const data = new FormData();
-      data.append("type", "cover");
-      data.append("file", File);
-
-      await fetch(`http://localhost:3000/api/Edit`, {
-        method: "POST",
-        body: data,
-      }).then((response) => {
-        if (response.status === 200) {
-          toast(<ToastSuccess message={"Cover Update Successfully!"} />, {
-            position: "bottom-left",
-            style: { background: "transparent" },
-          });
-        } else {
-          toast(<ToastError message={"An error occurred, try again"} />, {
-            position: "bottom-left",
-            style: { background: "transparent" },
-          });
-        }
-      });
+      buttonRef.current.click();
     } else {
       setImage(null);
+    }
+  };
+
+  const sendUpdate = async (formData) => {
+    const { message, status } = await CoverUpdate(formData);
+
+    if (status === 200) {
+      toast(<ToastSuccess message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
+    }
+
+    if (status === 400) {
+      toast(<ToastError message={message} />, {
+        position: "bottom-left",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        },
+      });
     }
   };
 
@@ -87,12 +96,16 @@ export default function Cover({ picture }) {
       <div className="absolute h-full w-full top-0 left-0 flex justify-center items-center">
         <RxPencil1 onClick={() => Edit()} className={color} />
       </div>
-      <input
-        onChange={(e) => Update(e)}
-        ref={CoverFile}
-        type="file"
-        className="hidden"
-      ></input>
+      <form>
+        <input
+          onChange={(e) => Update(e)}
+          ref={CoverFile}
+          type="file"
+          className="hidden"
+          name="cover"
+        />
+        <button className="hidden" ref={buttonRef} formAction={sendUpdate} />
+      </form>
     </div>
   );
 }

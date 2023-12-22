@@ -2,6 +2,7 @@
 
 // Required
 import { useRef, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 // Features
 import {
@@ -9,15 +10,19 @@ import {
   getSpecifiqueUserFollows,
 } from "../../features/user";
 
+// Hooks
+import useColorTheme from "../../hooks/useColorTheme";
+
 // Spinner
 import { SyncLoader } from "react-spinners";
 
 // Components
 import FollowCard from "../UI/Cards/FollowCard";
-import { useParams } from "next/navigation";
 
 export default function LoadMore({ user, type }) {
   const params = useParams();
+
+  const { theme } = useColorTheme();
 
   // References
   const divRef = useRef();
@@ -131,7 +136,7 @@ export default function LoadMore({ user, type }) {
       <div ref={divRef} className="flex justify-center w-full">
         {isVisible ? (
           !noDatas ? (
-            <SyncLoader color={color} loading={loading} />
+            <SyncLoader color={!theme ? "black" : "white"} loading={true} />
           ) : (
             "No more data.."
           )

@@ -4,12 +4,12 @@
 import { useRouter } from "next/navigation";
 
 // Hooks
-import { CheckColorScheme } from "../../hooks/colorScheme";
+import { useColorScheme } from "../../hooks/useColorScheme";
 
 export default function Order({ selected }) {
   const router = useRouter();
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 

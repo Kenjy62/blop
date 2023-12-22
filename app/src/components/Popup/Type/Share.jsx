@@ -6,7 +6,7 @@ import { useContext } from "react";
 // Components
 import Title from "../../UI/Title/Title";
 import Button from "../../UI/Button/Button";
-import CloseButton from "../../Popup/CloseButton";
+import CloseButton from "../CloseButton";
 
 import { ToastError, ToastSuccess } from "../../UI/Toast/Toasts";
 

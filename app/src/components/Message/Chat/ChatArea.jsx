@@ -7,7 +7,7 @@ import { send } from "@/app/src/features/chat";
 import { useState } from "react";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function ChatArea({ conversationId, userId }) {
   const [textarea, setTextarea] = useState("");
@@ -24,7 +24,7 @@ export default function ChatArea({ conversationId, userId }) {
     }
   }
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
   var bottom;

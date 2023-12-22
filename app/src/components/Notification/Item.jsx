@@ -14,10 +14,10 @@ import Tag from "../UI/Tag/Tag";
 import { setIsRead } from "../../features/notification";
 
 // Hooks
-import { CheckColorScheme } from "../../hooks/colorScheme";
+import { useColorScheme } from "../../hooks/useColorScheme";
 
 export default function Item({ item }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

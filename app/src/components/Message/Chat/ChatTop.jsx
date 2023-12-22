@@ -5,10 +5,10 @@ import Picture from "../../UI/User/Picture";
 import Title from "../../UI/Title/Title";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function ChatTop({ picture, name }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

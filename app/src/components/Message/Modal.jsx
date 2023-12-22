@@ -2,7 +2,7 @@
 
 // Components
 import ReactModal from "react-modal";
-import CreateConversation from "../Modal/Type/CreateConversation";
+import CreateConversation from "../Popup/Type/CreateConversation";
 
 // Required
 import { usePathname, useRouter } from "next/navigation";

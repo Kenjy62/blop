@@ -5,9 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ReactModal from "react-modal";
 
 // Components
-import Reply from "./Type/Reply";
-import Share from "./Type/Share";
-import Bookmark from "./Type/Bookmark";
+import Reply from "../Popup/Type/Reply";
+import Share from "../Popup/Type/Share";
+import Bookmark from "../Popup/Type/Bookmark";
 
 // Set Modal
 ReactModal.setAppElement("html");

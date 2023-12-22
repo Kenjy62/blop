@@ -8,10 +8,10 @@ import Picture from "../../UI/User/Picture";
 import Date from "../../UI/Globals/Date";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Item({ conversation, data }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

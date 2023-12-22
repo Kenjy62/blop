@@ -7,10 +7,10 @@ import Link from "next/link";
 import { RxClipboard } from "react-icons/rx";
 
 // Context
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Form({ data }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   const settings = [
     { name: "Username", placeholder: data.name },

@@ -12,10 +12,10 @@ import Pictures from "./Pictures";
 import Content from "./Content";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Post({ userId, post }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 

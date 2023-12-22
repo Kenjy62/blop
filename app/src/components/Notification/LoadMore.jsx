@@ -6,13 +6,20 @@ import { useRef, useEffect, useState } from "react";
 // Components
 import Item from "./Item";
 
+// Features
+import { getNotifications } from "../../features/user";
+
+// Hooks
+import useColorTheme from "../../hooks/useColorTheme";
+
 // Spinner
 import { SyncLoader } from "react-spinners";
-import { getNotifications } from "../../features/user";
 
 export default function LoadMore({ tab }) {
   // References
   const divRef = useRef();
+
+  const { theme } = useColorTheme();
 
   // State
   const [isVisible, setIsVisible] = useState(false);
@@ -97,7 +104,7 @@ export default function LoadMore({ tab }) {
       <div ref={divRef} className="flex justify-center">
         {isVisible ? (
           !noNotifications ? (
-            <SyncLoader color={color} loading={loading} />
+            <SyncLoader color={!theme ? "black" : "white"} loading={true} />
           ) : (
             "There are no more posts"
           )

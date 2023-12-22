@@ -1,10 +1,10 @@
 "use client";
 
 // Hooks
-import { CheckColorScheme } from "../../hooks/colorScheme";
+import { useColorScheme } from "../../hooks/useColorScheme";
 
 export const TriangleTop = () => {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

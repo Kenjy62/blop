@@ -28,6 +28,8 @@ export default function Cover({ isMyProfil, isFollowed, user }) {
 
   let [isPending, startTransition] = useTransition();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   async function follow() {
     if (!alreadyFollow) {
       startTransition(async () => {
@@ -48,6 +50,7 @@ export default function Cover({ isMyProfil, isFollowed, user }) {
   }
 
   async function createConversation(userId) {
+    setIsLoading(true);
     const { data, message, status } = await newConversation(userId);
 
     if (status === 200) {
@@ -65,6 +68,7 @@ export default function Cover({ isMyProfil, isFollowed, user }) {
       });
       return;
     }
+    setIsLoading(false);
   }
 
   return (
@@ -91,7 +95,7 @@ export default function Cover({ isMyProfil, isFollowed, user }) {
             </Button>
           </div>
           <div onClick={() => createConversation(user.id)}>
-            <Button>Message</Button>
+            <Button>{isLoading ? "Loading.." : "Message"}</Button>
           </div>
         </div>
       )}

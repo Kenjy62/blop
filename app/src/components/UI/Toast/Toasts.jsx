@@ -1,10 +1,10 @@
 "use client";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export function ToastError({ message }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 
@@ -31,7 +31,7 @@ export function ToastError({ message }) {
 }
 
 export function ToastSuccess({ message }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
 

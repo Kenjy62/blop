@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { PopupContext } from "@/app/src/context/popup";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 // Icons
 import { RxShare1 } from "react-icons/rx";
@@ -14,7 +14,7 @@ import { RxShare1 } from "react-icons/rx";
 export default function Share({ postId }) {
   const { togglePopup } = useContext(PopupContext);
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
   var hover;

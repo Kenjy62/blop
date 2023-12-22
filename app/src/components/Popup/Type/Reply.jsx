@@ -10,7 +10,7 @@ import { PopupContext } from "@/app/src/context/popup";
 import Button from "../../UI/Button/Button";
 import Title from "../../UI/Title/Title";
 import { ToastError } from "../../UI/Toast/Toasts";
-import CloseButton from "../../Popup/CloseButton";
+import CloseButton from "../CloseButton";
 
 // Features
 import { ReplyToPost } from "@/app/src/features/post";

@@ -1,11 +1,14 @@
+// Components
+import { Tooltip } from "react-tooltip";
+
 // Icons
 import { RxExclamationTriangle } from "react-icons/rx";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Report() {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
   var hover;
@@ -32,7 +35,12 @@ export default function Report() {
 
   return (
     <span className={hover}>
-      <RxExclamationTriangle />
+      <RxExclamationTriangle
+        data-tooltip-id="my-tooltip"
+        data-tooltip-content="Coming soon.."
+        data-tooltip-place="top"
+      />
+      <Tooltip id="my-tooltip" />
     </span>
   );
 }

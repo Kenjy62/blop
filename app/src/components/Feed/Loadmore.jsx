@@ -12,9 +12,14 @@ import Post from "./Post/Post";
 // Spinner
 import { SyncLoader } from "react-spinners";
 
+// Hooks
+import useColorTheme from "../../hooks/useColorTheme";
+
 export default function LoadMore({ user, order }) {
   // References
   const divRef = useRef();
+
+  const { theme } = useColorTheme();
 
   // State
   const [isVisible, setIsVisible] = useState(false);
@@ -119,7 +124,7 @@ export default function LoadMore({ user, order }) {
       <div ref={divRef} className="flex justify-center">
         {isVisible ? (
           !noPost ? (
-            <SyncLoader color={color} loading={loading} />
+            <SyncLoader color={!theme ? "black" : "white"} loading={true} />
           ) : (
             "There are no more posts"
           )

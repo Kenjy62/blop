@@ -11,9 +11,11 @@ export default function CloseButton() {
   const { togglePopup } = useContext(PopupContext);
 
   return (
-    <RxCross2
+    <div
+      className="flex justify-center items-center p-2 bg-white-400 dark:bg-night-400 rounded-full cursor-pointer"
       onClick={() => togglePopup()}
-      className="text-dark text-xl cursor-pointer dark:text-white"
-    />
+    >
+      <RxCross2 className="text-dark text-xl cursor-pointer dark:text-white" />
+    </div>
   );
 }

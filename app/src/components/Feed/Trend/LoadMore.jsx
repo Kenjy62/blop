@@ -1,20 +1,23 @@
 "use client";
 
-import { GetTrend } from "@/app/src/features/post";
 // Required
 import { useRef, useEffect, useState } from "react";
 
 // Features
+import { GetTrend } from "@/app/src/features/post";
 
 // Components
-
-// Spinner
 import { SyncLoader } from "react-spinners";
 import Post from "../Post/Post";
+
+// Hooks
+import useColorTheme from "@/app/src/hooks/useColorTheme";
 
 export default function LoadMore({ query, user }) {
   // References
   const divRef = useRef();
+
+  const { theme } = useColorTheme();
 
   // State
   const [isVisible, setIsVisible] = useState(false);
@@ -90,7 +93,7 @@ export default function LoadMore({ query, user }) {
       <div ref={divRef} className="flex justify-center">
         {isVisible ? (
           !noPost ? (
-            <SyncLoader color={color} loading={loading} />
+            <SyncLoader color={!theme ? "black" : "white"} loading={true} />
           ) : (
             "There are no more posts"
           )

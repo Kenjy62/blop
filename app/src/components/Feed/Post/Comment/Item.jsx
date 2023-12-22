@@ -1,5 +1,5 @@
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 // Components
 import Date from "../../../UI/Globals/Date";
@@ -7,7 +7,7 @@ import Picture from "../../../UI/User/Picture";
 import Content from "./Content";
 
 export default function Item({ comment }) {
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
   var color;
 
   if (colorScheme === "Watermelon") {

@@ -3,12 +3,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Item({ name }) {
   const pathname = usePathname();
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var activeColor;
   var unactiveColor;

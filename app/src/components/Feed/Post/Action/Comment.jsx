@@ -9,12 +9,12 @@ import { PopupContext } from "@/app/src/context/popup";
 import { RxChatBubble } from "react-icons/rx";
 
 // Hooks
-import { CheckColorScheme } from "@/app/src/hooks/colorScheme";
+import { useColorScheme } from "@/app/src/hooks/useColorScheme";
 
 export default function Comment({ postId }) {
   const { togglePopup } = useContext(PopupContext);
 
-  const colorScheme = CheckColorScheme();
+  const colorScheme = useColorScheme();
 
   var color;
   var hover;

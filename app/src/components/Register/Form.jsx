@@ -1,7 +1,7 @@
 "use client";
 
 // Required
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
 
 // Features
@@ -15,12 +15,15 @@ export default function Form() {
   const cover = useRef();
   const divRef = useRef();
 
+  const [isPending, startTransition] = useTransition();
+
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [avatarSelected, setAvatarSelected] = useState();
   const [coverSelected, setCoverSelected] = useState();
   const [errorMsg, setErrorMsg] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const setAvatar = () => {
     avatar.current.click();
@@ -57,15 +60,17 @@ export default function Form() {
   };
 
   async function register(formData) {
-    const { message, status } = await Register(formData);
+    startTransition(async () => {
+      const { message, status } = await Register(formData);
 
-    if (status === 400) {
-      setErrorMsg(message);
-    }
+      if (status === 400) {
+        setErrorMsg(message);
+      }
 
-    if (status === 200) {
-      setErrorMsg(message);
-    }
+      if (status === 200) {
+        setErrorMsg(message);
+      }
+    });
   }
 
   return (
@@ -160,7 +165,7 @@ export default function Form() {
             formAction={register}
             className="py-1 px-3 h-fit bg-watermelon-400 text-white rounded-lg w-fit hover:bg-watermelon-500 cursor-pointer"
           >
-            Sign up
+            {isPending ? "Loading" : "Sign up"}
           </button>
         </div>
       </form>

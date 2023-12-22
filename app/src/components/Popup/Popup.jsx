@@ -7,10 +7,10 @@ import { useContext } from "react";
 import { PopupContext } from "../../context/popup";
 
 // Components
-import Reply from "../Modal/Type/Reply";
+import Reply from "./Type/Reply";
 import Overlay from "./Overlay";
-import Share from "../Modal/Type/Share";
-import Bookmark from "../Modal/Type/Bookmark";
+import Share from "./Type/Share";
+import Bookmark from "./Type/Bookmark";
 import Media from "./Type/Media";
 
 export default function Popup() {
