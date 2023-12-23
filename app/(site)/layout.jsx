@@ -6,6 +6,9 @@ import SearchContainer from "../src/components/UI/Searchbar/Container";
 import Theme from "../src/components/Tricky/Theme";
 import Popup from "../src/components/Popup/Popup";
 
+// Required
+import { notFound } from "next/navigation";
+
 // Toast
 import { Toaster } from "react-hot-toast";
 
@@ -14,7 +17,6 @@ import Provider from "@/app/src/context/provider";
 
 // Features
 import { init } from "../src/features/user";
-import { notFound } from "next/navigation";
 
 export default async function Layout({ children }) {
   const { data, message, status } = await init();
@@ -46,8 +48,6 @@ export default async function Layout({ children }) {
           </div>
           <Popup />
           <SearchContainer />
-          {/* <Overlay defaultTheme={data?.darkMode ? data.darkMode : false} /> */}
-          {/* <Modal defaultTheme={data?.darkMode ? data.darkMode : false} /> */}
         </Theme>
       </Provider>
     );

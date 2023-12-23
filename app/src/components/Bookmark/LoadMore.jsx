@@ -5,48 +5,25 @@ import { useRef, useEffect, useState } from "react";
 
 // Components
 import { SyncLoader } from "react-spinners";
+import Post from "../Feed/Post/Post";
 
 // Hooks
 import useColorTheme from "@/app/src/hooks/useColorTheme";
-import Post from "../Feed/Post/Post";
+import { useIsVisible } from "react-is-visible";
 
 export default function LoadMore({ selectedTag, BookmarksList, userId }) {
   // References
   const divRef = useRef();
+  const isVisible = useIsVisible(divRef);
 
   const { theme } = useColorTheme();
 
   // State
-  const [isVisible, setIsVisible] = useState(false);
   const [post, setPost] = useState([]);
   const [skip, setSkip] = useState(5);
   const [limit, setLimit] = useState(10);
   const [noPost, setNoPost] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleScroll = () => {
-    if (divRef.current) {
-      const rect = divRef.current.getBoundingClientRect();
-      setIsVisible(
-        rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <=
-            (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <=
-            (window.innerWidth || document.documentElement.clientWidth)
-      );
-    }
-  };
-
-  useEffect(() => {
-    // Ajoutez un gestionnaire d'événements de défilement
-    window.addEventListener("scroll", handleScroll);
-
-    // Assurez-vous de retirer le gestionnaire d'événements lorsque le composant est démonté
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   async function load() {
     setLoading(true);
