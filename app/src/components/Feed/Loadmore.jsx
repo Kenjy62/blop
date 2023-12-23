@@ -101,7 +101,7 @@ export default function LoadMore({ user, order }) {
       <div ref={divRef} className="flex justify-center">
         {isVisible ? (
           !noPost ? (
-            <SyncLoader loading={true} />
+            <SyncLoader loading={true} color={theme ? "black" : "white"} />
           ) : (
             <p>No more post for this moment!</p>
           )

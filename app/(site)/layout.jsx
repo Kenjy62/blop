@@ -32,7 +32,7 @@ export default async function Layout({ children }) {
             <Header
               colorScheme={data?.colorScheme ? data.colorScheme : "Watermelon"}
             />
-            <div className="flex justify-center pb-40 md:px-2 ">
+            <div className="flex justify-center pb-10 md:px-2 ">
               <div className="flex flex-row gap-16 w-[1280px]">
                 <Navbar
                   colorScheme={
