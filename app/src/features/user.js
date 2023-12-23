@@ -4,7 +4,6 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { fetch } from "../config/text";
-import { writeFile } from "fs/promises";
 
 // Prisma
 import { PrismaClient } from "@prisma/client";
@@ -182,11 +181,18 @@ export const init = async () => {
       },
     })
     .then(async (data) => {
-      return {
-        data: data,
-        message: fetch.user.init.success.message,
-        status: fetch.user.init.success.status,
-      };
+      if (data !== null) {
+        return {
+          data: data,
+          message: fetch.user.init.success.message,
+          status: fetch.user.init.success.status,
+        };
+      } else {
+        return {
+          message: fetch.user.init.error.message,
+          status: fetch.user.init.error.status,
+        };
+      }
     })
     .catch((error) => {
       console.log(error);

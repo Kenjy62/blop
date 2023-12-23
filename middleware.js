@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(request) {
+export async function middleware(request) {
   const isAlreadyLogged = request.cookies.get("token");
   const url = request.nextUrl.pathname;
   console.log(`User request: ${url}`);
