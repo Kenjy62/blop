@@ -22,6 +22,8 @@ export default function LoadMore({ user, order }) {
 
   const { theme } = useColorTheme();
 
+  const isVisible = useIsVisible(divRef);
+
   // State
   const [post, setPost] = useState([]);
   const [skip, setSkip] = useState(5);
@@ -89,8 +91,6 @@ export default function LoadMore({ user, order }) {
     setSkip(5);
     setLimit(5);
   }, [order]);
-
-  const isVisible = useIsVisible(divRef);
 
   return (
     <>
