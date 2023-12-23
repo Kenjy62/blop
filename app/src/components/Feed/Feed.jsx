@@ -7,7 +7,7 @@ export default function Feed({ post, user, order }) {
   return (
     <div className="flex flex-col gap-4">
       <Order selected={order} />
-      <div>
+      <div className="flex flex-col gap-4">
         {order === "Followed" &&
           post.map((post) => (
             <Post key={post.id} userId={user.data.id} post={post} />

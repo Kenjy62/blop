@@ -45,7 +45,7 @@ export default async function Page({ searchParams }) {
         <div className="flex flex-row justify-between gap-4">
           <SearchBar />
           <Link href="/Message/Create">
-            <Button>Create Conversation</Button>
+            <Button>Open</Button>
           </Link>
         </div>
         {sortedConversations.map((item, id) => (
@@ -61,7 +61,7 @@ export default async function Page({ searchParams }) {
         <div className="flex flex-row justify-between gap-4">
           <SearchBar />
           <Link href="/Message/Create">
-            <Button>Create Conversation</Button>
+            <Button>Open</Button>
           </Link>
         </div>
         <Message>Unknow result with : {searchParams.query}</Message>
@@ -75,7 +75,7 @@ export default async function Page({ searchParams }) {
         <div className="flex flex-row justify-between gap-4">
           <SearchBar />
           <Link href="/Message/Create">
-            <Button>Create Conversation</Button>
+            <Button>Open</Button>
           </Link>
         </div>
         <Message>No Conversations for this moment!</Message>

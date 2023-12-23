@@ -39,7 +39,7 @@ export default function Tabs({ data }) {
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <div className="flex flex-row h-fit gap-2">
+      <div className="flex flex-row h-fit gap-2 px-4">
         {notificationsTabs.map((tab, id) => {
           return (
             <div key={id} onClick={() => setIsActive(tab)}>

@@ -26,10 +26,10 @@ export default function Comments({ comments }) {
   }
 
   if (comments.comments.length > 0) {
-    return comments.comments.map((comment) => (
-      <Item key={comment.id} comment={comment} />
-    ));
-  } else if (comments.length < 1) {
-    return <Message>test</Message>;
+    return comments.comments
+      .reverse()
+      .map((comment) => <Item key={comment.id} comment={comment} />);
+  } else if (comments.comments.length < 1) {
+    return <Message>No comments yet!</Message>;
   }
 }

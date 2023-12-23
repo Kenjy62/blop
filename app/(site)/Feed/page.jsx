@@ -23,7 +23,7 @@ export default async function Page({ searchParams }) {
     if (status === 200 && data.length > 0) {
       const user = await init();
       return (
-        <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+        <div className="w-full flex flex-col gap-8">
           <AlertBox
             message={
               "The notification system is functional but disabled for this demonstration for technical reasons."
@@ -37,7 +37,7 @@ export default async function Page({ searchParams }) {
 
     if (status === 200 && data.length < 1) {
       return (
-        <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+        <div className="w-full flex flex-col gap-8">
           <AlertBox
             message={
               "The notification system is functional but disabled for this demonstration for technical reasons."
@@ -60,7 +60,7 @@ export default async function Page({ searchParams }) {
 
     if (status === 200 && data.length > 0) {
       return (
-        <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+        <div className="w-full flex flex-col gap-8">
           <AlertBox
             message={
               "The notification system is functional but disabled for this demonstration for technical reasons."
@@ -74,7 +74,7 @@ export default async function Page({ searchParams }) {
 
     if (status === 200 && data.length < 1) {
       return (
-        <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+        <div className="w-full flex flex-col gap-8">
           <AlertBox
             message={
               "The notification system is functional but disabled for this demonstration for technical reasons."
@@ -100,7 +100,7 @@ export default async function Page({ searchParams }) {
     if (status === 200 && data.length > 0) {
       const user = await init();
       return (
-        <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+        <div className="w-full flex flex-col gap-8">
           <AlertBox
             message={
               "The notification system is functional but disabled for this demonstration for technical reasons."
@@ -114,7 +114,7 @@ export default async function Page({ searchParams }) {
 
     if (status === 200 && data.length < 1) {
       return (
-        <div className="w-full flex flex-col gap-8 px-2 md:px-0">
+        <div className="w-full flex flex-col gap-8">
           <AlertBox
             message={
               "The notification system is functional but disabled for this demonstration for technical reasons."

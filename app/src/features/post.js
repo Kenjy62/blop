@@ -323,30 +323,48 @@ export async function DeletePost(postId) {
           },
         })
         .then(async () => {
-          return prisma.hashtags
+          return prisma.comment
             .deleteMany({
-              where: {
-                post_id: postId,
-              },
+              where: { post_id: postId },
             })
             .then(async () => {
-              return prisma.post
-                .delete({
+              return prisma.postsLiked
+                .deleteMany({
                   where: {
-                    id: postId,
-                    author_id: user.id,
+                    post_id: postId,
                   },
                 })
-                .then(() => {
-                  revalidatePath("/Feed");
-                  return {
-                    message: fetch.post.delete.success.message,
-                    status: fetch.post.delete.success.status,
-                  };
+                .then(async () => {
+                  return prisma.hashtags
+                    .deleteMany({
+                      where: {
+                        post_id: postId,
+                      },
+                    })
+                    .then(async () => {
+                      return prisma.post
+                        .delete({
+                          where: {
+                            id: postId,
+                            author_id: user.id,
+                          },
+                        })
+                        .then(() => {
+                          revalidatePath("/Feed");
+                          return {
+                            message: fetch.post.delete.success.message,
+                            status: fetch.post.delete.success.status,
+                          };
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 })
-                .catch((error) => {
-                  console.log(error);
-                });
+                .catch((error) => console.log(error));
             })
             .catch((error) => {
               console.log(error);

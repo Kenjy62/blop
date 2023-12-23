@@ -1,5 +1,5 @@
 // Required
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 
@@ -20,6 +20,8 @@ import toast from "react-hot-toast";
 
 export default function Reply({ postId }) {
   const { togglePopup } = useContext(PopupContext);
+
+  const buttonRef = useRef();
 
   const [textarea, setTextarea] = useState();
   const router = useRouter();
@@ -56,6 +58,13 @@ export default function Reply({ postId }) {
     });
   };
 
+  // Liste if key enter is pressed
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      buttonRef.current.click();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 z-50 bg-white dark:bg-night-300 p-4 rounded-lg w-96">
       <div className="flex flex-row justify-between">
@@ -64,12 +73,17 @@ export default function Reply({ postId }) {
       </div>
 
       <textarea
+        onKeyDown={handleKeyPress}
         onChange={(e) => setTextarea(e.target.value)}
         className={`dark:bg-night-400 p-2 rounded-lg dark:text-white w-full resize-none outline-none`}
         type="text"
         placeholder="Write your response here.."
       />
-      <div className="flex justify-end" onClick={() => Reply(textarea, postId)}>
+      <div
+        ref={buttonRef}
+        className="flex justify-end"
+        onClick={() => Reply(textarea, postId)}
+      >
         <Button>{isPending ? "Loading" : "Send a response"}</Button>
       </div>
     </div>

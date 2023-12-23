@@ -10,8 +10,6 @@ import { init } from "@/app/src/features/user";
 export default async function Page({ params }) {
   const { data, message, status } = await GetPostDetails(params.id);
 
-  console.log(message, status);
-
   if (status === 400) {
     return <ComponentError message={message} />;
   }

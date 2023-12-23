@@ -28,7 +28,7 @@ export default function Order({ selected }) {
   }
 
   return (
-    <div className="flex justify-end dark:text-black">
+    <div className="flex justify-end dark:text-black px-4 md:px-0">
       <select
         className={color}
         value={!selected ? "All" : selected}

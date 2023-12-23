@@ -29,9 +29,14 @@ export default async function Navbar({ colorScheme }) {
 
   if (status === 200) {
     return (
-      <nav className={color}>
-        <Items user={data} colorScheme={colorScheme} />
-      </nav>
+      <>
+        <nav className={color}>
+          <Items user={data} colorScheme={colorScheme} />
+        </nav>
+        <nav className="md:hidden z-50 fixed w-full flex flex-row gap-4 justify-between p-4 bg-night-300 border-t-2 border-royal-blue-500 bottom-0 left-0">
+          <Items user={data} colorScheme={colorScheme} />
+        </nav>
+      </>
     );
   }
 }

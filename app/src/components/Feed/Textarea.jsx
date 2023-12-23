@@ -42,32 +42,32 @@ export default function Textarea() {
 
   if (colorScheme === "Watermelon") {
     color = `absolute top-2 right-2 text-white p-1 bg-watermelon-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200 ${
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
       isFocus && "dark:border-watermelon-400 border-watermelon-400"
     }`;
   } else if (colorScheme === "royal-blue") {
     color = `absolute top-2 right-2 text-white p-1 bg-royal-blue-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200 ${
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
       isFocus && "dark:border-royal-blue-400 border-royal-blue-400"
     }`;
   } else if (colorScheme === "cinnabar") {
     color = `absolute top-2 right-2 text-white p-1 bg-cinnabar-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200 ${
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
       isFocus && "dark:border-cinnabar-400 border-cinnabar-400"
     }`;
   } else if (colorScheme === "purple-heart") {
     color = `absolute top-2 right-2 text-white p-1 bg-purple-heart-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200 ${
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
       isFocus && "dark:border-purple-heart-400 border-purple-heart-400"
     }`;
   } else if (colorScheme === "fire-bush") {
     color = `absolute top-2 right-2 text-white p-1 bg-fire-bush-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200 ${
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
       isFocus && "dark:border-fire-bush-400 border-fire-bush-400"
     }`;
   } else if (colorScheme === "harlequin") {
     color = `absolute top-2 right-2 text-white p-1 bg-harlequin-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border rounded-lg p-4 dark:border-night-200 ${
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
       isFocus && "dark:border-harlequin-400 border-harlequin-400"
     }`;
   }
@@ -150,7 +150,7 @@ export default function Textarea() {
             onFocus={() => setIsFocus(!isFocus)}
             onBlur={() => setIsFocus(!isFocus)}
             onChange={(e) => setTextarea(e.target.value)}
-            className="w-full rounded-lg resize-none outline-none dark:bg-night-400"
+            className="w-full md:rounded-lg resize-none outline-none dark:bg-night-400"
             placeholder="Write a new post.."
             value={textarea}
           />

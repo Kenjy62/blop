@@ -3,19 +3,14 @@
 // Required
 import { useRef, useEffect, useState } from "react";
 
-// Features
-import { GetAllPost, GetFollowedPost } from "../../features/post";
-
 // Components
-import Post from "./Post/Post";
-
-// Spinner
 import { SyncLoader } from "react-spinners";
 
 // Hooks
-import useColorTheme from "../../hooks/useColorTheme";
+import useColorTheme from "@/app/src/hooks/useColorTheme";
+import Post from "../Feed/Post/Post";
 
-export default function LoadMore({ user, order }) {
+export default function LoadMore({ selectedTag, BookmarksList, userId }) {
   // References
   const divRef = useRef();
 
@@ -25,10 +20,9 @@ export default function LoadMore({ user, order }) {
   const [isVisible, setIsVisible] = useState(false);
   const [post, setPost] = useState([]);
   const [skip, setSkip] = useState(5);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [noPost, setNoPost] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [color, setColor] = useState("#ffffff");
 
   const handleScroll = () => {
     if (divRef.current) {
@@ -56,47 +50,19 @@ export default function LoadMore({ user, order }) {
 
   async function load() {
     setLoading(true);
-    if (!order || order === "All") {
-      const { data, message, status } = await GetAllPost(skip, limit);
-      setSkip((prev) => prev + 5);
-
-      if (data.length === 5) {
-        setNoPost(false);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
-        } else {
-          setPost(data);
-        }
-      } else {
-        setNoPost(true);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
-        } else {
-          setPost(data);
-        }
-      }
+    if (post.length < 1) {
+      setPost(BookmarksList.slice(skip, limit));
+    } else {
+      setPost((prev) => [...prev, ...BookmarksList.slice(skip, limit)]);
     }
 
-    if (order === "Followed") {
-      const { data, message, status } = await GetFollowedPost(skip, limit);
-      setSkip((prev) => prev + 5);
-
-      if (data.length === 5) {
-        setNoPost(false);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
-        } else {
-          setPost(data);
-        }
-      } else {
-        setNoPost(true);
-        if (post.length > 0) {
-          setPost((prev) => [...prev, ...data]);
-        } else {
-          setPost(data);
-        }
-      }
+    if (post.length + 5 >= length) {
+      setNoPost(true);
     }
+
+    setSkip((prev) => prev + 5);
+    setLimit((prev) => prev + 5);
+
     setLoading(false);
   }
 
@@ -112,19 +78,19 @@ export default function LoadMore({ user, order }) {
     setPost([]);
     setNoPost(false);
     setSkip(5);
-    setLimit(5);
-  }, [order]);
+    setLimit(10);
+  }, [selectedTag]);
 
   return (
     <>
-      {post?.length > 0 &&
-        post.map((item) => (
-          <Post key={item.id} userId={user.data.id} post={item} />
+      {post.length > 0 &&
+        post.map((item, id) => (
+          <Post key={id} userId={userId} post={item.post} />
         ))}
       <div ref={divRef} className="flex justify-center">
         {isVisible ? (
           !noPost ? (
-            <SyncLoader color={theme ? "black" : "white"} loading={true} />
+            <SyncLoader color={!theme ? "black" : "white"} loading={true} />
           ) : (
             "There are no more posts"
           )

@@ -25,11 +25,11 @@ export default async function Layout({ children }) {
     >
       <Theme>
         <Toaster />
-        <div className="flex flex-col gap-16 dark:bg-night-400 dark:text-white">
+        <div className="flex flex-col gap-0 md:gap-16 dark:bg-night-400 dark:text-white min-h-[100dvh]">
           <Header
             colorScheme={data?.colorScheme ? data.colorScheme : "Watermelon"}
           />
-          <div className="flex justify-center mb-16 px-2 min-h-[calc(100vh-201px)]">
+          <div className="flex justify-center pb-24 md:px-2 ">
             <div className="flex flex-row gap-16 w-[1280px]">
               <Navbar
                 colorScheme={data.colorScheme ? data.colorScheme : "Watermelon"}
