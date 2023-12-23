@@ -14,6 +14,7 @@ import { SyncLoader } from "react-spinners";
 
 // Hooks
 import useColorTheme from "../../hooks/useColorTheme";
+import { useIsVisible } from "react-is-visible";
 
 export default function LoadMore({ user, order }) {
   // References
@@ -22,7 +23,6 @@ export default function LoadMore({ user, order }) {
   const { theme } = useColorTheme();
 
   // State
-  const [isVisible, setIsVisible] = useState(false);
   const [post, setPost] = useState([]);
   const [skip, setSkip] = useState(5);
   const [limit, setLimit] = useState(5);
@@ -30,29 +30,29 @@ export default function LoadMore({ user, order }) {
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState("#ffffff");
 
-  const handleScroll = () => {
-    if (divRef.current) {
-      const rect = divRef.current.getBoundingClientRect();
-      setIsVisible(
-        rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <=
-            (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <=
-            (window.innerWidth || document.documentElement.clientWidth)
-      );
-    }
-  };
+  // const handleScroll = () => {
+  //   if (divRef.current) {
+  //     const rect = divRef.current.getBoundingClientRect();
+  //     setIsVisible(
+  //       rect.top >= 0 &&
+  //         rect.left >= 0 &&
+  //         rect.bottom <=
+  //           (window.innerHeight || document.documentElement.clientHeight) &&
+  //         rect.right <=
+  //           (window.innerWidth || document.documentElement.clientWidth)
+  //     );
+  //   }
+  // };
 
-  useEffect(() => {
-    // Ajoutez un gestionnaire d'événements de défilement
-    window.addEventListener("scroll", handleScroll);
+  // useEffect(() => {
+  //   // Ajoutez un gestionnaire d'événements de défilement
+  //   window.addEventListener("scroll", handleScroll);
 
-    // Assurez-vous de retirer le gestionnaire d'événements lorsque le composant est démonté
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  //   // Assurez-vous de retirer le gestionnaire d'événements lorsque le composant est démonté
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   async function load() {
     setLoading(true);
@@ -100,13 +100,13 @@ export default function LoadMore({ user, order }) {
     setLoading(false);
   }
 
-  useEffect(() => {
-    if (isVisible) {
-      if (!noPost && !loading) {
-        load();
-      }
-    }
-  }, [isVisible]);
+  // useEffect(() => {
+  //   if (isVisible) {
+  //     if (!noPost && !loading) {
+  //       load();
+  //     }
+  //   }
+  // }, [isVisible]);
 
   useEffect(() => {
     setPost([]);
@@ -115,6 +115,8 @@ export default function LoadMore({ user, order }) {
     setLimit(5);
   }, [order]);
 
+  const isVisible = useIsVisible(divRef);
+
   return (
     <>
       {post?.length > 0 &&
@@ -122,13 +124,7 @@ export default function LoadMore({ user, order }) {
           <Post key={item.id} userId={user.data.id} post={item} />
         ))}
       <div ref={divRef} className="flex justify-center">
-        {isVisible ? (
-          !noPost ? (
-            <SyncLoader color={theme ? "black" : "white"} loading={true} />
-          ) : (
-            "There are no more posts"
-          )
-        ) : null}
+        {isVisible ? "visible" : <p>test</p>}
       </div>
     </>
   );
