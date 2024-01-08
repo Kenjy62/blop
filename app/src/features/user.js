@@ -1190,14 +1190,12 @@ export async function GetUserMedias(name, skip) {
       },
     })
     .then(async (user) => {
-      return prisma.post
+      return prisma.postPicture
         .findMany({
           where: {
-            author_id: user.id,
-          },
-          select: {
-            id: true,
-            picture: true,
+            post: {
+              author_id: user.id
+            },
           },
           orderBy: {
             id: "asc",
@@ -1206,10 +1204,9 @@ export async function GetUserMedias(name, skip) {
           take: 5,
         })
         .then(async (data) => {
-          const filteredData = data.filter((post) => post.picture.length > 0);
 
           return {
-            data: filteredData,
+            data: data,
             message: "ok",
             status: 200,
           };

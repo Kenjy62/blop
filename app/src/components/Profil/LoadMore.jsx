@@ -149,24 +149,22 @@ export default function LoadMore({ user, profil, type }) {
         ))}
       {post?.length > 0 &&
         type === "Media" &&
-        post.map((post) => {
-          return post.picture.map((item, id) => {
-            return (
-              <Link
-                key={id}
-                href={`/Post/${post.id}`}
-                className="w-[calc(100%/4-12px)]"
-              >
-                <Image
-                  className="rounded-lg border dark:border-night-200 shadow-md"
-                  src={item.url}
-                  height={500}
-                  width={500}
-                  alt={`Post Picture`}
-                />
-              </Link>
-            );
-          });
+        post.map((post, id) => {
+          return (
+            <Link
+              key={id}
+              href={`/Post/${post.id}`}
+              className="w-[calc(100%/4-12px)]"
+            >
+              <Image
+                className="rounded-lg border dark:border-night-200 shadow-md"
+                src={post.url}
+                height={500}
+                width={500}
+                alt={`Post Picture`}
+              />
+            </Link>
+          );
         })}
       <div className="flex justify-center w-full" ref={divRef}>
         <p>{isVisible ? (!noPost ? "Loading" : "No more content...") : null}</p>
