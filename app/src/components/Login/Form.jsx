@@ -36,7 +36,7 @@ export default function Form() {
       </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="password">Password</label>
-        <input className="p-1" name="password" type="text" placeholder="****" />
+        <input className="p-1" name="password" type="password" placeholder="****" />
       </div>
       <div className="flex justify-center">
         <button

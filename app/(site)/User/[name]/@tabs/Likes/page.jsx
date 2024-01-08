@@ -20,11 +20,11 @@ export default async function Page({ params }) {
     return (
       <div className="flex flex-col gap-4">
         {data.length > 0 &&
-          data.map((post) => {
+          data.reverse().map((post) => {
             return <Post key={post.id} userId={user.data.id} post={post} />;
           })}
 
-        {data.length > 0 && <LoadMore user={user} type="Like" />}
+        {data.length > 0 && <LoadMore profil={params.name} user={user} type="Like" />}
         {data.length < 1 && (
           <Message>The user has not liked any posts yet!</Message>
         )}

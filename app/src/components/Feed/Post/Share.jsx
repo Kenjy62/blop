@@ -54,7 +54,7 @@ export default function Share({ post }) {
           </div>
           <div className="font-normal">{post.content}</div>
         </div>
-        {post.picture && (
+        {post.picture && post.picture.length > 0 && (
           <Image
             className="w-full rounded-lg"
             src={post.picture}

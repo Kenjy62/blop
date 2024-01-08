@@ -158,7 +158,7 @@ export default function Form() {
             onChange={(e) => setPassword(e.target.value)}
             className="p-1 border"
             name="password"
-            type="text"
+            type="password"
             placeholder="****"
           />
         </div>

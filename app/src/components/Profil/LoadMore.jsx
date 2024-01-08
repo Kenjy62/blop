@@ -19,7 +19,7 @@ import Post from "../Feed/Post/Post";
 // Hooks
 import { useIsVisible } from "react-is-visible";
 
-export default function LoadMore({ user, type }) {
+export default function LoadMore({ user, profil, type }) {
   const divRef = useRef();
   const isVisible = useIsVisible(divRef);
 
@@ -32,7 +32,7 @@ export default function LoadMore({ user, type }) {
     setIsLoading(true);
     if (type === "Post") {
       const { data, message, status } = await GetUserPosts(
-        user.data.name,
+        profil,
         skip
       );
 
@@ -57,7 +57,7 @@ export default function LoadMore({ user, type }) {
 
     if (type === "Share") {
       const { data, message, status } = await GetUserPostsShared(
-        user.data.name,
+        profil,
         skip
       );
 
@@ -82,7 +82,7 @@ export default function LoadMore({ user, type }) {
 
     if (type === "Like") {
       const { data, message, status } = await GetUserPostsLiked(
-        user.data.name,
+        profil,
         skip
       );
 
@@ -107,7 +107,7 @@ export default function LoadMore({ user, type }) {
 
     if (type === "Media") {
       const { data, message, status } = await GetUserMedias(
-        user.data.name,
+        profil,
         skip
       );
 

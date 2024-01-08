@@ -24,7 +24,7 @@ export default async function Page({ params }) {
             return <Post userId={user.data.id} key={post.id} post={post} />;
           })}
 
-        {data.length > 0 && <LoadMore user={user} type="Post" />}
+        {data.length > 0 && <LoadMore user={user} profil={params.name} type="Post" />}
         {data.length < 1 && (
           <Message>The user has no posts to his credit at the moment!</Message>
         )}

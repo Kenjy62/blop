@@ -23,7 +23,7 @@ export default async function Page({ params }) {
           data.map((post) => {
             return <Post userId={user.data.id} key={post.id} post={post} />;
           })}
-        {data.length > 0 && <LoadMore user={user} type="Share" />}
+        {data.length > 0 && <LoadMore profil={params.name} user={user} type="Share" />}
         {data.length < 1 && (
           <Message>
             The user has not shared any posts to their credit yet!
