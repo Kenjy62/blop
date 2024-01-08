@@ -15,7 +15,7 @@ export default async function Page({ params }) {
     return (
       <div className="w-full flex flex-row gap-4 flex-wrap">
         <Media data={data} />
-        {data.length > 0 && <LoadMore user={user} type="Media" />}
+        {data.length > 0 && <LoadMore profil={params.name} user={user} type="Media" />}
         {data.length < 1 && <Message>No medias for this moment!</Message>}
       </div>
     );
