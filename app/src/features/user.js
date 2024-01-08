@@ -4,6 +4,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { fetch } from "../config/text";
+import bcrypt from 'bcrypt'
 
 // Prisma
 import { PrismaClient } from "@prisma/client";
@@ -47,12 +48,14 @@ export async function Register(formData) {
           });
         }
 
+        const pwdhash = await hashPassword(formData.get('password'))
+
         return prisma.user
           .create({
             data: {
               name: formData.get("name"),
               email: formData.get("email"),
-              password: formData.get("password"),
+              password: pwdhash,
               picture: blobAvatar ? blobAvatar.url : "/Avatars/Default.png",
               cover: blobCover ? blobCover.url : "/Avatars/Default.png",
             },
@@ -84,6 +87,11 @@ export async function Register(formData) {
     });
 }
 
+async function hashPassword(password) {
+  const hash = await bcrypt.hash(password, 10)
+  return hash
+}
+
 // Login User
 export async function Login(formData) {
   const prisma = new PrismaClient();
@@ -92,43 +100,49 @@ export async function Login(formData) {
     .findFirst({
       where: {
         email: formData.get("email"),
-        password: formData.get("password"),
       },
       select: {
         id: true,
-        name: true,
-        picture: true,
+        password: true,
       },
     })
     .then(async (data) => {
-      const token = jwt.sign({ token: data.id }, "randomKey");
-      return prisma.user
-        .update({
-          where: {
-            id: data.id,
-          },
-          data: {
-            token: token,
-          },
-        })
-        .then(() => {
-          cookies().set("token", token);
-          return {
-            data: token,
-            message: fetch.user.login.success.message,
-            status: fetch.user.login.success.status,
-          };
-        });
+
+      const match = await comparePassword(data.password, formData.get('password'))
+
+      if (match) {
+        const token = jwt.sign({ token: data.id }, "randomKey");
+        return prisma.user
+          .update({
+            where: {
+              id: data.id,
+            },
+            data: {
+              token: token,
+            },
+          })
+          .then(() => {
+            cookies().set("token", token);
+            return {
+              data: token,
+              message: fetch.user.login.success.message,
+              status: fetch.user.login.success.status,
+            };
+          });
+      } else {
+        return {
+          message: fetch.user.login.error.message,
+          status: fetch.user.login.error.statut
+        }
+      }
     })
     .catch((error) => {
-      console.log(error);
       return {
         message: fetch.user.login.error.message,
         status: fetch.user.login.error.statut,
       };
     })
     .catch((error) => {
-      console.log(error);
       return {
         message: fetch.user.login.error.message,
         status: fetch.user.login.error.statut,
@@ -137,6 +151,11 @@ export async function Login(formData) {
     .finally(() => {
       prisma.$disconnect();
     });
+}
+
+async function comparePassword(hash, password) {
+  const match = await bcrypt.compare(password, hash)
+  return match
 }
 
 // Logout User

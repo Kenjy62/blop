@@ -20,8 +20,8 @@ export default function Modal({ defaultTheme }) {
     <ReactModal
       isOpen={
         searchParams.get("comment") ||
-        searchParams.get("share") ||
-        searchParams.get("bookmark")
+          searchParams.get("share") ||
+          searchParams.get("bookmark")
           ? true
           : false
       }

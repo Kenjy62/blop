@@ -15,6 +15,7 @@ import { setIsRead } from "../../features/notification";
 
 // Hooks
 import { useColorScheme } from "../../hooks/useColorScheme";
+import Date from "../UI/Globals/Date";
 
 export default function Item({ item }) {
   const colorScheme = useColorScheme();
@@ -56,11 +57,9 @@ export default function Item({ item }) {
             link={false}
             style="rounded-full h-10 w-10 cursor-pointer object-cover"
           />
-          <span className="w-fit">
-            {item.author.name} has {item.type} your post
+          <span className="w-fit text-sm md:text-base">
+            {item.author.name} has {item.type} your post <Date date={item.createdAt} />
           </span>
-          <span>-</span>
-          <span>{dayjs(item.createdAt).fromNow()}</span>
           {item.isRead === 0 && (
             <div className="flex flex-1 justify-end align-top">
               <Tag state={"Active"}>New</Tag>
@@ -83,11 +82,11 @@ export default function Item({ item }) {
             link={false}
             style="rounded-full h-10 w-10 cursor-pointer object-cover"
           />
-          <span className="w-fit">
+          <span className="w-fit text-sm">
             {item.author.name} send {item.type}
           </span>
           <span>-</span>
-          <span>{dayjs(item.createdAt).fromNow()}</span>
+          <Date date={item.createdAt} />
           {item.isRead === 0 && (
             <div className="flex flex-1 justify-end align-top">
               <Tag state={"Active"}>New</Tag>

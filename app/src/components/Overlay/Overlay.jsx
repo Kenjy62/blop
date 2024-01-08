@@ -37,8 +37,6 @@ export default function Overlay({ defaultTheme }) {
         },
         content: {
           position: "relative",
-          minWidth: "95%",
-          height: "95%",
           padding: 16,
           zIndex: 99,
           borderRadius: 12,

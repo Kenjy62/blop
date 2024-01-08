@@ -13,27 +13,27 @@ export default function Picture({ name, url, style, link }) {
   var color;
 
   if (colorScheme === "Watermelon") {
-    color = `${style} hover:border-2 hover:border-watermelon-400`;
+    color = `${style} hover:border-2 hover:border-watermelon-400 w-12 h-12`;
   } else if (colorScheme === "royal-blue") {
-    color = `${style} hover:border-2 hover:border-royal-blue-400`;
+    color = `${style} hover:border-2 hover:border-royal-blue-400 w-12 h-12`;
   } else if (colorScheme === "harlequin") {
-    color = `${style} hover:border-2 hover:border-harlequin-400`;
+    color = `${style} hover:border-2 hover:border-harlequin-400 w-12 h-12`;
   } else if (colorScheme === "fire-bush") {
-    color = `${style} hover:border-2 hover:border-fire-bush-400`;
+    color = `${style} hover:border-2 hover:border-fire-bush-400 w-12 h-12`;
   } else if (colorScheme === "cinnabar") {
-    color = `${style} hover:border-2 hover:border-cinnabar-400`;
+    color = `${style} hover:border-2 hover:border-cinnabar-400 w-12 h-12`;
   } else if (colorScheme === "purple-heart") {
-    color = `${style} hover:border-2 hover:border-purple-heart-400`;
+    color = `${style} hover:border-2 hover:border-purple-heart-400 w-12 h-12`;
   }
 
   if (link) {
     return (
-      <Link href={`/User/${name}`}>
+      <Link href={`/User/${name}`} className="w-12 h-12">
         <Image
           src={url}
           alt={`${name}'s Picture`}
-          height={600}
-          width={600}
+          height={60}
+          width={60}
           className={color}
         />
       </Link>

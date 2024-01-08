@@ -45,7 +45,7 @@ export default function Avatar({ picture }) {
 
   const Update = async (e) => {
     const File = e.target.files[0];
-    if (File) {
+    if (File && File.size < 2097152) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setFile(e.target.result);
@@ -54,7 +54,9 @@ export default function Avatar({ picture }) {
 
       buttonRef.current.click();
     } else {
-      setImage(null);
+      alert('File is too big (max 2mo)')
+      setFile(null);
+      AvatarFile.current.value = ''
     }
   };
 

@@ -45,11 +45,11 @@ export default function Bookmarks({ BookmarksList, Tags, userId }) {
           {filteredBookmarks.slice(0, 5).map((el, id) => {
             return <Post key={id} userId={userId} post={el.post} />;
           })}
-          <LoadMore
+          {filteredBookmarks.length > 5 && <LoadMore
             selectedTag={selectedTag}
             BookmarksList={filteredBookmarks}
             userId={userId}
-          />
+          />}
         </div>
       </div>
     </>

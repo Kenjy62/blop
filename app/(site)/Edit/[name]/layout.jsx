@@ -11,7 +11,7 @@ export default async function Layout(props) {
   if (status === 200) {
     if (data.name === props.params.name) {
       return (
-        <div className="w-full h-fit flex flex-row gap-4">
+        <div className="w-full h-fit flex flex-col md:flex-row gap-4 p-2 md:p-0">
           {props.children} {props.tabs}
         </div>
       );

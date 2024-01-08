@@ -42,34 +42,28 @@ export default function Textarea() {
 
   if (colorScheme === "Watermelon") {
     color = `absolute top-2 right-2 text-white p-1 bg-watermelon-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
-      isFocus && "dark:border-watermelon-400 border-watermelon-400"
-    }`;
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${isFocus && "dark:border-watermelon-400 border-watermelon-400"
+      }`;
   } else if (colorScheme === "royal-blue") {
     color = `absolute top-2 right-2 text-white p-1 bg-royal-blue-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
-      isFocus && "dark:border-royal-blue-400 border-royal-blue-400"
-    }`;
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${isFocus && "dark:border-royal-blue-400 border-royal-blue-400"
+      }`;
   } else if (colorScheme === "cinnabar") {
     color = `absolute top-2 right-2 text-white p-1 bg-cinnabar-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
-      isFocus && "dark:border-cinnabar-400 border-cinnabar-400"
-    }`;
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${isFocus && "dark:border-cinnabar-400 border-cinnabar-400"
+      }`;
   } else if (colorScheme === "purple-heart") {
     color = `absolute top-2 right-2 text-white p-1 bg-purple-heart-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
-      isFocus && "dark:border-purple-heart-400 border-purple-heart-400"
-    }`;
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${isFocus && "dark:border-purple-heart-400 border-purple-heart-400"
+      }`;
   } else if (colorScheme === "fire-bush") {
     color = `absolute top-2 right-2 text-white p-1 bg-fire-bush-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
-      isFocus && "dark:border-fire-bush-400 border-fire-bush-400"
-    }`;
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${isFocus && "dark:border-fire-bush-400 border-fire-bush-400"
+      }`;
   } else if (colorScheme === "harlequin") {
     color = `absolute top-2 right-2 text-white p-1 bg-harlequin-400 rounded-full cursor-pointer`;
-    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${
-      isFocus && "dark:border-harlequin-400 border-harlequin-400"
-    }`;
+    style = `flex flex-col gap-4 w-full border md:rounded-lg p-4 dark:border-night-200 ${isFocus && "dark:border-harlequin-400 border-harlequin-400"
+      }`;
   }
 
   // Transition with SA
@@ -88,11 +82,16 @@ export default function Textarea() {
     const inputFiles = Array.from(e.target.files);
     if (inputFiles.length > 0 && inputFiles.length <= 4) {
       inputFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setFiles((prev) => [...prev, reader.result]);
-        };
-        reader.readAsDataURL(file);
+        if (file.size > 2097152) {
+          alert('One of your images is too big (max 2mo)')
+        }
+        if(file.size < 2097152){
+          const reader = new FileReader();
+          reader.onload = () => {
+            setFiles((prev) => [...prev, reader.result]);
+          };
+          reader.readAsDataURL(file);
+        }
       });
     } else {
       alert("Maximum 4 Images");

@@ -77,7 +77,7 @@ export default function Cover({ isMyProfil, isFollowed, user }) {
         src={user.cover}
         height={1080}
         width={1920}
-        className="w-full h-64 object-cover object-center rounded-lg"
+        className="w-full h-64 object-cover object-center md:rounded-lg"
         alt={`${name} cover`}
       />
       {isMyProfil && (

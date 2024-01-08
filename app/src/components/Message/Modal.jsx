@@ -38,7 +38,6 @@ export default function Modal({ userFollowed, defaultTheme }) {
         },
         content: {
           position: "relative",
-          minWidth: 500,
           height: "auto",
           padding: 16,
           borderRadius: 12,

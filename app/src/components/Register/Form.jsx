@@ -35,26 +35,28 @@ export default function Form() {
 
   const UpdateAvatar = async (e) => {
     const File = e.target.files[0];
-    if (File) {
+    if (File && File.size < 2097152) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setAvatarSelected(e.target.result);
       };
       reader.readAsDataURL(File);
     } else {
+      alert('File is too big (max 2mo)')
       setAvatarSelected(null);
     }
   };
 
   const UpdateCover = async (e) => {
     const File = e.target.files[0];
-    if (File) {
+    if (File && File.size < 2097152) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setCoverSelected(e.target.result);
       };
       reader.readAsDataURL(File);
     } else {
+      alert('File is too big (max 2mo)')
       setCoverSelected(null);
     }
   };

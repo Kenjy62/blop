@@ -19,9 +19,8 @@ import Provider from "@/app/src/context/provider";
 import { init } from "../src/features/user";
 
 export default async function Layout({ children }) {
-  const { data, message, status } = await init();
+  const { data, status } = await init();
 
-  console.log(message, status);
   if (status === 200) {
     return (
       <Provider
@@ -30,7 +29,7 @@ export default async function Layout({ children }) {
       >
         <Theme>
           <Toaster />
-          <div className="flex flex-col gap-0 md:gap-16 dark:bg-night-400 dark:text-white min-h-[100dvh]">
+          <div className="flex flex-col gap-0 md:gap-16 bg-white dark:bg-night-400 dark:text-white min-h-[100dvh]">
             <Header
               colorScheme={data?.colorScheme ? data.colorScheme : "Watermelon"}
             />

@@ -12,18 +12,20 @@ export default function Pictures({ post }) {
   return (
     <div className="flex flex-row gap-2">
       {post.picture.map((pic, id) => (
-        <div className="flex-1" key={id}>
+        <div key={id}>
           <Link
             href={`#`}
             scroll={false}
             shallow={false}
             onClick={() => togglePopup("media", pic.url)}
+            className="relative"
           >
             <Image
               className="rounded-lg w-full"
               src={pic.url}
-              width={1920}
-              height={1080}
+              height={500}
+              width={500}
+              style={{objectFit: 'cover'}}
               alt={`post picture`}
             />
           </Link>

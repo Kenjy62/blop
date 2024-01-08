@@ -24,7 +24,7 @@ export default async function Page({ params }) {
 
     if (status === 200) {
       return (
-        <div className="w-full">
+        <div className="w-full p-4">
           <div className="flex flex-col gap-8">
             <ColorSelector />
             <Setting

@@ -12,7 +12,7 @@ export default function CloseButton() {
 
   return (
     <div
-      className="flex justify-center items-center p-2 bg-white-400 dark:bg-night-400 rounded-full cursor-pointer"
+      className="flex justify-center items-center p-2 bg-white dark:bg-night-400 rounded-full cursor-pointer"
       onClick={() => togglePopup()}
     >
       <RxCross2 className="text-dark text-xl cursor-pointer dark:text-white" />

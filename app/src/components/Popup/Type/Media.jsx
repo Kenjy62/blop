@@ -10,12 +10,10 @@ export default function Media() {
   const { data } = useContext(PopupContext);
 
   return (
-    <div className="relative h-full w-full">
-      <Image
+    <div className="relative flex justify-center items-center">
+      <img
         src={`${data}`}
-        width={1920}
-        height={1080}
-        className="rounded-lg object-cover w-full h-full"
+        className="rounded-lg relative"
       />
       <div className="absolute right-2 top-2">
         <CloseButton />

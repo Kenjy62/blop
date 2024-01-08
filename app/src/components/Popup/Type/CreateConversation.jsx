@@ -74,7 +74,7 @@ export default function CreateConversation({ userFollowed }) {
 
   if (followed) {
     return (
-      <div className="w-full p-4 rounded-lg bg-white dark:text-white text-black dark:bg-night-400 flex flex-col gap-4">
+      <div className="max-w-[100%] md:max-w-[500px] p-4 rounded-lg bg-white dark:text-white text-black dark:bg-night-400 flex flex-col gap-4">
         <Title>Create Conversation</Title>
         <input
           onChange={(e) => {

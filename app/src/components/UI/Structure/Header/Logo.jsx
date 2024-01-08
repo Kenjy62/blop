@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Logo() {
-  return <div>Blop</div>;
+  return <Link href={'/'}><div>Blop</div></Link>;
 }
