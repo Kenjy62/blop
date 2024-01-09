@@ -25,7 +25,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+.env
+*.env
+/app/*.env
+/app/.env
 
 # vercel
 .vercel
@@ -33,7 +36,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-#Other
-/prisma/
-/.VSCodeCounter/
