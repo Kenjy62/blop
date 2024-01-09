@@ -80,11 +80,11 @@ export default function Form() {
       {errorMsg}
       <form
         ref={divRef}
-        className="flex flex-col gap-4 p-4 border rounded-lg min-w-[400px]"
+        className="flex flex-col gap-4 p-4 bg-white md:bg-transparent border rounded-lg min-w-[400px]"
       >
         <div className="flex flex-col">
-          <div className="flex flex-row gap-4">
-            <div className="w-[300px] h-32 bg-watermelon-300 rounded-lg flex justify-center relative">
+          <div className="flex flex-col items-center md:items-start md:flex-row gap-4">
+            <div className="w-full md:w-[300px] h-32 bg-watermelon-300 rounded-lg flex justify-center relative">
               {coverSelected?.length > 0 && (
                 <Image
                   src={coverSelected}
