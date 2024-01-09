@@ -200,7 +200,7 @@ export async function CreatePost(formData, type) {
       where: { token: token.value },
       select: { id: true },
     })
-    .then((user) => {
+    .then(async (user) => {
       if (!user) {
         return Promise.resolve({
           message: fetch.post.create.user.error.message,
@@ -210,7 +210,7 @@ export async function CreatePost(formData, type) {
 
       if (type === "post") {
         // Hashtags Extractor
-        return HashtagsExtrator(formData.get("text")).then((hashtags) => {
+        return HashtagsExtrator(formData.get("text")).then(async (hashtags) => {
           // Prepare data for create post
           const data = {
             content: formData?.get("text").toString(),
@@ -708,7 +708,9 @@ export const GetTrend = async (query, skip) => {
   return prisma.hashtags
     .findMany({
       where: {
-        content: `#${query}`,
+        content: {
+          contains: `#${query.toLowerCase()}`
+        }
       },
       select: {
         post: {

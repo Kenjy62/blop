@@ -4,6 +4,6 @@ export function HashtagsExtrator(text) {
     const hashtags = text.match(regex);
 
     // Si des hashtags sont trouvés, renvoie-les dans un tableau, sinon renvoie un tableau vide
-    resolve(hashtags ? hashtags : []);
+    resolve(hashtags ? hashtags.map(tag => tag.toLowerCase()) : []);
   });
 }
